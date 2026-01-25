@@ -1,0 +1,33 @@
+# Git Ignore for RedCrossManager
+
+# Node/Angular
+node_modules/
+dist/
+build/
+coverage/
+.angular/cache/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env*
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.pdb
+*.mdb
+TestResults/
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
