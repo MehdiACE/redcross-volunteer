@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RedCrossManager.Server.DTOs.Volunteers;
 using RedCrossManager.Server.Services.Volunteers;
@@ -58,5 +59,26 @@ public class VolunteersController : ControllerBase
     {
         var volunteer = await _volunteerService.GetByEmailAsync(email, cancellationToken);
         return volunteer == null ? NotFound() : Ok(volunteer);
+    }
+
+    [HttpPatch("{id:guid}/status")]
+    [Authorize(Policy = "Coordinator")]
+    [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<VolunteerDto>> UpdateStatus(
+        Guid id,
+        [FromBody] UpdateStatusDto dto,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _volunteerService.UpdateStatusAsync(id, dto.Status, cancellationToken);
+            return result == null ? NotFound() : Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 }

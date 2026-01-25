@@ -36,3 +36,7 @@ public record VolunteerDto(
     bool IsMinor,
     bool SmsOptIn
 );
+
+public record UpdateStatusDto(
+    string Status
+);

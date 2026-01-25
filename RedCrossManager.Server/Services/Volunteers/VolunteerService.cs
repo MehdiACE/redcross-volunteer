@@ -11,23 +11,24 @@ public interface IVolunteerService
     Task<VolunteerDto> RegisterAsync(RegisterVolunteerDto dto, CancellationToken cancellationToken = default);
     Task<VolunteerDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<VolunteerDto?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
+    Task<VolunteerDto?> UpdateStatusAsync(Guid id, string status, CancellationToken cancellationToken = default);
 }
 
 public class VolunteerService : IVolunteerService
 {
     private readonly IVolunteerRepository _repository;
-        private readonly IEmailService _emailService;
+    private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
     private readonly ILogger<VolunteerService> _logger;
 
     public VolunteerService(
         IVolunteerRepository repository,
-            IEmailService emailService,
+        IEmailService emailService,
         IMapper mapper,
         ILogger<VolunteerService> logger)
     {
         _repository = repository;
-            _emailService = emailService;
+        _emailService = emailService;
         _mapper = mapper;
         _logger = logger;
     }
@@ -68,5 +69,28 @@ public class VolunteerService : IVolunteerService
     {
         var volunteer = await _repository.GetByEmailAsync(email, cancellationToken);
         return volunteer == null ? null : _mapper.Map<VolunteerDto>(volunteer);
+    }
+
+    public async Task<VolunteerDto?> UpdateStatusAsync(Guid id, string status, CancellationToken cancellationToken = default)
+    {
+        var volunteer = await _repository.GetByIdAsync(id, cancellationToken);
+        if (volunteer == null)
+        {
+            return null;
+        }
+
+        // Parse and validate status
+        if (!Enum.TryParse<VolunteerStatus>(status, out var volunteerStatus))
+        {
+            var validStatuses = string.Join(", ", Enum.GetNames(typeof(VolunteerStatus)));
+            throw new InvalidOperationException($"Invalid status: {status}. Valid statuses are: {validStatuses}");
+        }
+
+        volunteer.Status = volunteerStatus;
+        await _repository.UpdateAsync(volunteer, cancellationToken);
+
+        _logger.LogInformation("Volunteer status updated: {VolunteerId}, NewStatus: {Status}", id, status);
+
+        return _mapper.Map<VolunteerDto>(volunteer);
     }
 }
