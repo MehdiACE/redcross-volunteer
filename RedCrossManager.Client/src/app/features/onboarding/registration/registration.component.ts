@@ -125,6 +125,8 @@ export class RegistrationComponent implements OnInit {
 
     this.volunteerService.register(dto).subscribe({
       next: (response) => {
+        // Store volunteerId in session storage for stepper component
+        sessionStorage.setItem('volunteerId', response.id);
         this.snackBar.open(
           this.translate.instant('registration.success'),
           this.translate.instant('common.close'),

@@ -59,5 +59,53 @@
       "emailExists": "Ce courriel est déjà enregistré",
       "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
     }
+  },
+  "onboarding": {
+    "title": "Processus d'embarquement",
+    "subtitle": "Complétez les étapes ci-dessous pour terminer votre inscription et devenir un bénévole actif.",
+    "progress": "Étape {{current}} sur {{total}} complétée",
+    "steps": {
+      "personalInfo": "Informations personnelles",
+      "background": "Vérification des antécédents",
+      "training": "Formation",
+      "assignment": "Affectation"
+    },
+    "stepDescriptions": {
+      "personalInfoDesc": "Vérifiez vos informations personnelles et vos coordonnées",
+      "backgroundDesc": "Complétez votre vérification des antécédents",
+      "trainingDesc": "Complétez la formation requise",
+      "assignmentDesc": "Obtenez votre première affectation"
+    },
+    "stepStatus": {
+      "pending": "En attente",
+      "submitted": "Soumis",
+      "completed": "Complété",
+      "rejected": "Rejeté"
+    },
+    "fields": {
+      "name": "Nom",
+      "email": "Courriel",
+      "phone": "Téléphone"
+    },
+    "messages": {
+      "backgroundCheck": "Votre vérification des antécédents est en cours. Un coordinateur l'examinera bientôt.",
+      "trainingRequired": "Vous devez suivre la formation requise. Un cours en ligne vous a été assigné.",
+      "finalStep": "Vous êtes presque arrivé ! Une fois approuvé, vous serez activé en tant que bénévole.",
+      "stepSubmitted": "Étape soumise avec succès.",
+      "onboardingComplete": "Votre embarquement est terminé ! Vous pouvez maintenant accéder à votre tableau de bord de bénévole.",
+      "stepAlreadySubmitted": "Cette étape a déjà été soumise."
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement de la progression de l'embarquement.",
+      "submitFailed": "Échec de la soumission de l'étape. Veuillez réessayer.",
+      "stepLocked": "Cette étape est verrouillée. Complétez d'abord les étapes précédentes."
+    },
+    "warnings": {
+      "minorConsentRequired": "En tant que mineur, vous avez besoin du consentement parental/tutélaire pour poursuivre l'embarquement."
+    },
+    "congratulations": "Félicitations !",
+    "complete": "Terminer l'embarquement",
+    "submitFinal": "Soumettre l'étape finale",
+    "gotoDashboard": "Aller au tableau de bord"
   }
 }

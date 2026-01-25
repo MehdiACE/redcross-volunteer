@@ -59,5 +59,53 @@
       "emailExists": "This email is already registered",
       "serverError": "An error occurred. Please try again later."
     }
+  },
+  "onboarding": {
+    "title": "Onboarding Workflow",
+    "subtitle": "Complete the steps below to finish your registration and become an active volunteer.",
+    "progress": "Step {{current}} of {{total}} completed",
+    "steps": {
+      "personalInfo": "Personal Information",
+      "background": "Background Check",
+      "training": "Training",
+      "assignment": "Assignment"
+    },
+    "stepDescriptions": {
+      "personalInfoDesc": "Verify your personal information and contact details",
+      "backgroundDesc": "Complete your background check",
+      "trainingDesc": "Complete required training",
+      "assignmentDesc": "Get your first assignment"
+    },
+    "stepStatus": {
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "messages": {
+      "backgroundCheck": "Your background check is currently in progress. A coordinator will review it shortly.",
+      "trainingRequired": "You must complete the required training. An online course has been assigned to you.",
+      "finalStep": "You're almost done! Once approved, you'll be activated as a volunteer.",
+      "stepSubmitted": "Step submitted successfully.",
+      "onboardingComplete": "Your onboarding is complete! You can now access your volunteer dashboard.",
+      "stepAlreadySubmitted": "This step has already been submitted."
+    },
+    "errors": {
+      "loadFailed": "Failed to load onboarding progress.",
+      "submitFailed": "Failed to submit step. Please try again.",
+      "stepLocked": "This step is locked. Complete the previous steps first."
+    },
+    "warnings": {
+      "minorConsentRequired": "As a minor, you need parental/guardian consent to proceed with onboarding."
+    },
+    "congratulations": "Congratulations!",
+    "complete": "Complete Onboarding",
+    "submitFinal": "Submit Final Step",
+    "gotoDashboard": "Go to Dashboard"
   }
 }
