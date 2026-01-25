@@ -1,9 +1,10 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
-
-import { routes } from './app.routes';
+import { ApplicationConfig } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
+import { appBaseConfig } from './app.config.base';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration()]
+  providers: [
+    ...(appBaseConfig.providers ?? []),
+    provideClientHydration()
+  ]
 };
