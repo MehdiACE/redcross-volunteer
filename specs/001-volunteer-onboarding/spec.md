@@ -54,6 +54,9 @@ A newly registered volunteer progresses through a guided onboarding workflow dis
 4. **Given** a volunteer uploads proof of First Aid and CPR certification, **When** a coordinator reviews and approves the documents, **Then** the system marks "Certification" complete and advances to "Final Review"
 5. **Given** a coordinator reviews a volunteer's completed onboarding steps, **When** they approve the final review, **Then** the system changes volunteer status to "Active" and sends congratulations email with first mission opportunities
 6. **Given** a volunteer is partway through onboarding, **When** they log out and return later, **Then** they resume at the exact step where they left off with all previous progress saved
+7. **Given** a volunteer indicates they are under 18 years old, **When** they reach the onboarding step requiring parental/guardian consent, **Then** the system presents the consent form to the guardian for signature and does not allow advancement until consent is submitted and approved
+8. **Given** a guardian receives a consent request for a minor volunteer, **When** they complete and submit the provided form, **Then** the system records the consent with timestamp and marks the onboarding step as "Submitted" pending coordinator approval
+9. **Given** a minor volunteer without guardian consent attempts to proceed to Orientation Training, **When** they click "Continue", **Then** the system blocks progression and displays "Parental/guardian consent required before training"
 
 ---
 
@@ -132,6 +135,24 @@ Volunteers upload required documents (identification, background check consent, 
 
 ---
 
+### User Story 7 - B1J Communication Dashboard (Priority: P2)
+
+Coordinators need to communicate with youth volunteers (B1J) through a dedicated dashboard. The dashboard allows sending targeted messages by segment (age <18, onboarding status, mission assignment status) via email and, when available, SMS. Coordinators can draft messages, preview recipients, and send. Delivery status (queued, sent, failed) is visible. Volunteers receive messages in their preferred language (FR/EN) and can view a message history in their portal.
+
+**Why this priority**: Clear communication with minors and their guardians reduces no-shows and compliance risk. Targeted messaging keeps B1J informed about consent requests, onboarding steps, and mission logistics.
+
+**Independent Test**: Can be tested by sending a targeted message to a B1J segment, verifying delivery via email, optional SMS, and viewing the message in the volunteer portal history.
+
+**Acceptance Scenarios**:
+
+1. **Given** a coordinator selects the "B1J - Missing Consent" segment, **When** they compose a message and choose email channel, **Then** the system shows the list of recipient minors and their guardians and sends the email upon confirmation
+2. **Given** a coordinator selects both email and SMS channels, **When** they send the message, **Then** the system dispatches email to volunteers/guardians and queues SMS for numbers that have opted in for SMS communication
+3. **Given** a message is sent, **When** delivery completes, **Then** the coordinator dashboard shows status per recipient (sent/failed) and provides retry for failed SMS
+4. **Given** a volunteer (or guardian) logs into the portal, **When** they view "Messages", **Then** they see the communication history with timestamps and content in their preferred language
+5. **Given** a volunteer has not opted in to SMS, **When** the coordinator sends to both channels, **Then** the system skips SMS for that volunteer and logs email-only delivery
+
+---
+
 ### Edge Cases
 
 - What happens when a volunteer starts onboarding but never completes it? (System sends reminder emails after 7 days, 14 days, then marks profile as "Inactive" after 30 days of inactivity)
@@ -141,6 +162,8 @@ Volunteers upload required documents (identification, background check consent, 
 - What happens if training capacity is reached but volunteers are already in waitlist? (When a spot opens (cancellation), system notifies waitlisted volunteers in order and grants 24-hour window to claim spot before moving to next person)
 - How does the system handle volunteers with multiple active missions on the same day? (Permits multiple assignments if no time overlap; displays warning if missions are less than 2 hours apart to account for travel time)
 - What if a volunteer doesn't show up for their assigned mission? (Coordinator marks as "No Show"; system logs attendance record and flags profile after 2+ no-shows for coordinator review)
+- What if a minor's guardian does not respond to consent requests? (System sends reminders at 3 and 7 days, then marks onboarding as paused after 14 days and notifies coordinator)
+- What if SMS delivery fails or a volunteer/guardian has not opted in? (System records failure, retries once, falls back to email-only if SMS opt-in is absent or opt-out is detected)
 
 ## Requirements *(mandatory)*
 
@@ -203,9 +226,26 @@ Volunteers upload required documents (identification, background check consent, 
 - **FR-039**: System MUST implement role-based access control with minimum roles: Volunteer (view own data), Coordinator (manage volunteers/trainings/missions), Administrator (full system access)
 - **FR-040**: System MUST enforce that volunteers can only view and edit their own profiles and assignments
 
+**Parental Consent for Minors**:
+- **FR-041**: System MUST capture date of birth during registration and flag volunteers under 18 as minors
+- **FR-042**: System MUST collect parental/guardian contact information (name, email, phone) for minor volunteers
+- **FR-043**: System MUST require a signed parental/guardian consent form before minors can advance beyond Document Verification or enroll in trainings/missions
+- **FR-044**: System MUST provide a workflow to send the consent form to guardians, record submission timestamp, and store the signed form linked to the volunteer profile
+- **FR-045**: System MUST track consent status (Not Requested, Requested, Submitted, Approved, Rejected) and block onboarding progression for minors until status is Approved
+- **FR-046**: System MUST allow coordinators to resend consent requests and add reviewer notes when approving or rejecting submissions
+
+**B1J Communication (Youth Volunteers)**:
+- **FR-047**: System MUST allow coordinators to send targeted communications to youth volunteer segments (e.g., minors missing consent, minors in onboarding, minors assigned to missions)
+- **FR-048**: System MUST support email as a required channel and SMS as an optional channel for recipients who have explicitly opted in to SMS
+- **FR-049**: System MUST display delivery status per recipient (Queued, Sent, Failed) and allow retry for failed SMS deliveries
+- **FR-050**: System MUST present message history to volunteers (and guardians where applicable) within the portal, showing content, channel, timestamp, and language
+- **FR-051**: System MUST send communications in the recipient's preferred language (FR/EN) when available
+
 ### Key Entities
 
 - **Volunteer**: Represents a Red Cross volunteer with profile information (name, contact details, emergency contact, areas of interest, availability), current status (Pending/In Training/Active/Inactive), onboarding progress, assigned roles, registration date, and language preference. Related to Assignments, Trainings, Documents, OnboardingSteps.
+
+- **ParentalConsent**: Represents parental/guardian authorization for minor volunteers. Includes guardian identity (name, email, phone), consent form reference, submission timestamp, approval status (Requested/Submitted/Approved/Rejected), reviewer notes, and expiry/renewal date if required. Related to Volunteer.
 
 - **OnboardingStep**: Represents one step in the volunteer onboarding workflow (Document Verification, Orientation Training, Certification, Final Review). Tracks completion status (Not Started/In Progress/Submitted/Approved/Rejected), submission date, approval date, reviewer notes, and links to required documents or trainings. Related to Volunteer.
 
@@ -220,6 +260,8 @@ Volunteers upload required documents (identification, background check consent, 
 - **Mission**: Represents a Red Cross mission or event requiring volunteers (blood drive, disaster relief, community program). Includes title, description, date/time, location, number of volunteers needed, required certifications, mission type, coordinator, and published status. Related to Assignments.
 
 - **Document**: Represents an uploaded document in a volunteer's file. Tracks document category (Identification, Background Check, Certification, Medical Form), file name, file path/URL, upload date, expiry date (if applicable), verification status (Pending/Approved/Rejected), reviewer, review date, and reviewer notes. Related to Volunteer.
+
+- **CommunicationMessage**: Represents an outbound communication to volunteers/guardians. Tracks audience segment criteria (e.g., minors missing consent), channel (email, SMS), language, content template, recipients, delivery status per recipient, send timestamp, and retry history. Related to Volunteer and ParentalConsent (for guardian recipients).
 
 ## Success Criteria *(mandatory)*
 
@@ -243,10 +285,15 @@ Volunteers upload required documents (identification, background check consent, 
 - **SC-010**: Reduce volunteer no-show rate for assigned missions by 30% through automated reminders (measured by no-show % before vs. after system deployment)
 - **SC-011**: 95% of certification expiries are renewed before expiry date due to automated alerts (measured by renewal completion rate among alerted volunteers)
 
+**Compliance & Communications**:
+- **SC-012**: 95% of minor volunteers obtain approved parental/guardian consent within 10 days of registration (measured by consent approval timestamps vs. registration dates)
+- **SC-013**: 90% of B1J outbound messages are successfully delivered on the first attempt (combined email/SMS), with failures retried automatically
+- **SC-014**: SMS opt-in recipients experience <5% delivery failure rate after retries (measured per sending batch)
+
 **Adoption & Satisfaction**:
-- **SC-012**: 80% of volunteers report onboarding process as "clear" or "very clear" in post-onboarding survey
-- **SC-013**: Coordinators can create and publish a new training session in under 10 minutes (measured via user testing and analytics)
-- **SC-014**: System achieves 85% volunteer adoption rate (active logins) within first 3 months of deployment among registered volunteers
+- **SC-015**: 80% of volunteers report onboarding process as "clear" or "very clear" in post-onboarding survey
+- **SC-016**: Coordinators can create and publish a new training session in under 10 minutes (measured via user testing and analytics)
+- **SC-017**: System achieves 85% volunteer adoption rate (active logins) within first 3 months of deployment among registered volunteers
 
 ### Assumed Defaults
 
@@ -260,9 +307,13 @@ Volunteers upload required documents (identification, background check consent, 
 - Volunteer data is considered personally identifiable information (PII) and subject to standard privacy protection regulations (PIPEDA in Canada).
 
 **Onboarding Workflow**:
-- The 4-step onboarding workflow (Document Verification, Orientation, Certification, Final Review) is fixed for all volunteers regardless of role. Custom workflows per volunteer type are not required in MVP.
+- The 4-step onboarding workflow (Document Verification, Orientation, Certification, Final Review) is fixed for all volunteers. Minors add a required parental/guardian consent gate within Document Verification before proceeding.
 - Coordinator approval is required for each onboarding step before volunteer can advance. Automated approval is not assumed.
+- **Coordinator Review SLA**: Consent submissions and onboarding step approvals target 48-hour coordinator review window (best-effort; not guaranteed). System tracks review timestamps for audit; volunteer receives reminder email after 14 days of pending review.
+- **Guardian Identity Verification**: Guardian consent requires email address verification (confirmation token sent to guardian email). System records verification status (NotVerified, EmailConfirmed, Rejected) but does not require notarization or advanced verification (e.g., govt ID).
 - Background check processing happens externally (third-party service). System only tracks consent form upload and approval status, not actual check results.
+- **Age Calculation**: A minor is defined using UTC date comparison: age = floor((UTC today - DateOfBirth) / 365.25 days). Consent remains valid until volunteer reaches UTC age 18 or for 12 months from request, whichever comes first.
+- Guardians can be parents or legally authorized representatives; at least one guardian contact is required for minors.
 
 **Training & Certifications**:
 - Training sessions are in-person or virtual (Zoom/Teams link provided). System does not host embedded video training content in MVP.
@@ -272,16 +323,20 @@ Volunteers upload required documents (identification, background check consent, 
 **Mission Assignment**:
 - Coordinators manually review and approve volunteer applications for missions. Automated matching based on skills/availability is not assumed for MVP.
 - Volunteers can be assigned to maximum 5 concurrent active missions to prevent over-commitment (configurable limit).
+- **Travel Buffer Enforcement**: System prevents volunteer from being assigned to two missions with less than 2-hour gap between end/start times (configurable per mission via `TravelBufferMinutes` field; default 120 minutes). Coordinator override available if needed.
+- **Geographic Scope**: Mission notifications sent to all volunteers matching interest + certification requirements, regardless of location. Future enhancement: location-based filtering for mission discovery.
 - Mission confirmation is optional. If volunteer doesn't confirm, assignment remains active unless volunteer explicitly cancels or coordinator removes them.
 
 **Document Management**:
+- **Document Expiry Mapping**: Identification (expires based on ID expiry), Background Check (expires 12 months from date, or 24 months if documented policy), Certification (expires per certification standard), Medical Form (no expiry), Consent Form (expires per consent expiry logic). System alerts on 30-day and 60-day pre-expiry thresholds.
 - Documents are stored in Azure Blob Storage with virus scanning on upload. Local file system storage is development environment only.
 - Accepted formats: PDF, JPG, PNG. File size limit: 10MB. Documents larger than 10MB must be compressed or split.
 - Document retention policy: Documents are kept for 7 years after volunteer account becomes inactive (compliance with typical record retention regulations).
 
 **Notifications**:
-- Email is primary notification channel. SMS notifications are not included in MVP but can be added later.
-- Email service uses SendGrid or similar transactional email provider. System does not operate its own SMTP server.
+- Email is primary notification channel. SMS is supported for youth/B1J communications when recipients have explicitly opted in (tracked via `Volunteer.SmsOptIn` and `ParentalConsent.SmsOptIn` flags); otherwise, the system falls back to email-only.
+- System will not send SMS to recipients without explicit opt-in or with missing phone numbers.
+- **Retry Logic**: Failed email sends retried up to 3 times over 24 hours with exponential backoff. Failed SMS sends retried up to 2 times within 4 hours; no SMS attempted if opt-in absent. All delivery status logged for audit.
 
 **Data Retention**:
 - Volunteer accounts become "Inactive" after 365 days of no login activity. Inactive accounts receive reactivation email before status change.
@@ -305,7 +360,7 @@ Volunteers upload required documents (identification, background check consent, 
 
 ### Future Considerations (Potential Phase 2)
 
-- SMS notifications for urgent mission alerts
+- Expanded SMS coverage beyond B1J communications (e.g., urgent mission alerts for all volunteers)
 - Mobile native apps for field volunteers
 - Integration with external calendar systems (Google Calendar, Outlook)
 - Volunteer-to-volunteer shift swapping
