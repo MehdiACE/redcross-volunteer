@@ -27,8 +27,7 @@ import { OnboardingProgressDto } from '../../../core/models/onboarding.model';
     RouterLink,
     TranslateModule
   ],
-  templateUrl: './stepper.component.html',
-  styleUrls: ['./stepper.component.scss']
+  templateUrl: './stepper.component.html'
 })
 export class StepperComponent implements OnInit, OnDestroy {
   progress: OnboardingProgressDto | null = null;
