@@ -23,6 +23,7 @@ obj/
 TestResults/
 
 # IDE/editor
+.vs/
 .vscode/
 .idea/
 *.swp
