@@ -1,0 +1,6 @@
+@RedCrossManager.Server_HostAddress = http://localhost:5049
+
+GET {{RedCrossManager.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

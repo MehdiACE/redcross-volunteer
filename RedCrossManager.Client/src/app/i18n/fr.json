@@ -1,0 +1,8 @@
+{
+  "app": {
+    "title": "Gestion Croix-Rouge",
+    "welcome": "Bienvenue",
+    "onboarding": "Embarquement",
+    "dashboard": "Tableau de bord"
+  }
+}

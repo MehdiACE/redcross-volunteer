@@ -21,20 +21,20 @@ description: "Tasks for volunteer onboarding & management system"
 ## Phase 1: Setup (Shared Infrastructure)
 
  - [X] T001 Initialize repository structure for backend/frontend per plan in `RedCrossManager.Server/` and `RedCrossManager.Client/`
-- [ ] T002 Create .NET 10 Web API project and solution in `RedCrossManager.Server/`
-- [ ] T003 Create Angular 18 app with Tailwind 3.1.0 and Material 18 in `RedCrossManager.Client/`
+ - [X] T002 Create .NET 10 Web API project and solution in `RedCrossManager.Server/`
+ - [X] T003 Create Angular 18 app with Tailwind 3.1.0 and Material 18 in `RedCrossManager.Client/`
  - [X] T004 [P] Add `.editorconfig`, `.gitignore`, and base `Directory.Build.props` for consistent formatting in repo root
 - [ ] T005 [P] Configure Husky/lint-staged (frontend) and dotnet-format hook (backend) in repo root
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-- [ ] T006 Configure EF Core 10 DbContext, connection strings, and initial migration for core entities in `RedCrossManager.Server/Infrastructure`
-- [ ] T007 [P] Set up Serilog + Application Insights and health checks endpoints in `RedCrossManager.Server`
-- [ ] T008 [P] Implement JWT auth (with Azure AD optional scheme) and RBAC roles (Volunteer, Coordinator, Admin) in `RedCrossManager.Server`
-- [ ] T008a [P] Create WebApplicationFactory and test database seeding helper for integration tests in `RedCrossManager.Server/Tests/Infrastructure` (blocks T013, T020, T032, T046, T052)
-- [ ] T009 [P] Enable CORS for Angular origins in `RedCrossManager.Server`
-- [ ] T010 Configure Tailwind, global theme, and i18n scaffolding (fr/en) in `RedCrossManager.Client/src`
-- [ ] T011 [P] Set up API client base service and auth interceptor in `RedCrossManager.Client/src/app/core`
+- [X] T006 Configure EF Core 10 DbContext, connection strings, and initial migration for core entities in `RedCrossManager.Server/Infrastructure`
+- [X] T007 [P] Set up Serilog + Application Insights and health checks endpoints in `RedCrossManager.Server`
+- [X] T008 [P] Implement JWT auth (with Azure AD optional scheme) and RBAC roles (Volunteer, Coordinator, Admin) in `RedCrossManager.Server`
+- [X] T008a [P] Create WebApplicationFactory and test database seeding helper for integration tests in `RedCrossManager.Server/Tests/Infrastructure` (blocks T013, T020, T032, T046, T052)
+- [X] T009 [P] Enable CORS for Angular origins in `RedCrossManager.Server`
+- [X] T010 Configure Tailwind, global theme, and i18n scaffolding (fr/en) in `RedCrossManager.Client/src`
+- [X] T011 [P] Set up API client base service and auth interceptor in `RedCrossManager.Client/src/app/core`
 - [ ] T011a [P] Implement SMS opt-in flag infrastructure: add `Volunteer.SmsOptIn` and `ParentalConsent.SmsOptIn` fields in `RedCrossManager.Server/Domain/Entities`; create POST `/volunteers/me/sms-opt-in` endpoint in `VolunteersController`; add opt-in toggle to Angular profile in `RedCrossManager.Client/src/app/features/profile`
 - [ ] T012 Establish CI checks (lint, test, build) scripts entries for backend/frontend in repo root; specify `.github/workflows/` pipeline files
 
