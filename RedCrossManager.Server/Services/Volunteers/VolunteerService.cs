@@ -2,6 +2,7 @@ using AutoMapper;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.DTOs.Volunteers;
 using RedCrossManager.Server.Repositories;
+using RedCrossManager.Server.Services.Notifications;
 
 namespace RedCrossManager.Server.Services.Volunteers;
 
@@ -15,15 +16,18 @@ public interface IVolunteerService
 public class VolunteerService : IVolunteerService
 {
     private readonly IVolunteerRepository _repository;
+        private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
     private readonly ILogger<VolunteerService> _logger;
 
     public VolunteerService(
         IVolunteerRepository repository,
+            IEmailService emailService,
         IMapper mapper,
         ILogger<VolunteerService> logger)
     {
         _repository = repository;
+            _emailService = emailService;
         _mapper = mapper;
         _logger = logger;
     }
@@ -41,6 +45,13 @@ public class VolunteerService : IVolunteerService
 
         var created = await _repository.AddAsync(volunteer, cancellationToken);
         
+        // Send confirmation email
+        await _emailService.SendConfirmationEmailAsync(
+            created.Email,
+            created.FirstName,
+            created.LanguagePreference,
+            cancellationToken);
+
         _logger.LogInformation("Volunteer registered: {VolunteerId}, Email: {Email}, IsMinor: {IsMinor}",
             created.Id, created.Email, created.IsMinor);
 

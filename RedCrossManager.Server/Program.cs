@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using RedCrossManager.Server.Infrastructure;
 using RedCrossManager.Server.Repositories;
 using RedCrossManager.Server.Services.Volunteers;
+using RedCrossManager.Server.Services.Notifications;
+using RedCrossManager.Server.Services.Onboarding;
+using RedCrossManager.Server.Services.Consents;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Serilog;
@@ -30,9 +33,14 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Repositories
 builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
+builder.Services.AddScoped<IOnboardingStepRepository, OnboardingStepRepository>();
+builder.Services.AddScoped<IParentalConsentRepository, ParentalConsentRepository>();
 
 // Services
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IVolunteerService, VolunteerService>();
+builder.Services.AddScoped<IOnboardingService, OnboardingService>();
+builder.Services.AddScoped<IConsentService, ConsentService>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };

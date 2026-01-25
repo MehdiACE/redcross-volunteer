@@ -51,11 +51,11 @@ description: "Tasks for volunteer onboarding & management system"
 - [ ] T014 [P] [US1] Frontend component test for registration form validation in `RedCrossManager.Client/src/app/features/onboarding/registration/registration.component.spec.ts`
 
 ### Implementation
-- [ ] T015 [P] [US1] Implement `Volunteer` entity, configuration, and repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
-- [ ] T016 [US1] Implement registration service + DTOs + AutoMapper profile in `RedCrossManager.Server/Services/Volunteers`
-- [ ] T017 [US1] Implement `VolunteersController` registration endpoint in `RedCrossManager.Server/Controllers/VolunteersController.cs`
+- [X] T015 [P] [US1] Implement `Volunteer` entity, configuration, and repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
+- [X] T016 [US1] Implement registration service + DTOs + AutoMapper profile in `RedCrossManager.Server/Services/Volunteers`
+- [X] T017 [US1] Implement `VolunteersController` registration endpoint in `RedCrossManager.Server/Controllers/VolunteersController.cs`
 - [ ] T018 [US1] Build registration UI (form fields, validation, i18n) in `RedCrossManager.Client/src/app/features/onboarding/registration`
-- [ ] T019 [US1] Wire confirmation email send via SendGrid abstraction in `RedCrossManager.Server/Services/Notifications`
+- [X] T019 [US1] Wire confirmation email send via SendGrid abstraction in `RedCrossManager.Server/Services/Notifications`
 
 ---
 
@@ -72,11 +72,11 @@ description: "Tasks for volunteer onboarding & management system"
 - [ ] T021a [US2] Unit/integration tests for guardian identity verification (email confirmation) in `RedCrossManager.Server/Tests/Integration/GuardianVerificationTests.cs`
 
 ### Implementation
-- [ ] T022 [P] [US2] Implement `OnboardingStep` entity/config + repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
+- [X] T022 [P] [US2] Implement `OnboardingStep` entity/config + repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
 - [ ] T023 [US2] Implement onboarding service (progress fetch, submit, resume) in `RedCrossManager.Server/Services/Onboarding`
 - [ ] T024 [US2] Implement stepper UI with state fetch and guarded advancement in `RedCrossManager.Client/src/app/features/onboarding/stepper`
 - [ ] T025 [US2] Add status transitions in `VolunteersController` and onboarding controller endpoints in `RedCrossManager.Server/Controllers`; implement consent request/approval workflow in `ConsentsController`
-- [ ] T025a [US2] Implement parental consent service with guardian email notification, SLA tracking (48-hour coordinator review), and identity verification (email confirmation token) in `RedCrossManager.Server/Services/Consents`
+- [X] T025a [US2] Implement parental consent service with guardian email notification, SLA tracking (48-hour coordinator review), and identity verification (email confirmation token) in `RedCrossManager.Server/Services/Consents`
 - [ ] T025b [US2] Build guardian consent form UI (read-only form display, signature capture, submit) in `RedCrossManager.Client/src/app/features/onboarding/guardian-consent`
 - [ ] T026 [US2] Persist progress/resume state in client store/service in `RedCrossManager.Client/src/app/core/services/onboarding-state.service.ts`
 
