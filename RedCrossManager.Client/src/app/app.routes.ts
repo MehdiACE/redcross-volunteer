@@ -10,6 +10,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/onboarding/stepper/stepper.component').then(m => m.StepperComponent)
   },
   {
+    path: 'benevole-ponctuel',
+    loadComponent: () => import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(m => m.OneTimeVolunteerComponent)
+  },
+  {
     path: '',
     redirectTo: '/register',
     pathMatch: 'full'

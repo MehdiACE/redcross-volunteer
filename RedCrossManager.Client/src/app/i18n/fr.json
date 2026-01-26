@@ -107,5 +107,50 @@
     "complete": "Terminer l'embarquement",
     "submitFinal": "Soumettre l'étape finale",
     "gotoDashboard": "Aller au tableau de bord"
+  },
+  "oneTimeVolunteer": {
+    "title": "Formulaire bénévole ponctuel",
+    "subtitle": "Complétez ce formulaire pour générer automatiquement le PDF du bénévole ponctuel.",
+    "sections": {
+      "identity": "Identité",
+      "assignment": "Mission",
+      "emergency": "Contact d'urgence",
+      "consents": "Déclarations et consentements",
+      "signature": "Signature"
+    },
+    "fields": {
+      "fullName": "Nom et prénom",
+      "birthDate": "Né(e) le",
+      "birthPlace": "à",
+      "phones": "Tél(s)",
+      "email": "E-mail",
+      "address": "Adresse complète",
+      "action": "Action à laquelle vous participez",
+      "structure": "Structure CRf de rattachement",
+      "emergencyContactName": "Nom et prénom",
+      "emergencyContactRelation": "Lien de parenté",
+      "emergencyContactAddress": "Adresse complète",
+      "emergencyContactPhones": "Tél(s)",
+      "acceptsPrinciples": "Je déclare avoir pris connaissance des principes fondamentaux et les respecter",
+      "acceptsImage": "J’accepte que la Croix-Rouge française fasse usage de mon image",
+      "keepDataConsent": "Accord pour conserver le dossier de renseignements pendant 1 an",
+      "signedAt": "Fait à",
+      "signedOn": "Le",
+      "signature": "Signature"
+    },
+    "options": {
+      "yes": "Donner mon accord",
+      "no": "Refuser mon accord"
+    },
+    "actions": {
+      "generate": "Générer le PDF"
+    },
+    "messages": {
+      "generated": "PDF généré avec succès."
+    },
+    "errors": {
+      "invalidForm": "Veuillez remplir tous les champs obligatoires.",
+      "generationFailed": "Échec de génération du PDF."
+    }
   }
 }

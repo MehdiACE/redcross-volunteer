@@ -1,0 +1,139 @@
+<div class="max-w-5xl mx-auto p-6 min-h-screen bg-gray-100">
+  <h1 class="text-3xl font-bold mb-2">{{ 'oneTimeVolunteer.title' | translate }}</h1>
+  <p class="text-gray-600 mb-6">{{ 'oneTimeVolunteer.subtitle' | translate }}</p>
+
+  <form [formGroup]="form" class="space-y-6">
+    <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
+      <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.identity' | translate }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.fullName' | translate }}</mat-label>
+          <input matInput formControlName="fullName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.birthDate' | translate }}</mat-label>
+          <input matInput [matDatepicker]="birthPicker" formControlName="birthDate" required>
+          <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
+          <mat-datepicker #birthPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.birthPlace' | translate }}</mat-label>
+          <input matInput formControlName="birthPlace" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.phones' | translate }}</mat-label>
+          <input matInput formControlName="phones" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.email' | translate }}</mat-label>
+          <input matInput type="email" formControlName="email" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full md:col-span-2">
+          <mat-label>{{ 'oneTimeVolunteer.fields.address' | translate }}</mat-label>
+          <textarea matInput rows="2" formControlName="address" required></textarea>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
+      <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.assignment' | translate }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.action' | translate }}</mat-label>
+          <input matInput formControlName="action" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.structure' | translate }}</mat-label>
+          <input matInput formControlName="structure" required>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
+      <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.emergency' | translate }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactName' | translate }}</mat-label>
+          <input matInput formControlName="emergencyContactName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactRelation' | translate }}</mat-label>
+          <input matInput formControlName="emergencyContactRelation" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full md:col-span-2">
+          <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactAddress' | translate }}</mat-label>
+          <textarea matInput rows="2" formControlName="emergencyContactAddress" required></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactPhones' | translate }}</mat-label>
+          <input matInput formControlName="emergencyContactPhones" required>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
+      <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.consents' | translate }}</h2>
+      <div class="flex flex-col gap-2">
+        <mat-checkbox formControlName="acceptsPrinciples">
+          {{ 'oneTimeVolunteer.fields.acceptsPrinciples' | translate }}
+        </mat-checkbox>
+        <mat-checkbox formControlName="acceptsImage">
+          {{ 'oneTimeVolunteer.fields.acceptsImage' | translate }}
+        </mat-checkbox>
+      </div>
+
+      <div class="mt-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          {{ 'oneTimeVolunteer.fields.keepDataConsent' | translate }}
+        </label>
+        <div class="flex items-center gap-6">
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="h-4 w-4" formControlName="keepDataConsent" value="yes">
+            <span>{{ 'oneTimeVolunteer.options.yes' | translate }}</span>
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="h-4 w-4" formControlName="keepDataConsent" value="no">
+            <span>{{ 'oneTimeVolunteer.options.no' | translate }}</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
+      <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.signature' | translate }}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.signedAt' | translate }}</mat-label>
+          <input matInput formControlName="signedAt" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.signedOn' | translate }}</mat-label>
+          <input matInput [matDatepicker]="signedPicker" formControlName="signedOn" required>
+          <mat-datepicker-toggle matIconSuffix [for]="signedPicker"></mat-datepicker-toggle>
+          <mat-datepicker #signedPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>{{ 'oneTimeVolunteer.fields.signature' | translate }}</mat-label>
+          <input matInput formControlName="signature" required>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <div class="flex justify-end">
+      <button mat-raised-button color="primary" (click)="generatePdf()" [disabled]="isGenerating">
+        {{ 'oneTimeVolunteer.actions.generate' | translate }}
+      </button>
+    </div>
+  </form>
+</div>

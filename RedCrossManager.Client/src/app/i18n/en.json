@@ -107,5 +107,50 @@
     "complete": "Complete Onboarding",
     "submitFinal": "Submit Final Step",
     "gotoDashboard": "Go to Dashboard"
+  },
+  "oneTimeVolunteer": {
+    "title": "One-time Volunteer Form",
+    "subtitle": "Fill in this form to generate the one-time volunteer PDF.",
+    "sections": {
+      "identity": "Identity",
+      "assignment": "Mission",
+      "emergency": "Emergency contact",
+      "consents": "Declarations and consents",
+      "signature": "Signature"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "birthDate": "Date of birth",
+      "birthPlace": "Place of birth",
+      "phones": "Phone(s)",
+      "email": "Email",
+      "address": "Full address",
+      "action": "Action you are participating in",
+      "structure": "Red Cross structure",
+      "emergencyContactName": "Full name",
+      "emergencyContactRelation": "Relationship",
+      "emergencyContactAddress": "Full address",
+      "emergencyContactPhones": "Phone(s)",
+      "acceptsPrinciples": "I declare I have read the fundamental principles and will respect them",
+      "acceptsImage": "I accept the use of my image by the Red Cross",
+      "keepDataConsent": "Consent to keep my data for 1 year",
+      "signedAt": "Signed at",
+      "signedOn": "On",
+      "signature": "Signature"
+    },
+    "options": {
+      "yes": "Give my consent",
+      "no": "Refuse my consent"
+    },
+    "actions": {
+      "generate": "Generate PDF"
+    },
+    "messages": {
+      "generated": "PDF generated successfully."
+    },
+    "errors": {
+      "invalidForm": "Please fill all required fields.",
+      "generationFailed": "PDF generation failed."
+    }
   }
 }

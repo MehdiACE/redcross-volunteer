@@ -56,6 +56,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T016 [US1] Implement registration service + DTOs + AutoMapper profile in `RedCrossManager.Server/Services/Volunteers`
 - [X] T017 [US1] Implement `VolunteersController` registration endpoint in `RedCrossManager.Server/Controllers/VolunteersController.cs`
 - [X] T018 [US1] Build registration UI (form fields, validation, i18n) in `RedCrossManager.Client/src/app/features/onboarding/registration` — **COMPLETED**: Component, service, models, i18n (EN/FR), routing configured
+- [X] T018c [US1] Add one-time volunteer form UI and PDF generation from template in `RedCrossManager.Client/src/app/features/onboarding/one-time-volunteer` and `src/assets/forms` — **COMPLETED**: Form + client-side PDF fill
 - [X] T019 [US1] Wire confirmation email send via SendGrid abstraction in `RedCrossManager.Server/Services/Notifications`
 
 ---
