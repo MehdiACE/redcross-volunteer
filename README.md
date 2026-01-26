@@ -44,6 +44,23 @@ RedCrossManager.Client/   # Frontend (to be scaffolded per tasks)
 - Contracts versioned at `/api/v1`; Swagger enabled in development.
 - Tests-first per tasks in specs/001-volunteer-onboarding/tasks.md.
 
+## Git Hooks (Format/Lint)
+Pre-commit hooks run frontend formatting and backend `dotnet format` checks.
+
+1) Install root dev dependencies:
+
+```powershell
+npm install
+```
+
+2) Install frontend dependencies (if needed):
+
+```powershell
+npm install --prefix RedCrossManager.Client
+```
+
+Hooks are installed via the root `prepare` script and run automatically on `git commit`.
+
 ## Links
 - Feature Spec: specs/001-volunteer-onboarding/spec.md
 - Plan: specs/001-volunteer-onboarding/plan.md

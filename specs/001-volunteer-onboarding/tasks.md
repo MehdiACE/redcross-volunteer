@@ -25,7 +25,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T003 Create Angular 20 app with Tailwind 3.1.0 and Material 20 in `RedCrossManager.Client/`
 - [X] T003b Migrate frontend dependencies to Angular 20 + Material 20 in `RedCrossManager.Client/package.json`
  - [X] T004 [P] Add `.editorconfig`, `.gitignore`, and base `Directory.Build.props` for consistent formatting in repo root
-- [ ] T005 [P] Configure Husky/lint-staged (frontend) and dotnet-format hook (backend) in repo root
+- [X] T005 [P] Configure Husky/lint-staged (frontend) and dotnet-format hook (backend) in repo root
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
