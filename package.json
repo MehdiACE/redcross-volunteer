@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "ci": "pwsh ./scripts/ci.ps1",
+    "ci:backend": "pwsh ./scripts/backend-ci.ps1",
+    "ci:frontend": "pwsh ./scripts/frontend-ci.ps1",
+    "ci:fix": "pwsh ./scripts/ci.ps1 -Fix",
+    "ci:backend:fix": "pwsh ./scripts/backend-ci.ps1 -Fix",
+    "ci:frontend:fix": "pwsh ./scripts/frontend-ci.ps1 -Fix"
   },
   "devDependencies": {
     "husky": "^9.1.7",

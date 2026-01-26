@@ -40,3 +40,6 @@ public record VolunteerDto(
 public record UpdateStatusDto(
     string Status
 );
+public record SmsOptInDto(
+    bool SmsOptIn
+);

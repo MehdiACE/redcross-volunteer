@@ -1,0 +1,89 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - '001-volunteer-onboarding'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  BUILD_CONFIGURATION: 'Release'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and Test (.NET)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }}
+
+      - name: Run unit tests
+        run: dotnet test RedCrossManager.Server.Tests/RedCrossManager.Server.Tests.csproj --no-build --configuration ${{ env.BUILD_CONFIGURATION }} --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" -- RunConfiguration.DisableAppDomain=true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: '**/test-results.trx'
+
+      - name: Upload code coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-coverage
+          path: '**/coverage.cobertura.xml'
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Code Quality (StyleCop)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Check code style with StyleCop
+        run: |
+          dotnet restore
+          dotnet build --no-restore --configuration ${{ env.BUILD_CONFIGURATION }} /p:EnforceCodeStyleInBuild=true
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scanning
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Dependabot scan
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Report dependencies
+        run: dotnet list package --vulnerable
+        continue-on-error: true

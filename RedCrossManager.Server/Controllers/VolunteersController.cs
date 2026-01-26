@@ -61,6 +61,32 @@ public class VolunteersController : ControllerBase
         return volunteer == null ? NotFound() : Ok(volunteer);
     }
 
+    [HttpGet("me")]
+    [Authorize(Policy = "Volunteer")]
+    [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<VolunteerDto>> GetCurrentProfile(
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Extract volunteer ID from JWT claims
+            var volunteerId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(volunteerId) || !Guid.TryParse(volunteerId, out var id))
+            {
+                return Unauthorized(new { error = "Invalid or missing volunteer ID in token" });
+            }
+
+            var volunteer = await _volunteerService.GetByIdAsync(id, cancellationToken);
+            return volunteer == null ? NotFound() : Ok(volunteer);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving current volunteer profile");
+            return StatusCode(StatusCodes.Status500InternalServerError, new { error = ex.Message });
+        }
+    }
+
     [HttpPatch("{id:guid}/status")]
     [Authorize(Policy = "Coordinator")]
     [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status200OK)]
@@ -78,6 +104,34 @@ public class VolunteersController : ControllerBase
         }
         catch (InvalidOperationException ex)
         {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPost("me/sms-opt-in")]
+    [Authorize(Policy = "Volunteer")]
+    [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<VolunteerDto>> UpdateSmsOptIn(
+        [FromBody] SmsOptInDto dto,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Extract volunteer ID from JWT claims
+            var volunteerId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(volunteerId) || !Guid.TryParse(volunteerId, out var id))
+            {
+                return BadRequest(new { error = "Invalid or missing volunteer ID in token" });
+            }
+
+            var result = await _volunteerService.UpdateSmsOptInAsync(id, dto.SmsOptIn, cancellationToken);
+            return result == null ? NotFound() : Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating SMS opt-in for volunteer");
             return BadRequest(new { error = ex.Message });
         }
     }

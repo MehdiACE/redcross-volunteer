@@ -36,8 +36,8 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T009 [P] Enable CORS for Angular origins in `RedCrossManager.Server`
 - [X] T010 Configure Tailwind, global theme, and i18n scaffolding (fr/en) in `RedCrossManager.Client/src`
 - [X] T011 [P] Set up API client base service and auth interceptor in `RedCrossManager.Client/src/app/core`
-- [ ] T011a [P] Implement SMS opt-in flag infrastructure: add `Volunteer.SmsOptIn` and `ParentalConsent.SmsOptIn` fields in `RedCrossManager.Server/Domain/Entities`; create POST `/volunteers/me/sms-opt-in` endpoint in `VolunteersController`; add opt-in toggle to Angular profile in `RedCrossManager.Client/src/app/features/profile`
-- [ ] T012 Establish CI checks (lint, test, build) scripts entries for backend/frontend in repo root; specify `.github/workflows/` pipeline files
+- [X] T011a [P] Implement SMS opt-in flag infrastructure: add `Volunteer.SmsOptIn` and `ParentalConsent.SmsOptIn` fields in `RedCrossManager.Server/Domain/Entities`; create POST `/volunteers/me/sms-opt-in` endpoint in `VolunteersController`; add opt-in toggle to Angular profile in `RedCrossManager.Client/src/app/features/profile`
+- [X] T012 Establish CI checks (lint, test, build) scripts entries for backend/frontend in repo root; specify `.github/workflows/` pipeline files
 
 ---
 

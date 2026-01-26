@@ -10,10 +10,12 @@
     "close": "Fermer",
     "submit": "Soumettre",
     "save": "Enregistrer",
+    "saving": "Enregistrement...",
     "delete": "Supprimer",
     "edit": "Modifier",
     "back": "Retour",
-    "next": "Suivant"
+    "next": "Suivant",
+    "loading": "Chargement..."
   },
   "registration": {
     "title": "Inscription des bénévoles",
@@ -152,5 +154,20 @@
       "invalidForm": "Veuillez remplir tous les champs obligatoires.",
       "generationFailed": "Échec de génération du PDF."
     }
+  },
+  "profile": {
+    "title": "Profil du bénévole",
+    "subtitle": "Gérez vos informations de profil et vos préférences de communication",
+    "personalInfo": "Informations personnelles",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "Adresse électronique",
+    "phone": "Numéro de téléphone",
+    "status": "Statut du bénévole",
+    "languagePreference": "Préférence de langue",
+    "communicationPreferences": "Préférences de communication",
+    "smsOptIn": "Accepter les notifications par SMS",
+    "smsOptInDescription": "Recevez des mises à jour importantes et des rappels par SMS. Cela comprend les notifications d'événements, les confirmations d'attribution et les alertes urgentes."
   }
+}
 }

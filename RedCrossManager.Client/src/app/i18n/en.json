@@ -10,10 +10,12 @@
     "close": "Close",
     "submit": "Submit",
     "save": "Save",
+    "saving": "Saving...",
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "loading": "Loading..."
   },
   "registration": {
     "title": "Volunteer Registration",
@@ -152,5 +154,19 @@
       "invalidForm": "Please fill all required fields.",
       "generationFailed": "PDF generation failed."
     }
+  },
+  "profile": {
+    "title": "Volunteer Profile",
+    "subtitle": "Manage your profile information and communication preferences",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "status": "Volunteer Status",
+    "languagePreference": "Language Preference",
+    "communicationPreferences": "Communication Preferences",
+    "smsOptIn": "Opt-in to SMS notifications",
+    "smsOptInDescription": "Receive important updates and reminders via SMS text message. This includes event notifications, assignment confirmations, and urgent alerts."
   }
 }

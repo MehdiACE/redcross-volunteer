@@ -1,0 +1,86 @@
+<div class="profile-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ 'profile.title' | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ 'profile.subtitle' | translate }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+        <p>{{ 'common.loading' | translate }}</p>
+      </div>
+
+      <form [formGroup]="profileForm" *ngIf="!isLoading" class="profile-form">
+        <!-- Read-only fields -->
+        <div class="form-section">
+          <h3>{{ 'profile.personalInfo' | translate }}</h3>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.firstName' | translate }}</mat-label>
+            <input matInput formControlName="firstName" readonly />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.lastName' | translate }}</mat-label>
+            <input matInput formControlName="lastName" readonly />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.email' | translate }}</mat-label>
+            <input matInput formControlName="email" readonly />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.phone' | translate }}</mat-label>
+            <input matInput formControlName="phone" readonly />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.status' | translate }}</mat-label>
+            <input matInput formControlName="status" readonly />
+          </mat-form-field>
+
+          <mat-form-field class="full-width">
+            <mat-label>{{ 'profile.languagePreference' | translate }}</mat-label>
+            <input matInput formControlName="languagePreference" readonly />
+          </mat-form-field>
+        </div>
+
+        <!-- SMS Opt-in Section -->
+        <div class="form-section sms-section">
+          <h3>{{ 'profile.communicationPreferences' | translate }}</h3>
+
+          <div class="sms-opt-in-wrapper">
+            <div class="checkbox-container">
+              <mat-checkbox
+                formControlName="smsOptIn"
+                [disabled]="isSaving"
+                class="sms-checkbox"
+              >
+                {{ 'profile.smsOptIn' | translate }}
+              </mat-checkbox>
+              <p class="sms-description">
+                {{ 'profile.smsOptInDescription' | translate }}
+              </p>
+            </div>
+
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveSmsPreference()"
+              [disabled]="isSaving || profileForm.invalid"
+              class="save-button"
+            >
+              <span *ngIf="!isSaving">{{ 'common.save' | translate }}</span>
+              <span *ngIf="isSaving">
+                <mat-spinner diameter="20"></mat-spinner>
+                {{ 'common.saving' | translate }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

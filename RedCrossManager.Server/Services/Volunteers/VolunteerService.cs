@@ -12,6 +12,7 @@ public interface IVolunteerService
     Task<VolunteerDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<VolunteerDto?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
     Task<VolunteerDto?> UpdateStatusAsync(Guid id, string status, CancellationToken cancellationToken = default);
+    Task<VolunteerDto?> UpdateSmsOptInAsync(Guid id, bool smsOptIn, CancellationToken cancellationToken = default);
 }
 
 public class VolunteerService : IVolunteerService
@@ -90,6 +91,22 @@ public class VolunteerService : IVolunteerService
         await _repository.UpdateAsync(volunteer, cancellationToken);
 
         _logger.LogInformation("Volunteer status updated: {VolunteerId}, NewStatus: {Status}", id, status);
+
+        return _mapper.Map<VolunteerDto>(volunteer);
+    }
+
+    public async Task<VolunteerDto?> UpdateSmsOptInAsync(Guid id, bool smsOptIn, CancellationToken cancellationToken = default)
+    {
+        var volunteer = await _repository.GetByIdAsync(id, cancellationToken);
+        if (volunteer == null)
+        {
+            return null;
+        }
+
+        volunteer.SmsOptIn = smsOptIn;
+        await _repository.UpdateAsync(volunteer, cancellationToken);
+
+        _logger.LogInformation("Volunteer SMS opt-in updated: {VolunteerId}, SmsOptIn: {SmsOptIn}", id, smsOptIn);
 
         return _mapper.Map<VolunteerDto>(volunteer);
     }

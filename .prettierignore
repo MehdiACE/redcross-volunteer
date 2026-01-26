@@ -1,0 +1,35 @@
+# Build directories
+node_modules/
+dist/
+build/
+bin/
+obj/
+.angular/
+
+# Package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment files
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated code
+*.generated.ts
+
+# Coverage
+coverage/
+
+# Build outputs
+dist/
+.next/

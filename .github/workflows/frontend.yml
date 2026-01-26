@@ -1,0 +1,115 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - '001-volunteer-onboarding'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build and Test (Angular)
+    working-directory: ./RedCrossManager.Client
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: RedCrossManager.Client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./RedCrossManager.Client
+
+      - name: Lint code
+        run: npm run lint --if-present
+        working-directory: ./RedCrossManager.Client
+
+      - name: Run tests with coverage
+        run: npm run test -- --code-coverage --watch=false
+        working-directory: ./RedCrossManager.Client
+
+      - name: Build for production
+        run: npm run build
+        working-directory: ./RedCrossManager.Client
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: RedCrossManager.Client/coverage/
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: RedCrossManager.Client/dist/
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Code Quality (ESLint)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: RedCrossManager.Client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./RedCrossManager.Client
+
+      - name: Run ESLint
+        run: npm run lint --if-present
+        working-directory: ./RedCrossManager.Client
+        continue-on-error: true
+
+      - name: Run Prettier check
+        run: npx prettier --check "src/**/*.{ts,tsx,js,jsx,html,scss,css,json}"
+        working-directory: ./RedCrossManager.Client
+        continue-on-error: true
+
+  security-scan:
+    runs-on: ubuntu-latest
+    name: Security Scanning
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: RedCrossManager.Client/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./RedCrossManager.Client
+
+      - name: Check npm vulnerabilities
+        run: npm audit --audit-level=moderate
+        working-directory: ./RedCrossManager.Client
+        continue-on-error: true

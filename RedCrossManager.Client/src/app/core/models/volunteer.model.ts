@@ -32,3 +32,7 @@ export interface VolunteerDto {
   isMinor: boolean;
   smsOptIn: boolean;
 }
+
+export interface SmsOptInDto {
+  smsOptIn: boolean;
+}
