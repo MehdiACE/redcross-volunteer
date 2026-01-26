@@ -1,0 +1,30 @@
+.signature-pad-container {
+  @apply border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50;
+  min-height: 200px;
+}
+
+.form-section {
+  @apply space-y-4;
+}
+
+.agreement-item {
+  @apply flex items-start space-x-3 p-4 bg-gray-50 rounded-lg;
+
+  &:hover {
+    @apply bg-gray-100 transition-colors;
+  }
+}
+
+.action-buttons {
+  @apply flex justify-between gap-4 mt-8;
+}
+
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    @apply grid-cols-1;
+  }
+
+  .action-buttons {
+    @apply flex-col;
+  }
+}

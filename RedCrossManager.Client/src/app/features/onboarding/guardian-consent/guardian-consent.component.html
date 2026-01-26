@@ -1,0 +1,207 @@
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-blue-50 py-8 px-4">
+  <div class="max-w-4xl mx-auto">
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="flex justify-center items-center min-h-96">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!isLoading && consentData" class="space-y-6">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+          {{ 'guardianConsent.title' | translate }}
+        </h1>
+        <p class="text-gray-600">
+          {{ 'guardianConsent.subtitle' | translate }}
+        </p>
+      </div>
+
+      <form [formGroup]="consentForm" (ngSubmit)="submit()">
+        <!-- Volunteer Information (Read-only) -->
+        <mat-card class="mb-6 shadow-sm">
+          <mat-card-header class="bg-blue-50 border-b">
+            <mat-card-title>{{ 'guardianConsent.volunteerInformation' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="pt-6">
+            <div formGroupName="volunteerInfo" class="grid grid-cols-2 gap-4">
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.firstName' | translate }}</mat-label>
+                <input matInput formControlName="firstName" readonly />
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.lastName' | translate }}</mat-label>
+                <input matInput formControlName="lastName" readonly />
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.dateOfBirth' | translate }}</mat-label>
+                <input matInput formControlName="dateOfBirth" readonly />
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.email' | translate }}</mat-label>
+                <input matInput formControlName="email" readonly />
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Guardian Information -->
+        <mat-card class="mb-6 shadow-sm">
+          <mat-card-header class="bg-blue-50 border-b">
+            <mat-card-title>{{ 'guardianConsent.guardianInformation' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="pt-6">
+            <div formGroupName="guardianInfo" class="grid grid-cols-2 gap-4">
+              <mat-form-field class="w-full col-span-2">
+                <mat-label>{{ 'guardianConsent.guardianFullName' | translate }}</mat-label>
+                <input matInput formControlName="fullName" required />
+                <mat-error *ngIf="consentForm.get('guardianInfo.fullName')?.hasError('required')">
+                  {{ 'guardianConsent.required' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.email' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email" required />
+                <mat-error *ngIf="consentForm.get('guardianInfo.email')?.hasError('required')">
+                  {{ 'guardianConsent.required' | translate }}
+                </mat-error>
+                <mat-error *ngIf="consentForm.get('guardianInfo.email')?.hasError('email')">
+                  {{ 'guardianConsent.invalidEmail' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full">
+                <mat-label>{{ 'guardianConsent.phone' | translate }}</mat-label>
+                <input matInput formControlName="phone" required />
+                <mat-error *ngIf="consentForm.get('guardianInfo.phone')?.hasError('required')">
+                  {{ 'guardianConsent.required' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="w-full col-span-2">
+                <mat-label>{{ 'guardianConsent.relationship' | translate }}</mat-label>
+                <input matInput formControlName="relationship" required />
+                <mat-error *ngIf="consentForm.get('guardianInfo.relationship')?.hasError('required')">
+                  {{ 'guardianConsent.required' | translate }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Consent Agreements -->
+        <mat-card class="mb-6 shadow-sm">
+          <mat-card-header class="bg-blue-50 border-b">
+            <mat-card-title>{{ 'guardianConsent.agreements' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="pt-6 space-y-4">
+            <!-- Guardian Agreement -->
+            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <mat-checkbox formControlName="guardianAgreement" class="pt-1"></mat-checkbox>
+              <div class="flex-1">
+                <p class="font-semibold text-gray-900">
+                  {{ 'guardianConsent.guardianAgreementLabel' | translate }}
+                </p>
+                <p class="text-sm text-gray-600 mt-1">
+                  {{ 'guardianConsent.guardianAgreementText' | translate }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Data Processing Agreement -->
+            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+              <mat-checkbox formControlName="dataProcessingAgreement" class="pt-1"></mat-checkbox>
+              <div class="flex-1">
+                <p class="font-semibold text-gray-900">
+                  {{ 'guardianConsent.dataProcessingLabel' | translate }}
+                </p>
+                <p class="text-sm text-gray-600 mt-1">
+                  {{ 'guardianConsent.dataProcessingText' | translate }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Accept Terms -->
+            <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <mat-checkbox formControlName="acceptTerms" required class="pt-1"></mat-checkbox>
+              <div class="flex-1">
+                <p class="font-semibold text-gray-900">
+                  {{ 'guardianConsent.acceptTermsLabel' | translate }}
+                </p>
+                <p class="text-sm text-gray-600 mt-1">
+                  {{ 'guardianConsent.acceptTermsText' | translate }}
+                </p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Signature Section -->
+        <mat-card class="mb-6 shadow-sm">
+          <mat-card-header class="bg-blue-50 border-b">
+            <mat-card-title>{{ 'guardianConsent.signature' | translate }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="pt-6">
+            <p class="text-sm text-gray-600 mb-4">
+              {{ 'guardianConsent.signatureInstructions' | translate }}
+            </p>
+
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50 mb-4">
+              <p class="text-center text-gray-500 text-sm py-12">
+                {{ 'guardianConsent.signaturePadPlaceholder' | translate }}
+              </p>
+              <!-- Signature Pad would be integrated here -->
+            </div>
+
+            <div class="flex space-x-4">
+              <button
+                type="button"
+                mat-stroked-button
+                color="primary"
+                (click)="clearSignature()"
+                [disabled]="isSignatureEmpty || isSubmitting"
+              >
+                {{ 'common.clear' | translate }}
+              </button>
+            </div>
+
+            <mat-error *ngIf="isSignatureEmpty && consentForm.touched" class="block mt-2">
+              {{ 'guardianConsent.signatureRequired' | translate }}
+            </mat-error>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-between gap-4">
+          <button
+            type="button"
+            mat-stroked-button
+            [disabled]="isSubmitting"
+          >
+            {{ 'common.cancel' | translate }}
+          </button>
+
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!consentForm.valid || isSignatureEmpty || isSubmitting"
+            class="min-w-48"
+          >
+            <span *ngIf="!isSubmitting">
+              {{ 'common.submit' | translate }}
+            </span>
+            <span *ngIf="isSubmitting" class="flex items-center gap-2">
+              <mat-spinner diameter="20" class="!m-0"></mat-spinner>
+              {{ 'common.submitting' | translate }}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
