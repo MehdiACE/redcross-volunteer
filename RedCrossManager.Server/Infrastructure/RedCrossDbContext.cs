@@ -20,6 +20,9 @@ public class RedCrossDbContext : DbContext
     public DbSet<Assignment> Assignments => Set<Assignment>();
     public DbSet<CommunicationMessage> CommunicationMessages => Set<CommunicationMessage>();
     public DbSet<CommunicationRecipient> CommunicationRecipients => Set<CommunicationRecipient>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -198,6 +201,41 @@ public class RedCrossDbContext : DbContext
             entity.HasOne(cr => cr.Message)
                 .WithMany(cm => cm.Recipients)
                 .HasForeignKey(cr => cr.MessageId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // User configuration
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(u => u.Id);
+            entity.HasIndex(u => u.Email).IsUnique();
+            entity.Property(u => u.Email).IsRequired().HasMaxLength(255);
+            entity.Property(u => u.PasswordHash).IsRequired().HasMaxLength(500);
+            entity.Property(u => u.IsActive).IsRequired();
+        });
+
+        // Role configuration
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(r => r.Id);
+            entity.HasIndex(r => r.Name).IsUnique();
+            entity.Property(r => r.Name).IsRequired().HasMaxLength(100);
+            entity.Property(r => r.Description).HasMaxLength(255);
+        });
+
+        // UserRole configuration
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            entity.HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }
