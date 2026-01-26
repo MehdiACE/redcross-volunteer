@@ -7,12 +7,12 @@
 
 ## Summary
 
-Build a full-stack volunteer onboarding platform with guided onboarding stepper (documents, orientation, certifications, final review), parental consent flow for minors, training management, mission assignment, document verification, dashboards, and B1J communications (email required, SMS optional with opt-in). Backend: .NET 10 Web API + EF Core 10 (SQL Server) with Repository/Service/Controller/DTO/AutoMapper; JWT auth with Azure AD option; CORS for Angular. Frontend: Angular 18 + Material 18 (stepper, tables) + Tailwind for utilities, HttpClient + routing. Contracts versioned `/api/v1`. Migrations for SQL Server. Localization FR/EN. Structured logging and health checks for Azure readiness.
+Build a full-stack volunteer onboarding platform with guided onboarding stepper (documents, orientation, certifications, final review), parental consent flow for minors, training management, mission assignment, document verification, dashboards, and B1J communications (email required, SMS optional with opt-in). Backend: .NET 10 Web API + EF Core 10 (SQL Server) with Repository/Service/Controller/DTO/AutoMapper; JWT auth with Azure AD option; CORS for Angular. Frontend: Angular 20 + Material 20 (stepper, tables) + Tailwind for utilities, HttpClient + routing. Contracts versioned `/api/v1`. Migrations for SQL Server. Localization FR/EN. Structured logging and health checks for Azure readiness.
 
 ## Technical Context
 
-**Language/Version**: Backend C# / .NET 10; Frontend Angular 18 (TypeScript 5+)  
-**Primary Dependencies**: ASP.NET Core Web API, EF Core 10 (SQL Server), AutoMapper, FluentValidation, JWT auth with optional Azure AD, Serilog + Application Insights sink; Angular 18, Angular Material 18, Tailwind 3.1.0, RxJS, ngx-translate  
+**Language/Version**: Backend C# / .NET 10; Frontend Angular 20 (TypeScript 5+)  
+**Primary Dependencies**: ASP.NET Core Web API, EF Core 10 (SQL Server), AutoMapper, FluentValidation, JWT auth with optional Azure AD, Serilog + Application Insights sink; Angular 20, Angular Material 20, Tailwind 3.1.0, RxJS, ngx-translate  
 **Storage**: SQL Server (code-first migrations), Azure Blob Storage for documents (dev: local file system)  
 **Testing**: Backend xUnit (or NUnit) + integration tests (WebApplicationFactory, Testcontainers SQL); Frontend Jest + Angular Testing Library; Contract tests for APIs  
 **Target Platform**: Azure App Service (API), Azure SQL Database, Azure Blob Storage, Azure Static Web Apps/App Service for frontend  

@@ -22,7 +22,8 @@ description: "Tasks for volunteer onboarding & management system"
 
  - [X] T001 Initialize repository structure for backend/frontend per plan in `RedCrossManager.Server/` and `RedCrossManager.Client/`
  - [X] T002 Create .NET 10 Web API project and solution in `RedCrossManager.Server/`
- - [X] T003 Create Angular 18 app with Tailwind 3.1.0 and Material 18 in `RedCrossManager.Client/`
+- [X] T003 Create Angular 20 app with Tailwind 3.1.0 and Material 20 in `RedCrossManager.Client/`
+- [X] T003b Migrate frontend dependencies to Angular 20 + Material 20 in `RedCrossManager.Client/package.json`
  - [X] T004 [P] Add `.editorconfig`, `.gitignore`, and base `Directory.Build.props` for consistent formatting in repo root
 - [ ] T005 [P] Configure Husky/lint-staged (frontend) and dotnet-format hook (backend) in repo root
 
