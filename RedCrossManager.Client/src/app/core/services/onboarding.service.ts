@@ -12,6 +12,15 @@ export class OnboardingService {
 
   constructor(private http: HttpClient) {}
 
+  getMyProgress(): Observable<OnboardingProgressDto> {
+    return this.http.get<OnboardingProgressDto>(`${this.apiUrl}/me`);
+  }
+
+  submitMyStep(stepId: string): Observable<any> {
+    const dto: SubmitStepDto = { stepId };
+    return this.http.post(`${this.apiUrl}/me/steps/submit`, dto);
+  }
+
   getProgress(volunteerId: string): Observable<OnboardingProgressDto> {
     return this.http.get<OnboardingProgressDto>(`${this.apiUrl}/progress/${volunteerId}`);
   }

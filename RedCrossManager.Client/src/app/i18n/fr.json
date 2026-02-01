@@ -17,6 +17,24 @@
     "next": "Suivant",
     "loading": "Chargement..."
   },
+  "login": {
+    "title": "Connexion",
+    "subtitle": "Connectez-vous à votre compte bénévole",
+    "submit": "Se connecter",
+    "success": "Connexion réussie !",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "register": "S'inscrire",
+    "fields": {
+      "email": "Courriel",
+      "password": "Mot de passe"
+    },
+    "errors": {
+      "required": "Ce champ est obligatoire",
+      "invalidEmail": "Veuillez entrer une adresse courriel valide",
+      "invalidCredentials": "Courriel ou mot de passe incorrect",
+      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
+    }
+  },
   "registration": {
     "title": "Inscription des bénévoles",
     "subtitle": "Rejoignez la communauté de bénévoles de la Croix-Rouge canadienne. Remplissez le formulaire ci-dessous pour commencer.",

@@ -21,6 +21,27 @@ public class OnboardingController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet("me")]
+    [Authorize]
+    [ProducesResponseType(typeof(OnboardingProgressDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<OnboardingProgressDto>> GetMyProgress(CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == Guid.Empty)
+        {
+            return Unauthorized();
+        }
+
+        var progress = await _onboardingService.GetProgressByUserIdAsync(userId, cancellationToken);
+        if (progress == null)
+        {
+            return NotFound(new { error = "No volunteer profile found for this user" });
+        }
+
+        return Ok(progress);
+    }
+
     [HttpGet("progress/{volunteerId:guid}")]
     [ProducesResponseType(typeof(OnboardingProgressDto), StatusCodes.Status200OK)]
     public async Task<ActionResult<OnboardingProgressDto>> GetProgress(
@@ -42,6 +63,39 @@ public class OnboardingController : ControllerBase
         try
         {
             var result = await _onboardingService.SubmitStepAsync(volunteerId, dto, cancellationToken);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
+
+    [HttpPost("me/steps/submit")]
+    [Authorize]
+    [ProducesResponseType(typeof(OnboardingStepDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<OnboardingStepDto>> SubmitMyStep(
+        [FromBody] SubmitStepDto dto,
+        CancellationToken cancellationToken)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == Guid.Empty)
+        {
+            return Unauthorized();
+        }
+
+        // Get the volunteer ID from the user ID
+        var progress = await _onboardingService.GetProgressByUserIdAsync(userId, cancellationToken);
+        if (progress == null)
+        {
+            return NotFound(new { error = "No volunteer profile found for this user" });
+        }
+
+        try
+        {
+            var result = await _onboardingService.SubmitStepAsync(progress.VolunteerId, dto, cancellationToken);
             return Ok(result);
         }
         catch (InvalidOperationException ex)

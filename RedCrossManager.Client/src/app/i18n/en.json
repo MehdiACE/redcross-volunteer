@@ -16,8 +16,24 @@
     "back": "Back",
     "next": "Next",
     "loading": "Loading..."
-  },
-  "registration": {
+  },  "login": {
+    "title": "Login",
+    "subtitle": "Sign in to your volunteer account",
+    "submit": "Sign In",
+    "success": "Login successful!",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "fields": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "errors": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidCredentials": "Invalid email or password",
+      "serverError": "An error occurred. Please try again later."
+    }
+  },  "registration": {
     "title": "Volunteer Registration",
     "subtitle": "Join the Canadian Red Cross volunteer community. Fill out the form below to get started.",
     "submit": "Register",

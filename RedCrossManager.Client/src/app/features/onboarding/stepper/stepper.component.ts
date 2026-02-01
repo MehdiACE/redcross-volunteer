@@ -35,7 +35,6 @@ export class StepperComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   selectedStepIndex = 0;
   private destroy$ = new Subject<void>();
-  private volunteerId: string = '';
 
   stepTitles = [
     'onboarding.steps.personalInfo',
@@ -56,17 +55,9 @@ export class StepperComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
     private translate: TranslateService
-  ) {
-    // Get volunteerId from session/localStorage
-    this.volunteerId = sessionStorage.getItem('volunteerId') || '';
-  }
+  ) {}
 
   ngOnInit(): void {
-    if (!this.volunteerId) {
-      this.router.navigate(['/register']);
-      return;
-    }
-
     this.loadProgress();
   }
 
@@ -77,7 +68,7 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   private loadProgress(): void {
     this.isLoading = true;
-    this.onboardingService.getProgress(this.volunteerId)
+    this.onboardingService.getMyProgress()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (progress) => {
@@ -187,7 +178,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     const step = this.progress.steps[stepIndex];
     this.isSubmitting = true;
 
-    this.onboardingService.submitStep(this.volunteerId, step.id)
+    this.onboardingService.submitMyStep(step.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {

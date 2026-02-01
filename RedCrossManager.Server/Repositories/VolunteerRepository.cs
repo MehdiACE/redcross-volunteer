@@ -22,6 +22,15 @@ public class VolunteerRepository : IVolunteerRepository
             .FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
     }
 
+    public async Task<Volunteer?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Volunteers
+            .Include(v => v.ParentalConsent)
+            .Include(v => v.OnboardingSteps)
+            .Include(v => v.Certifications)
+            .FirstOrDefaultAsync(v => v.UserId == userId, cancellationToken);
+    }
+
     public async Task<Volunteer?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         return await _context.Volunteers

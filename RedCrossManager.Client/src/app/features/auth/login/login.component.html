@@ -1,0 +1,51 @@
+<div class="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+  <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        {{ 'login.title' | translate }}
+      </h1>
+      <p class="text-gray-600">
+        {{ 'login.subtitle' | translate }}
+      </p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'login.fields.email' | translate }}</mat-label>
+        <input matInput type="email" formControlName="email" required autocomplete="email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error>{{ getErrorMessage('email') }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>{{ 'login.fields.password' | translate }}</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="current-password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error>{{ getErrorMessage('password') }}</mat-error>
+      </mat-form-field>
+
+      <button 
+        mat-raised-button 
+        color="primary" 
+        type="submit" 
+        class="w-full h-12 text-base"
+        [disabled]="isLoading || loginForm.invalid">
+        <mat-spinner *ngIf="isLoading" diameter="20" class="inline-block mr-2"></mat-spinner>
+        <span *ngIf="!isLoading">{{ 'login.submit' | translate }}</span>
+        <span *ngIf="isLoading">{{ 'common.loading' | translate }}</span>
+      </button>
+
+      <div class="text-center mt-4">
+        <p class="text-gray-600 text-sm">
+          {{ 'login.noAccount' | translate }}
+          <a routerLink="/register" class="text-blue-600 hover:text-blue-800 font-medium">
+            {{ 'login.register' | translate }}
+          </a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>

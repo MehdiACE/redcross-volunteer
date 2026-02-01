@@ -8,6 +8,7 @@ namespace RedCrossManager.Server.Services.Onboarding;
 public interface IOnboardingService
 {
     Task<OnboardingProgressDto> GetProgressAsync(Guid volunteerId, CancellationToken cancellationToken = default);
+    Task<OnboardingProgressDto?> GetProgressByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     Task InitializeStepsAsync(Guid volunteerId, CancellationToken cancellationToken = default);
     Task<OnboardingStepDto> SubmitStepAsync(Guid volunteerId, SubmitStepDto dto, CancellationToken cancellationToken = default);
     Task<OnboardingStepDto> ReviewStepAsync(Guid stepId, Guid reviewerId, ReviewStepDto dto, CancellationToken cancellationToken = default);
@@ -59,6 +60,48 @@ public class OnboardingService : IOnboardingService
 
         return new OnboardingProgressDto(
             volunteerId,
+            volunteerInfo,
+            stepDtos,
+            completedCount,
+            steps.Count,
+            completedCount == steps.Count,
+            volunteer.Status.ToString(),
+            volunteer.IsMinor,
+            volunteer.ParentalConsent?.ConsentStatus == Domain.Entities.ConsentStatus.Approved,
+            volunteer.RegisteredAt,
+            completedCount == steps.Count ? DateTime.UtcNow : null
+        );
+    }
+
+    public async Task<OnboardingProgressDto?> GetProgressByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        var volunteer = await _volunteerRepository.GetByUserIdAsync(userId, cancellationToken);
+        if (volunteer == null)
+        {
+            _logger.LogWarning("No volunteer profile found for user {UserId}", userId);
+            return null;
+        }
+
+        var steps = await _stepRepository.GetByVolunteerIdAsync(volunteer.Id, cancellationToken);
+        
+        if (steps.Count == 0)
+        {
+            await InitializeStepsAsync(volunteer.Id, cancellationToken);
+            steps = await _stepRepository.GetByVolunteerIdAsync(volunteer.Id, cancellationToken);
+        }
+
+        var stepDtos = _mapper.Map<List<OnboardingStepDto>>(steps);
+        var completedCount = steps.Count(s => s.Status == StepStatus.Approved);
+
+        var volunteerInfo = new VolunteerBasicInfoDto(
+            volunteer.FirstName,
+            volunteer.LastName,
+            volunteer.Email,
+            volunteer.Phone
+        );
+
+        return new OnboardingProgressDto(
+            volunteer.Id,
             volunteerInfo,
             stepDtos,
             completedCount,

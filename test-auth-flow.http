@@ -1,0 +1,57 @@
+### Test Authentication Flow
+
+@baseUrl = http://localhost:5049/api/v1
+@email = test@example.com
+@password = SecurePass123!
+
+### 1. Register a new volunteer
+POST {{baseUrl}}/volunteers/register
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "phone": "+1234567890",
+  "dateOfBirth": "1995-05-15",
+  "addressStreet": "123 Main St",
+  "addressCity": "Montreal",
+  "addressStateProvince": "QC",
+  "addressPostalCode": "H1A 1A1",
+  "addressCountry": "Canada",
+  "emergencyContactName": "Jane Doe",
+  "emergencyContactPhone": "+0987654321",
+  "areasOfInterest": ["First Aid", "Community Outreach"],
+  "availability": {
+    "daysOfWeek": ["Monday", "Wednesday"],
+    "timePreference": "Evenings"
+  },
+  "languagePreference": "en"
+}
+
+### 2. Login with credentials
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### 3. Get My Onboarding Progress (with token from login)
+# @name loginResponse
+GET {{baseUrl}}/onboarding/me
+Authorization: Bearer {{loginResponse.response.body.accessToken}}
+
+### 4. Submit a step (with token from login)
+POST {{baseUrl}}/onboarding/me/steps/submit
+Authorization: Bearer {{loginResponse.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "stepId": "STEP_ID_HERE"
+}
+
+### 5. Test unauthorized access (no token)
+GET {{baseUrl}}/onboarding/me
