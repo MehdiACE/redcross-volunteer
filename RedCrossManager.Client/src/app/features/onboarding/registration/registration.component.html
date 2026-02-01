@@ -8,25 +8,25 @@
       <h2 class="text-xl font-semibold mb-4">{{ 'registration.sections.personalInfo' | translate }}</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.firstName' | translate }}</mat-label>
           <input matInput formControlName="firstName" required>
           <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.lastName' | translate }}</mat-label>
           <input matInput formControlName="lastName" required>
           <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.email' | translate }}</mat-label>
           <input matInput type="email" formControlName="email" required>
           <mat-error>{{ getErrorMessage('email') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.password' | translate }}</mat-label>
           <input matInput type="password" formControlName="password" required>
           <mat-hint>{{ 'registration.hints.password' | translate }}</mat-hint>
@@ -41,7 +41,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.confirmPassword' | translate }}</mat-label>
           <input matInput type="password" formControlName="confirmPassword" required>
           <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
@@ -52,13 +52,13 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.phone' | translate }}</mat-label>
           <input matInput type="tel" formControlName="phone" placeholder="+15145551234" required>
           <mat-error>{{ getErrorMessage('phone') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.dateOfBirth' | translate }}</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -66,7 +66,7 @@
           <mat-error>{{ getErrorMessage('dateOfBirth') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.languagePreference' | translate }}</mat-label>
           <mat-select formControlName="languagePreference" required>
             <mat-option value="fr">Français</mat-option>
@@ -81,32 +81,32 @@
       <h2 class="text-xl font-semibold mb-4">{{ 'registration.sections.address' | translate }}</h2>
       
       <div class="grid grid-cols-1 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.street' | translate }}</mat-label>
           <input matInput formControlName="street" required>
           <mat-error>{{ getErrorMessage('address.street') }}</mat-error>
         </mat-form-field>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full">
             <mat-label>{{ 'registration.fields.city' | translate }}</mat-label>
             <input matInput formControlName="city" required>
             <mat-error>{{ getErrorMessage('address.city') }}</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full">
             <mat-label>{{ 'registration.fields.stateProvince' | translate }}</mat-label>
             <input matInput formControlName="stateProvince" required>
             <mat-error>{{ getErrorMessage('address.stateProvince') }}</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full">
             <mat-label>{{ 'registration.fields.postalCode' | translate }}</mat-label>
             <input matInput formControlName="postalCode" required>
             <mat-error>{{ getErrorMessage('address.postalCode') }}</mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="w-full">
+          <mat-form-field class="w-full">
             <mat-label>{{ 'registration.fields.country' | translate }}</mat-label>
             <input matInput formControlName="country" required>
             <mat-error>{{ getErrorMessage('address.country') }}</mat-error>
@@ -120,13 +120,13 @@
       <h2 class="text-xl font-semibold mb-4">{{ 'registration.sections.emergencyContact' | translate }}</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.emergencyContactName' | translate }}</mat-label>
           <input matInput formControlName="name" required>
           <mat-error>{{ getErrorMessage('emergencyContact.name') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.emergencyContactPhone' | translate }}</mat-label>
           <input matInput type="tel" formControlName="phone" placeholder="+15145551234" required>
           <mat-error>{{ getErrorMessage('emergencyContact.phone') }}</mat-error>
@@ -138,7 +138,7 @@
     <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
       <h2 class="text-xl font-semibold mb-4">{{ 'registration.sections.preferences' | translate }}</h2>
       
-      <mat-form-field appearance="outline" class="w-full mb-4">
+      <mat-form-field class="w-full mb-4">
         <mat-label>{{ 'registration.fields.areasOfInterest' | translate }}</mat-label>
         <mat-select formControlName="areasOfInterest" multiple required>
           <mat-option *ngFor="let interest of availableInterests" [value]="interest">
@@ -149,7 +149,7 @@
       </mat-form-field>
 
       <div formGroupName="availability">
-        <mat-form-field appearance="outline" class="w-full mb-4">
+        <mat-form-field class="w-full mb-4">
           <mat-label>{{ 'registration.fields.availableDays' | translate }}</mat-label>
           <mat-select formControlName="daysOfWeek" multiple required>
             <mat-option *ngFor="let day of daysOfWeek" [value]="day">
@@ -159,7 +159,7 @@
           <mat-error>{{ getErrorMessage('availability.daysOfWeek') }}</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'registration.fields.timePreference' | translate }}</mat-label>
           <mat-select formControlName="timePreference" required>
             <mat-option value="Morning">{{ 'registration.timeOptions.morning' | translate }}</mat-option>

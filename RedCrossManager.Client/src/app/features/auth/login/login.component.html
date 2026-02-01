@@ -10,14 +10,14 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-      <mat-form-field appearance="outline" class="w-full">
+      <mat-form-field class="w-full">
         <mat-label>{{ 'login.fields.email' | translate }}</mat-label>
         <input matInput type="email" formControlName="email" required autocomplete="email">
         <mat-icon matPrefix>email</mat-icon>
         <mat-error>{{ getErrorMessage('email') }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="w-full">
+      <mat-form-field class="w-full">
         <mat-label>{{ 'login.fields.password' | translate }}</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="current-password">
         <mat-icon matPrefix>lock</mat-icon>

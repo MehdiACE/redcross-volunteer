@@ -6,34 +6,34 @@
     <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
       <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.identity' | translate }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.fullName' | translate }}</mat-label>
           <input matInput formControlName="fullName" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.birthDate' | translate }}</mat-label>
           <input matInput [matDatepicker]="birthPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matIconSuffix [for]="birthPicker"></mat-datepicker-toggle>
           <mat-datepicker #birthPicker></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.birthPlace' | translate }}</mat-label>
           <input matInput formControlName="birthPlace" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.phones' | translate }}</mat-label>
           <input matInput formControlName="phones" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.email' | translate }}</mat-label>
           <input matInput type="email" formControlName="email" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full md:col-span-2">
+        <mat-form-field class="w-full md:col-span-2">
           <mat-label>{{ 'oneTimeVolunteer.fields.address' | translate }}</mat-label>
           <textarea matInput rows="2" formControlName="address" required></textarea>
         </mat-form-field>
@@ -43,12 +43,12 @@
     <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
       <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.assignment' | translate }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.action' | translate }}</mat-label>
           <input matInput formControlName="action" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.structure' | translate }}</mat-label>
           <input matInput formControlName="structure" required>
         </mat-form-field>
@@ -58,22 +58,22 @@
     <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
       <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.emergency' | translate }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactName' | translate }}</mat-label>
           <input matInput formControlName="emergencyContactName" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactRelation' | translate }}</mat-label>
           <input matInput formControlName="emergencyContactRelation" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full md:col-span-2">
+        <mat-form-field class="w-full md:col-span-2">
           <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactAddress' | translate }}</mat-label>
           <textarea matInput rows="2" formControlName="emergencyContactAddress" required></textarea>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.emergencyContactPhones' | translate }}</mat-label>
           <input matInput formControlName="emergencyContactPhones" required>
         </mat-form-field>
@@ -111,12 +111,12 @@
     <section class="bg-white p-6 rounded-lg shadow transition-shadow hover:shadow-md">
       <h2 class="text-xl font-semibold mb-4">{{ 'oneTimeVolunteer.sections.signature' | translate }}</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.signedAt' | translate }}</mat-label>
           <input matInput formControlName="signedAt" required>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
+        <mat-form-field class="w-full">
           <mat-label>{{ 'oneTimeVolunteer.fields.signedOn' | translate }}</mat-label>
           <input matInput [matDatepicker]="signedPicker" formControlName="signedOn" required>
           <mat-datepicker-toggle matIconSuffix [for]="signedPicker"></mat-datepicker-toggle>
