@@ -15,7 +15,8 @@
     "edit": "Modifier",
     "back": "Retour",
     "next": "Suivant",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "logout": "Déconnexion"
   },
   "login": {
     "title": "Connexion",

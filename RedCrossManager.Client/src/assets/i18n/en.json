@@ -15,7 +15,8 @@
     "edit": "Edit",
     "back": "Back",
     "next": "Next",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "logout": "Logout"
   },
   "login": {
     "title": "Login",

@@ -246,4 +246,5 @@ export class StepperComponent implements OnInit, OnDestroy {
   goToRegistration(): void {
     this.router.navigate(['/register']);
   }
+
 }

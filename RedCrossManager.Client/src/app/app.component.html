@@ -1,3 +1,51 @@
 <div class="min-h-screen bg-app-bg">
+  <header *ngIf="showHeader" class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="h-8 w-auto" />
+        <span class="text-sm font-semibold text-red-600">Croix-Rouge</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="toggleLanguage()"
+          class="h-9 px-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+          {{ currentLang.toUpperCase() }}
+        </button>
+        <button
+          type="button"
+          (click)="toggleTheme()"
+          class="h-9 w-9 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50">
+          <span *ngIf="!isDarkMode">🌙</span>
+          <span *ngIf="isDarkMode">☀️</span>
+        </button>
+
+        <div class="relative">
+          <button
+            type="button"
+            (click)="toggleUserMenu()"
+            class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50">
+            <span class="h-6 w-6 rounded-full bg-red-100 text-red-600 text-xs font-semibold flex items-center justify-center">
+              {{ displayName.charAt(0) }}
+            </span>
+            <span class="text-sm font-medium text-gray-700">
+              {{ displayName }}
+            </span>
+          </button>
+
+          <div *ngIf="showUserMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1">
+            <button
+              type="button"
+              (click)="logout()"
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              {{ 'common.logout' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
   <router-outlet />
 </div>
