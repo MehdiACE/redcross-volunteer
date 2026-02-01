@@ -39,7 +39,7 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
             <mat-form-field class="w-full">
               <mat-label>{{ 'login.fields.email' | translate }}</mat-label>
-              <input matInput type="email" formControlName="email" required autocomplete="email">
+              <input matInput type="email" formControlName="email" required autocomplete="email" [placeholder]="'login.fields.email' | translate">
               <mat-icon matPrefix>email</mat-icon>
               <mat-error>{{ getErrorMessage('email') }}</mat-error>
             </mat-form-field>
@@ -47,7 +47,7 @@
             <div class="space-y-2">
               <mat-form-field class="w-full">
                 <mat-label>{{ 'login.fields.password' | translate }}</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="current-password">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required autocomplete="current-password" [placeholder]="'login.fields.password' | translate">
                 <mat-icon matPrefix>lock</mat-icon>
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword" type="button">
                   <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>

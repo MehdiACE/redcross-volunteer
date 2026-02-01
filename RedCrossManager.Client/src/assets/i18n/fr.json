@@ -10,10 +10,30 @@
     "close": "Fermer",
     "submit": "Soumettre",
     "save": "Enregistrer",
+    "saving": "Enregistrement...",
     "delete": "Supprimer",
     "edit": "Modifier",
     "back": "Retour",
-    "next": "Suivant"
+    "next": "Suivant",
+    "loading": "Chargement..."
+  },
+  "login": {
+    "title": "Connexion",
+    "subtitle": "Connectez-vous à votre compte bénévole",
+    "submit": "Se connecter",
+    "success": "Connexion réussie !",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "register": "S'inscrire",
+    "fields": {
+      "email": "Courriel",
+      "password": "Mot de passe"
+    },
+    "errors": {
+      "required": "Ce champ est obligatoire",
+      "invalidEmail": "Veuillez entrer une adresse courriel valide",
+      "invalidCredentials": "Courriel ou mot de passe incorrect",
+      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
+    }
   },
   "registration": {
     "title": "Inscription des bénévoles",
@@ -30,6 +50,8 @@
       "firstName": "Prénom",
       "lastName": "Nom de famille",
       "email": "Courriel",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
       "phone": "Téléphone",
       "dateOfBirth": "Date de naissance",
       "languagePreference": "Langue préférée",
@@ -44,6 +66,9 @@
       "availableDays": "Jours disponibles",
       "timePreference": "Période préférée"
     },
+    "hints": {
+      "password": "Minimum 8 caractères, avec au moins une majuscule, une minuscule et un caractère spécial"
+    },
     "timeOptions": {
       "morning": "Matin",
       "afternoon": "Après-midi",
@@ -57,7 +82,12 @@
       "maxLength": "Maximum {{max}} caractères autorisés",
       "invalidForm": "Veuillez remplir tous les champs obligatoires correctement",
       "emailExists": "Ce courriel est déjà enregistré",
-      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
+      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordPattern": "Le mot de passe doit contenir au moins une majuscule, une minuscule et un caractère spécial",
+      "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas"
     }
   },
   "onboarding": {
@@ -152,5 +182,19 @@
       "invalidForm": "Veuillez remplir tous les champs obligatoires.",
       "generationFailed": "Échec de génération du PDF."
     }
+  },
+  "profile": {
+    "title": "Profil du bénévole",
+    "subtitle": "Gérez vos informations de profil et vos préférences de communication",
+    "personalInfo": "Informations personnelles",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "Adresse électronique",
+    "phone": "Numéro de téléphone",
+    "status": "Statut du bénévole",
+    "languagePreference": "Préférence de langue",
+    "communicationPreferences": "Préférences de communication",
+    "smsOptIn": "Accepter les notifications par SMS",
+    "smsOptInDescription": "Recevez des mises à jour importantes et des rappels par SMS. Cela comprend les notifications d'événements, les confirmations d'attribution et les alertes urgentes."
   }
 }

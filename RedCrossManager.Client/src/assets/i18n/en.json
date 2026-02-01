@@ -10,10 +10,30 @@
     "close": "Close",
     "submit": "Submit",
     "save": "Save",
+    "saving": "Saving...",
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
-    "next": "Next"
+    "next": "Next",
+    "loading": "Loading..."
+  },
+  "login": {
+    "title": "Login",
+    "subtitle": "Sign in to your volunteer account",
+    "submit": "Sign In",
+    "success": "Login successful!",
+    "noAccount": "Don't have an account?",
+    "register": "Register",
+    "fields": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "errors": {
+      "required": "This field is required",
+      "invalidEmail": "Please enter a valid email address",
+      "invalidCredentials": "Invalid email or password",
+      "serverError": "An error occurred. Please try again later."
+    }
   },
   "registration": {
     "title": "Volunteer Registration",
@@ -30,6 +50,8 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
       "phone": "Phone",
       "dateOfBirth": "Date of Birth",
       "languagePreference": "Preferred Language",
@@ -44,6 +66,9 @@
       "availableDays": "Available Days",
       "timePreference": "Preferred Time"
     },
+    "hints": {
+      "password": "Minimum 8 characters, with at least one uppercase letter, one lowercase letter, and one special character"
+    },
     "timeOptions": {
       "morning": "Morning",
       "afternoon": "Afternoon",
@@ -57,7 +82,12 @@
       "maxLength": "Maximum {{max}} characters allowed",
       "invalidForm": "Please fill out all required fields correctly",
       "emailExists": "This email is already registered",
-      "serverError": "An error occurred. Please try again later."
+      "serverError": "An error occurred. Please try again later.",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one special character",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
     }
   },
   "onboarding": {
@@ -152,5 +182,19 @@
       "invalidForm": "Please fill all required fields.",
       "generationFailed": "PDF generation failed."
     }
+  },
+  "profile": {
+    "title": "Volunteer Profile",
+    "subtitle": "Manage your profile information and communication preferences",
+    "personalInfo": "Personal Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "status": "Volunteer Status",
+    "languagePreference": "Language Preference",
+    "communicationPreferences": "Communication Preferences",
+    "smsOptIn": "Opt-in to SMS notifications",
+    "smsOptInDescription": "Receive important updates and reminders via SMS text message. This includes event notifications, assignment confirmations, and urgent alerts."
   }
 }
