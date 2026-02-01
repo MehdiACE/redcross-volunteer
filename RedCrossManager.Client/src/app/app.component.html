@@ -1,44 +1,64 @@
-<div class="min-h-screen bg-app-bg">
-  <header *ngIf="showHeader" class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200">
+<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark text-gray-900 dark:text-[#F5F5F0]">
+  <header *ngIf="showHeader" class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-[#191a1f]/90 dark:border-text-dark">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="h-8 w-auto" />
-        <span class="text-sm font-semibold text-red-600">Croix-Rouge</span>
+
       </div>
 
       <div class="flex items-center gap-3">
-        <button
-          type="button"
-          (click)="toggleLanguage()"
-          class="h-9 px-3 rounded-full border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50">
-          {{ currentLang.toUpperCase() }}
-        </button>
-        <button
-          type="button"
-          (click)="toggleTheme()"
-          class="h-9 w-9 rounded-full border border-gray-200 text-gray-600 hover:bg-gray-50">
-          <span *ngIf="!isDarkMode">🌙</span>
-          <span *ngIf="isDarkMode">☀️</span>
-        </button>
-
         <div class="relative">
           <button
             type="button"
             (click)="toggleUserMenu()"
-            class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50">
+            class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-text-dark dark:hover:bg-gray-800">
             <span class="h-6 w-6 rounded-full bg-red-100 text-red-600 text-xs font-semibold flex items-center justify-center">
               {{ displayName.charAt(0) }}
             </span>
-            <span class="text-sm font-medium text-gray-700">
+            <span class="text-sm font-medium text-gray-700 dark:text-[#F5F5F0]">
               {{ displayName }}
             </span>
           </button>
 
-          <div *ngIf="showUserMenu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-1">
+          <div *ngIf="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg py-2 dark:bg-[#191a1f] dark:border-text-dark">
+            <div class="px-4 py-2 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              Langue
+            </div>
+            <div class="px-4 pb-2">
+              <button
+                type="button"
+                (click)="toggleLanguage()"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-text-dark dark:text-[#F5F5F0] dark:hover:bg-gray-800">
+                <span>FR / EN</span>
+                <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
+                  {{ currentLang.toUpperCase() }}
+                </span>
+              </button>
+            </div>
+
+            <div class="border-t border-gray-200 dark:border-text-dark my-1"></div>
+
+            <div class="px-4 py-2 text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+              Mode d'affichage
+            </div>
+            <div class="px-4 pb-2">
+              <button
+                type="button"
+                (click)="toggleTheme()"
+                class="w-full flex items-center justify-between px-3 py-2 rounded-md border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-text-dark dark:text-[#F5F5F0] dark:hover:bg-gray-800">
+                <span>Clair / Sombre</span>
+                <span class="px-2 py-0.5 rounded-full bg-gray-100 text-gray-700 text-xs font-semibold dark:bg-gray-800 dark:text-[#F5F5F0]">
+                  {{ isDarkMode ? 'Sombre' : 'Clair' }}
+                </span>
+              </button>
+            </div>
+
+            <div class="border-t border-gray-200 dark:border-text-dark my-1"></div>
+
             <button
               type="button"
               (click)="logout()"
-              class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-[#F5F5F0] dark:hover:bg-gray-800">
               {{ 'common.logout' | translate }}
             </button>
           </div>
