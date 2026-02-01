@@ -1,0 +1,17 @@
+<svg width="800" height="450" viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Volunteer hero illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E8C7A2" />
+      <stop offset="100%" stop-color="#C79B76" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" rx="24" fill="url(#bg)" />
+  <rect x="110" y="70" width="580" height="310" rx="24" fill="#F7E6D7" opacity="0.5" />
+  <g transform="translate(190 120)">
+    <rect x="0" y="40" width="260" height="120" rx="18" fill="#D69A6C" />
+    <rect x="220" y="0" width="260" height="120" rx="18" fill="#B97C58" />
+    <rect x="140" y="80" width="260" height="120" rx="18" fill="#E0B28A" />
+    <circle cx="60" cy="100" r="26" fill="#C4865D" />
+    <circle cx="360" cy="40" r="26" fill="#A66B4B" />
+  </g>
+</svg>
