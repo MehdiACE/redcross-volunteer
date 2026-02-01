@@ -110,12 +110,18 @@
   "onboarding": {
     "title": "Onboarding Workflow",
     "subtitle": "Complete the steps below to finish your registration and become an active volunteer.",
+    "badge": "Onboarding",
+    "stepsCompleted": "steps completed",
     "progress": "Step {{current}} of {{total}} completed",
     "steps": {
       "personalInfo": "Personal Information",
       "background": "Background Check",
       "training": "Training",
-      "assignment": "Assignment"
+      "assignment": "Assignment",
+      "personalInfoDesc": "Verify your personal information and contact details",
+      "backgroundDesc": "Complete your background check",
+      "trainingDesc": "Complete required training",
+      "assignmentDesc": "Get your first assignment"
     },
     "stepDescriptions": {
       "personalInfoDesc": "Verify your personal information and contact details",

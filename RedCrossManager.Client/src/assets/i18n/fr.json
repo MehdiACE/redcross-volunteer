@@ -110,12 +110,18 @@
   "onboarding": {
     "title": "Processus d'embarquement",
     "subtitle": "Complétez les étapes ci-dessous pour terminer votre inscription et devenir un bénévole actif.",
+    "badge": "Onboarding",
+    "stepsCompleted": "étapes complétées",
     "progress": "Étape {{current}} sur {{total}} complétée",
     "steps": {
       "personalInfo": "Informations personnelles",
       "background": "Vérification des antécédents",
       "training": "Formation",
-      "assignment": "Affectation"
+      "assignment": "Affectation",
+      "personalInfoDesc": "Vérifiez vos informations personnelles et vos coordonnées",
+      "backgroundDesc": "Complétez votre vérification des antécédents",
+      "trainingDesc": "Complétez la formation requise",
+      "assignmentDesc": "Obtenez votre première affectation"
     },
     "stepDescriptions": {
       "personalInfoDesc": "Vérifiez vos informations personnelles et vos coordonnées",
