@@ -32,6 +32,8 @@
       "firstName": "Prénom",
       "lastName": "Nom de famille",
       "email": "Courriel",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
       "phone": "Téléphone",
       "dateOfBirth": "Date de naissance",
       "languagePreference": "Langue préférée",
@@ -46,6 +48,9 @@
       "availableDays": "Jours disponibles",
       "timePreference": "Période préférée"
     },
+    "hints": {
+      "password": "Minimum 8 caractères, avec au moins une majuscule, une minuscule et un caractère spécial"
+    },
     "timeOptions": {
       "morning": "Matin",
       "afternoon": "Après-midi",
@@ -59,7 +64,12 @@
       "maxLength": "Maximum {{max}} caractères autorisés",
       "invalidForm": "Veuillez remplir tous les champs obligatoires correctement",
       "emailExists": "Ce courriel est déjà enregistré",
-      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
+      "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard.",
+      "passwordRequired": "Le mot de passe est obligatoire",
+      "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordPattern": "Le mot de passe doit contenir au moins une majuscule, une minuscule et un caractère spécial",
+      "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas"
     }
   },
   "onboarding": {

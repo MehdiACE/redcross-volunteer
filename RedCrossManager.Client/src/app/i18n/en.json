@@ -32,6 +32,8 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
       "phone": "Phone",
       "dateOfBirth": "Date of Birth",
       "languagePreference": "Preferred Language",
@@ -46,6 +48,9 @@
       "availableDays": "Available Days",
       "timePreference": "Preferred Time"
     },
+    "hints": {
+      "password": "Minimum 8 characters, with at least one uppercase letter, one lowercase letter, and one special character"
+    },
     "timeOptions": {
       "morning": "Morning",
       "afternoon": "Afternoon",
@@ -59,7 +64,12 @@
       "maxLength": "Maximum {{max}} characters allowed",
       "invalidForm": "Please fill out all required fields correctly",
       "emailExists": "This email is already registered",
-      "serverError": "An error occurred. Please try again later."
+      "serverError": "An error occurred. Please try again later.",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordPattern": "Password must contain at least one uppercase letter, one lowercase letter, and one special character",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match"
     }
   },
   "onboarding": {

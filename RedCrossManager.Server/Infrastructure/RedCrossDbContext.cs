@@ -47,6 +47,12 @@ public class RedCrossDbContext : DbContext
             entity.Property(v => v.AreasOfInterest).IsRequired();
             entity.Property(v => v.Availability).IsRequired();
             entity.Property(v => v.LanguagePreference).IsRequired().HasMaxLength(10);
+            
+            // Optional foreign key to User
+            entity.HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
         });
 
         // ParentalConsent configuration

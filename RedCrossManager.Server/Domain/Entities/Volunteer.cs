@@ -24,8 +24,10 @@ public class Volunteer
     public bool IsMinor { get; set; } // Computed at registration
     public Guid? GuardianContactId { get; set; }
     public bool SmsOptIn { get; set; } = false;
+    public Guid? UserId { get; set; } // Link to User for authentication
 
     // Navigation properties
+    public User? User { get; set; }
     public ParentalConsent? ParentalConsent { get; set; }
     public ICollection<OnboardingStep> OnboardingSteps { get; set; } = new List<OnboardingStep>();
     public ICollection<Document> Documents { get; set; } = new List<Document>();

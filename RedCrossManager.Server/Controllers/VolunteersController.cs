@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RedCrossManager.Server.DTOs.Auth;
 using RedCrossManager.Server.DTOs.Volunteers;
 using RedCrossManager.Server.Services.Volunteers;
 
@@ -21,17 +22,17 @@ public class VolunteersController : ControllerBase
     }
 
     [HttpPost("register")]
-    [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(LoginResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<VolunteerDto>> Register(
+    public async Task<ActionResult<LoginResponseDto>> Register(
         [FromBody] RegisterVolunteerDto dto,
         CancellationToken cancellationToken)
     {
         try
         {
             var result = await _volunteerService.RegisterAsync(dto, cancellationToken);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            return Created(string.Empty, result);
         }
         catch (InvalidOperationException ex) when (ex.Message.Contains("already exists"))
         {

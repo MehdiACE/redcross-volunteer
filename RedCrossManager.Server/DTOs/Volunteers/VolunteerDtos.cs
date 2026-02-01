@@ -4,6 +4,7 @@ public record RegisterVolunteerDto(
     string FirstName,
     string LastName,
     string Email,
+    string Password,
     string Phone,
     DateTime DateOfBirth,
     string AddressStreet,

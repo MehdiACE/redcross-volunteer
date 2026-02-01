@@ -65,6 +65,12 @@ export class RegistrationComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$/)
+      ]],
+      confirmPassword: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]],
       dateOfBirth: ['', Validators.required],
       address: this.fb.group({
@@ -84,7 +90,13 @@ export class RegistrationComponent implements OnInit {
         timePreference: ['', Validators.required]
       }),
       languagePreference: ['fr', Validators.required]
-    });
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  private passwordMatchValidator(group: FormGroup): {[key: string]: boolean} | null {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
   onSubmit(): void {
@@ -105,6 +117,7 @@ export class RegistrationComponent implements OnInit {
       firstName: formValue.firstName,
       lastName: formValue.lastName,
       email: formValue.email,
+      password: formValue.password,
       phone: formValue.phone,
       dateOfBirth: formValue.dateOfBirth,
       addressStreet: formValue.address.street,
@@ -124,8 +137,10 @@ export class RegistrationComponent implements OnInit {
 
     this.volunteerService.register(dto).subscribe({
       next: (response) => {
-        // Store volunteerId in session storage for stepper component
-        sessionStorage.setItem('volunteerId', response.id);
+        // Store auth token and userId for authentication
+        localStorage.setItem('authToken', response.accessToken);
+        localStorage.setItem('userId', response.userId);
+        sessionStorage.setItem('volunteerId', response.userId); // For backward compatibility with stepper
         this.snackBar.open(
           this.translate.instant('registration.success'),
           this.translate.instant('common.close'),

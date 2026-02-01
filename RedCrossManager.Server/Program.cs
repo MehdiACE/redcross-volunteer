@@ -105,6 +105,13 @@ builder.Services.AddAuthorization(options =>
 
 var app = builder.Build();
 
+// Seed database with roles
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
+    await DatabaseSeeder.SeedRolesAsync(dbContext);
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

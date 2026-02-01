@@ -304,6 +304,39 @@ Coordinators need to communicate with youth volunteers (B1J) through a dedicated
 **Authentication & Security**:
 - The application uses internal authentication with email/password and issues signed JWTs for access.
 - Users and roles are stored in the database (tables for Users, Roles, and UserRoles). Role-based access controls map to Volunteer, Coordinator, and Admin.
+- **Password Requirements**: Passwords MUST meet the following criteria:
+  - Minimum 8 characters
+  - At least one uppercase letter (A-Z)
+  - At least one lowercase letter (a-z)
+  - At least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+  - Passwords are hashed using ASP.NET Core Identity PasswordHasher before storage
+- **Registration Flow with Authentication**:
+  1. User completes registration form with personal information + email + password
+  2. System validates password requirements and email uniqueness
+  3. System creates both Volunteer entity (personal data) and User entity (credentials)
+  4. User entity is linked to Volunteer via foreign key relationship
+  5. Default "Volunteer" role is assigned to the User
+  6. System returns JWT token in registration response
+  7. Frontend stores token in localStorage/sessionStorage
+  8. User is automatically authenticated and redirected to onboarding
+- **Login Flow**:
+  1. User enters email + password on login page
+  2. POST to `/api/v1/auth/login` with credentials
+  3. System validates credentials against User table
+  4. If valid, system generates JWT token with user ID and roles
+  5. System updates User.LastLoginAt timestamp
+  6. Response includes token, expiry, user ID, and roles
+  7. Frontend stores token and uses it for all subsequent API calls
+- **Token Management**:
+  - Access tokens expire after 60 minutes (configurable via `Jwt:AccessTokenMinutes`)
+  - Tokens include claims: sub (user ID), email, roles, exp (expiry)
+  - All protected endpoints require `Authorization: Bearer {token}` header
+  - Frontend auth interceptor automatically attaches token to requests
+  - Token refresh is handled by re-login (refresh tokens out of scope for MVP)
+- **Protected Endpoints**:
+  - `/api/v1/volunteers/me` - Get current volunteer profile (requires authenticated user)
+  - `/api/v1/onboarding/me` - Get onboarding progress (requires authenticated user)
+  - All other volunteer-specific endpoints verify token and match user ID to volunteer ID
 - Password reset functionality follows standard email-based token flow with 1-hour expiry.
 - Volunteer data is considered personally identifiable information (PII) and subject to standard privacy protection regulations (PIPEDA in Canada).
 

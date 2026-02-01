@@ -57,6 +57,24 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T017 [US1] Implement `VolunteersController` registration endpoint in `RedCrossManager.Server/Controllers/VolunteersController.cs`
 - [X] T018 [US1] Build registration UI (form fields, validation, i18n) in `RedCrossManager.Client/src/app/features/onboarding/registration` — **COMPLETED**: Component, service, models, i18n (EN/FR), routing configured
 - [X] T018c [US1] Add one-time volunteer form UI and PDF generation from template in `RedCrossManager.Client/src/app/features/onboarding/one-time-volunteer` and `src/assets/forms` — **COMPLETED**: Form + client-side PDF fill
+- [ ] T018d [US1] **Implement Password-Based Authentication for Volunteer Registration**:
+  - Backend: Add `Password` field to `RegisterVolunteerDto` in `RedCrossManager.Server/DTOs/Volunteers`
+  - Backend: Add password validation (min 8 chars, uppercase, lowercase, special char) using FluentValidation in `RedCrossManager.Server/Validators/RegisterVolunteerDtoValidator.cs`
+  - Backend: Modify `VolunteerService.RegisterAsync` to create `User` entity with hashed password and link to `Volunteer` via foreign key
+  - Backend: Assign default "Volunteer" role to new user in `VolunteerService.RegisterAsync`
+  - Backend: Change registration response to return `LoginResponseDto` (with JWT token) instead of plain `VolunteerDto`
+  - Frontend: Add password + confirmPassword fields to registration form in `RedCrossManager.Client/src/app/features/onboarding/registration/registration.component.html`
+  - Frontend: Add password validation (min 8 chars, uppercase, lowercase, special char, match) in `registration.component.ts`
+  - Frontend: Update registration service to store JWT token in localStorage on successful registration
+  - Frontend: Create auth interceptor to attach token to all API requests in `RedCrossManager.Client/src/app/core/interceptors/auth.interceptor.ts`
+  - Frontend: Update onboarding stepper to use `/api/v1/onboarding/me` (authenticated endpoint using token) instead of passing volunteerId
+- [ ] T018e [US1] **Create Login Page and Authentication Flow**:
+  - Frontend: Create login component with email/password form in `RedCrossManager.Client/src/app/features/auth/login`
+  - Frontend: Create auth service with login/logout methods in `RedCrossManager.Client/src/app/core/services/auth.service.ts`
+  - Frontend: Add route guard to protect onboarding/dashboard routes in `RedCrossManager.Client/src/app/core/guards/auth.guard.ts`
+  - Frontend: Add logout functionality and token expiry handling
+  - Backend: Verify `/api/v1/auth/login` endpoint works correctly (already exists in `AuthController`)
+  - Backend: Create `/api/v1/onboarding/me` endpoint in `OnboardingController` to get progress using authenticated user's ID from JWT token
 - [X] T019 [US1] Wire confirmation email send via SendGrid abstraction in `RedCrossManager.Server/Services/Notifications`
 
 ---

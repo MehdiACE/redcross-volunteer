@@ -2,6 +2,7 @@ export interface RegisterVolunteerDto {
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phone: string;
   dateOfBirth: Date;
   addressStreet: string;
@@ -35,4 +36,11 @@ export interface VolunteerDto {
 
 export interface SmsOptInDto {
   smsOptIn: boolean;
+}
+
+export interface LoginResponseDto {
+  userId: string;
+  accessToken: string;
+  expiresAtUtc: Date;
+  roles: string[];
 }
