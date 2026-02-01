@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   hidePassword = true;
+  currentLang: string = 'fr';
   private returnUrl: string = '/onboarding';
 
   constructor(
@@ -45,6 +46,10 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const savedLang = localStorage.getItem('lang');
+    this.currentLang = savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
+    this.translate.use(this.currentLang);
+
     // Get the return URL from route parameters or default to '/onboarding'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/onboarding';
 
@@ -99,5 +104,11 @@ export class LoginComponent implements OnInit {
       return this.translate.instant('login.errors.invalidEmail');
     }
     return '';
+  }
+
+  toggleLanguage(): void {
+    this.currentLang = this.currentLang === 'fr' ? 'en' : 'fr';
+    this.translate.use(this.currentLang);
+    localStorage.setItem('lang', this.currentLang);
   }
 }
