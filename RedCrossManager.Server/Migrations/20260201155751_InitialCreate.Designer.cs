@@ -9,10 +9,10 @@ using RedCrossManager.Server.Infrastructure;
 
 #nullable disable
 
-namespace RedCrossManager.Server.Infrastructure.Migrations
+namespace RedCrossManager.Server.Migrations
 {
     [DbContext(typeof(RedCrossDbContext))]
-    [Migration("20260125210806_InitialCreate")]
+    [Migration("20260201155751_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -411,6 +411,29 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                     b.ToTable("ParentalConsents");
                 });
 
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Training", b =>
                 {
                     b.Property<Guid>("Id")
@@ -507,6 +530,54 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("TrainingEnrollments");
+                });
+
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastLoginAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Volunteer", b =>
@@ -641,7 +712,7 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                     b.HasOne("RedCrossManager.Server.Domain.Entities.Volunteer", "Volunteer")
                         .WithMany("Certifications")
                         .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Document");
@@ -719,6 +790,25 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                     b.Navigation("Volunteer");
                 });
 
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.UserRole", b =>
+                {
+                    b.HasOne("RedCrossManager.Server.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RedCrossManager.Server.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Certification", b =>
                 {
                     b.Navigation("TrainingEnrollments");
@@ -734,9 +824,19 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                     b.Navigation("Assignments");
                 });
 
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Training", b =>
                 {
                     b.Navigation("Enrollments");
+                });
+
+            modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("RedCrossManager.Server.Domain.Entities.Volunteer", b =>

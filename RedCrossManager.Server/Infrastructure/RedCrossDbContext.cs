@@ -138,7 +138,7 @@ public class RedCrossDbContext : DbContext
             entity.HasOne(c => c.Volunteer)
                 .WithMany(v => v.Certifications)
                 .HasForeignKey(c => c.VolunteerId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(c => c.Document)
                 .WithMany()

@@ -12,11 +12,24 @@ public record OnboardingStepDto(
 );
 
 public record OnboardingProgressDto(
+    Guid VolunteerId,
+    VolunteerBasicInfoDto Volunteer,
     List<OnboardingStepDto> Steps,
     int CompletedCount,
     int TotalCount,
     bool IsComplete,
-    string? CurrentStep
+    string CurrentStatus,
+    bool IsMinor,
+    bool ParentalConsentApproved,
+    DateTime StartedAt,
+    DateTime? CompletedAt
+);
+
+public record VolunteerBasicInfoDto(
+    string FirstName,
+    string LastName,
+    string Email,
+    string Phone
 );
 
 public record SubmitStepDto(

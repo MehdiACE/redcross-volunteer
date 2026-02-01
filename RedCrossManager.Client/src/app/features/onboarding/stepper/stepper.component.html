@@ -1,26 +1,39 @@
-<div class="max-w-4xl mx-auto p-6 min-h-screen bg-gray-100">
+<div class="max-w-2xl mx-auto p-6 min-h-screen bg-white">
+  <!-- Back Button -->
+  <div class="mb-6">
+    <a routerLink="/register" class="flex items-center text-indigo-600 hover:text-indigo-800 transition-colors">
+      <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      {{ 'common.back' | translate }}
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-96">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
   <!-- Header -->
-  <div class="mb-8">
-    <h1 class="text-3xl font-bold mb-2">{{ 'onboarding.title' | translate }}</h1>
+  <div *ngIf="!isLoading && progress" class="mb-8">
+    <div class="inline-block bg-indigo-100 text-indigo-700 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+      {{ 'onboarding.badge' | translate }}
+    </div>
+    
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ 'onboarding.title' | translate }}</h1>
     <p class="text-gray-600 mb-4">{{ 'onboarding.subtitle' | translate }}</p>
 
-    <!-- Progress Bar -->
-    <div class="mb-6">
-      <div class="flex justify-between items-center mb-2">
-        <span class="text-sm font-medium">
-          {{ 'onboarding.progress' | translate: { current: getCompletedStepsCount(), total: getTotalSteps() } }}
-        </span>
-        <span class="text-sm font-bold text-blue-600">{{ getProgressPercentage() }}%</span>
-      </div>
-      <div class="w-full bg-gray-200 rounded-full h-2">
-        <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-             [style.width.%]="getProgressPercentage()"></div>
-      </div>
+    <!-- Duration/Progress -->
+    <div class="flex items-center text-sm text-gray-500">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span>{{ getCompletedStepsCount() }} / {{ getTotalSteps() }} {{ 'onboarding.stepsCompleted' | translate }}</span>
     </div>
 
     <!-- Minor Warning -->
-    <div *ngIf="progress && progress.isMinor && !progress.parentalConsentApproved" 
-         class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+    <div *ngIf="progress.isMinor && !progress.parentalConsentApproved" 
+         class="mt-4 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
       <div class="flex">
         <div class="flex-shrink-0">
           <span class="text-2xl">⚠️</span>
@@ -34,192 +47,122 @@
     </div>
   </div>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex justify-center items-center h-96">
-    <mat-spinner diameter="50"></mat-spinner>
+  <!-- Vertical Step List -->
+  <div *ngIf="!isLoading && progress" class="relative">
+    <div *ngFor="let step of progress.steps; let i = index; let isLast = last" 
+         class="relative flex pb-8"
+         [class.pb-0]="isLast">
+      
+      <!-- Connector Line -->
+      <div *ngIf="!isLast" class="absolute left-5 top-10 bottom-0 w-0.5 bg-gray-200"></div>
+
+      <!-- Step Icon -->
+      <div class="relative z-10 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm transition-all"
+           [ngClass]="{
+             'bg-indigo-600 text-white': getStepStatus(i) === 'completed',
+             'bg-white border-2 border-indigo-600 text-indigo-600': getStepStatus(i) === 'current',
+             'bg-white border-2 border-gray-300 text-gray-400': getStepStatus(i) === 'pending'
+           }">
+        <svg *ngIf="getStepStatus(i) === 'completed'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span *ngIf="getStepStatus(i) !== 'completed'">{{ i + 1 }}</span>
+      </div>
+
+      <!-- Step Content -->
+      <div class="ml-4 flex-1 cursor-pointer group" 
+           (click)="onStepClick(i)"
+           [class.opacity-50]="getStepStatus(i) === 'pending'">
+        <h3 class="text-base font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors"
+            [class.text-indigo-600]="getStepStatus(i) === 'current'">
+          {{ stepTitles[i] | translate }}
+        </h3>
+        <p class="text-sm text-gray-600 mt-1">
+          {{ stepDescriptions[i] | translate }}
+        </p>
+
+        <!-- Step Details (Expanded for current step) -->
+        <div *ngIf="getStepStatus(i) === 'current'" class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <!-- Personal Information Step -->
+          <div *ngIf="i === 0">
+            <div class="space-y-2 mb-4">
+              <p class="text-sm text-gray-700">
+                <span class="font-medium">{{ 'onboarding.fields.name' | translate }}:</span>
+                {{ progress.volunteer?.firstName }} {{ progress.volunteer?.lastName }}
+              </p>
+              <p class="text-sm text-gray-700">
+                <span class="font-medium">{{ 'onboarding.fields.email' | translate }}:</span>
+                {{ progress.volunteer?.email }}
+              </p>
+              <p class="text-sm text-gray-700">
+                <span class="font-medium">{{ 'onboarding.fields.phone' | translate }}:</span>
+                {{ progress.volunteer?.phone }}
+              </p>
+            </div>
+            <button mat-raised-button color="primary" 
+                    (click)="submitStep(i)"
+                    [disabled]="isSubmitting || isStepCompleted(i)"
+                    class="w-full">
+              <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
+              {{ isStepCompleted(i) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
+            </button>
+          </div>
+
+          <!-- Background Check Step -->
+          <div *ngIf="i === 1">
+            <p class="text-sm text-gray-700 mb-4">
+              {{ 'onboarding.messages.backgroundCheck' | translate }}
+            </p>
+            <button mat-raised-button color="primary" 
+                    (click)="submitStep(i)"
+                    [disabled]="isSubmitting || isStepCompleted(i)"
+                    class="w-full">
+              <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
+              {{ isStepCompleted(i) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
+            </button>
+          </div>
+
+          <!-- Training Step -->
+          <div *ngIf="i === 2">
+            <p class="text-sm text-gray-700 mb-4">
+              {{ 'onboarding.messages.trainingRequired' | translate }}
+            </p>
+            <button mat-raised-button color="primary" 
+                    (click)="submitStep(i)"
+                    [disabled]="isSubmitting || isStepCompleted(i)"
+                    class="w-full">
+              <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
+              {{ isStepCompleted(i) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
+            </button>
+          </div>
+
+          <!-- Final Review Step -->
+          <div *ngIf="i === 3">
+            <p class="text-sm text-gray-700 mb-4">
+              {{ 'onboarding.messages.finalStep' | translate }}
+            </p>
+            <button mat-raised-button color="accent" 
+                    (click)="submitStep(i)"
+                    [disabled]="isSubmitting || isStepCompleted(i)"
+                    class="w-full">
+              <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
+              {{ isStepCompleted(i) ? ('onboarding.complete' | translate) : ('onboarding.submitFinal' | translate) }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <!-- Stepper -->
-  <mat-stepper *ngIf="!isLoading && progress" 
-               #stepper
-               [selectedIndex]="selectedStepIndex"
-               (selectionChange)="onStepChange($event)"
-               class="shadow-lg rounded-lg">
-
-    <!-- Step 1: Personal Information -->
-    <mat-step [completed]="isStepCompleted(0)" 
-              [editable]="true">
-      <ng-template matStepLabel>
-        <div class="flex items-center gap-2">
-          <span>{{ stepTitles[0] | translate }}</span>
-          <mat-chip *ngIf="getStepStatus(0) === 'completed'" class="!bg-green-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-green-700">✓</span>
-          </mat-chip>
-          <mat-chip *ngIf="isStepLocked(0)" class="!bg-gray-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-gray-600">🔒</span>
-          </mat-chip>
-        </div>
-      </ng-template>
-
-      <h3 class="text-xl font-semibold mb-4">{{ stepTitles[0] | translate }}</h3>
-      <p class="text-gray-600 mb-6">{{ stepDescriptions[0] | translate }}</p>
-
-      <mat-card class="bg-gray-50 mb-6 rounded-lg transition-shadow hover:shadow-md">
-        <mat-card-content>
-          <p class="text-sm text-gray-700">
-            <strong>{{ 'onboarding.fields.name' | translate }}:</strong>
-            {{ progress.volunteer.firstName }} {{ progress.volunteer.lastName }}
-          </p>
-          <p class="text-sm text-gray-700 mt-2">
-            <strong>{{ 'onboarding.fields.email' | translate }}:</strong>
-            {{ progress.volunteer.email }}
-          </p>
-          <p class="text-sm text-gray-700 mt-2">
-            <strong>{{ 'onboarding.fields.phone' | translate }}:</strong>
-            {{ progress.volunteer.phone }}
-          </p>
-        </mat-card-content>
-      </mat-card>
-
-      <div class="flex justify-between">
-        <button mat-button [disabled]="selectedStepIndex === 0" class="transition-opacity disabled:opacity-60">
-          {{ 'common.back' | translate }}
-        </button>
-        <button mat-raised-button color="primary" 
-                (click)="submitStep(0)"
-          [disabled]="isSubmitting || isStepCompleted(0)"
-          class="transition-opacity disabled:opacity-60">
-          <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
-          {{ isStepCompleted(0) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
-        </button>
-      </div>
-    </mat-step>
-
-    <!-- Step 2: Background & Training -->
-    <mat-step [completed]="isStepCompleted(1)" 
-              [editable]="!isStepLocked(1)">
-      <ng-template matStepLabel>
-        <div class="flex items-center gap-2">
-          <span>{{ stepTitles[1] | translate }}</span>
-          <mat-chip *ngIf="getStepStatus(1) === 'completed'" class="!bg-green-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-green-700">✓</span>
-          </mat-chip>
-          <mat-chip *ngIf="isStepLocked(1)" class="!bg-gray-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-gray-600">🔒</span>
-          </mat-chip>
-        </div>
-      </ng-template>
-
-      <h3 class="text-xl font-semibold mb-4">{{ stepTitles[1] | translate }}</h3>
-      <p class="text-gray-600 mb-6">{{ stepDescriptions[1] | translate }}</p>
-
-      <mat-card class="bg-gray-50 mb-6 rounded-lg transition-shadow hover:shadow-md">
-        <mat-card-content>
-          <p class="text-sm text-gray-700">
-            {{ 'onboarding.messages.backgroundCheck' | translate }}
-          </p>
-        </mat-card-content>
-      </mat-card>
-
-      <div class="flex justify-between">
-        <button mat-button (click)="stepper.previous()" class="transition-opacity disabled:opacity-60">
-          {{ 'common.back' | translate }}
-        </button>
-        <button mat-raised-button color="primary" 
-                (click)="submitStep(1)"
-          [disabled]="isSubmitting || isStepCompleted(1)"
-          class="transition-opacity disabled:opacity-60">
-          <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
-          {{ isStepCompleted(1) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
-        </button>
-      </div>
-    </mat-step>
-
-    <!-- Step 3: Training -->
-    <mat-step [completed]="isStepCompleted(2)" 
-              [editable]="!isStepLocked(2)">
-      <ng-template matStepLabel>
-        <div class="flex items-center gap-2">
-          <span>{{ stepTitles[2] | translate }}</span>
-          <mat-chip *ngIf="getStepStatus(2) === 'completed'" class="!bg-green-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-green-700">✓</span>
-          </mat-chip>
-          <mat-chip *ngIf="isStepLocked(2)" class="!bg-gray-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-gray-600">🔒</span>
-          </mat-chip>
-        </div>
-      </ng-template>
-
-      <h3 class="text-xl font-semibold mb-4">{{ stepTitles[2] | translate }}</h3>
-      <p class="text-gray-600 mb-6">{{ stepDescriptions[2] | translate }}</p>
-
-      <mat-card class="bg-gray-50 mb-6 rounded-lg transition-shadow hover:shadow-md">
-        <mat-card-content>
-          <p class="text-sm text-gray-700">
-            {{ 'onboarding.messages.trainingRequired' | translate }}
-          </p>
-        </mat-card-content>
-      </mat-card>
-
-      <div class="flex justify-between">
-        <button mat-button (click)="stepper.previous()" class="transition-opacity disabled:opacity-60">
-          {{ 'common.back' | translate }}
-        </button>
-        <button mat-raised-button color="primary" 
-                (click)="submitStep(2)"
-          [disabled]="isSubmitting || isStepCompleted(2)"
-          class="transition-opacity disabled:opacity-60">
-          <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
-          {{ isStepCompleted(2) ? ('onboarding.stepStatus.completed' | translate) : ('common.next' | translate) }}
-        </button>
-      </div>
-    </mat-step>
-
-    <!-- Step 4: Assignment & Activation -->
-    <mat-step [completed]="isStepCompleted(3)" 
-              [editable]="!isStepLocked(3)">
-      <ng-template matStepLabel>
-        <div class="flex items-center gap-2">
-          <span>{{ stepTitles[3] | translate }}</span>
-          <mat-chip *ngIf="getStepStatus(3) === 'completed'" class="!bg-green-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-green-700">✓</span>
-          </mat-chip>
-          <mat-chip *ngIf="isStepLocked(3)" class="!bg-gray-100 text-xs h-auto px-2 py-1 ml-2">
-            <span class="text-gray-600">🔒</span>
-          </mat-chip>
-        </div>
-      </ng-template>
-
-      <h3 class="text-xl font-semibold mb-4">{{ stepTitles[3] | translate }}</h3>
-      <p class="text-gray-600 mb-6">{{ stepDescriptions[3] | translate }}</p>
-
-      <mat-card class="bg-gray-50 mb-6 rounded-lg transition-shadow hover:shadow-md">
-        <mat-card-content>
-          <p class="text-sm text-gray-700">
-            {{ 'onboarding.messages.finalStep' | translate }}
-          </p>
-        </mat-card-content>
-      </mat-card>
-
-      <div class="flex justify-between">
-        <button mat-button (click)="stepper.previous()" class="transition-opacity disabled:opacity-60">
-          {{ 'common.back' | translate }}
-        </button>
-        <button mat-raised-button color="accent" 
-                (click)="submitStep(3)"
-          [disabled]="isSubmitting || isStepCompleted(3)"
-          class="transition-opacity disabled:opacity-60">
-          <mat-spinner *ngIf="isSubmitting" diameter="20" class="inline-block mr-2"></mat-spinner>
-          {{ isStepCompleted(3) ? ('onboarding.complete' | translate) : ('onboarding.submitFinal' | translate) }}
-        </button>
-      </div>
-    </mat-step>
-  </mat-stepper>
 
   <!-- Completion State -->
   <div *ngIf="!isLoading && progress && getOverallStatus() === 'completed'" 
-       class="mt-8 bg-green-50 border-l-4 border-green-400 p-6 rounded">
-    <h2 class="text-2xl font-bold text-green-800 mb-2">✓ {{ 'onboarding.congratulations' | translate }}</h2>
+       class="mt-8 bg-green-50 border-l-4 border-green-400 p-6 rounded-lg">
+    <h2 class="text-2xl font-bold text-green-800 mb-2">
+      <svg class="w-8 h-8 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      {{ 'onboarding.congratulations' | translate }}
+    </h2>
     <p class="text-green-700 mb-4">{{ 'onboarding.messages.onboardingComplete' | translate }}</p>
     <button mat-raised-button color="primary" routerLink="/dashboard">
       {{ 'onboarding.gotoDashboard' | translate }}

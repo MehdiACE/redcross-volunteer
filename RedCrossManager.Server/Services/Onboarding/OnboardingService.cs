@@ -34,6 +34,10 @@ public class OnboardingService : IOnboardingService
 
     public async Task<OnboardingProgressDto> GetProgressAsync(Guid volunteerId, CancellationToken cancellationToken = default)
     {
+        var volunteer = await _volunteerRepository.GetByIdAsync(volunteerId, cancellationToken);
+        if (volunteer == null)
+            throw new InvalidOperationException($"Volunteer {volunteerId} not found");
+
         var steps = await _stepRepository.GetByVolunteerIdAsync(volunteerId, cancellationToken);
         
         if (steps.Count == 0)
@@ -44,14 +48,27 @@ public class OnboardingService : IOnboardingService
 
         var stepDtos = _mapper.Map<List<OnboardingStepDto>>(steps);
         var completedCount = steps.Count(s => s.Status == StepStatus.Approved);
-        var currentStep = steps.FirstOrDefault(s => s.Status != StepStatus.Approved)?.StepType.ToString();
+        var currentStep = steps.FirstOrDefault(s => s.Status != StepStatus.Approved)?.StepType.ToString() ?? "Completed";
+
+        var volunteerInfo = new VolunteerBasicInfoDto(
+            volunteer.FirstName,
+            volunteer.LastName,
+            volunteer.Email,
+            volunteer.Phone
+        );
 
         return new OnboardingProgressDto(
+            volunteerId,
+            volunteerInfo,
             stepDtos,
             completedCount,
             steps.Count,
             completedCount == steps.Count,
-            currentStep
+            volunteer.Status.ToString(),
+            volunteer.IsMinor,
+            volunteer.ParentalConsent?.ConsentStatus == Domain.Entities.ConsentStatus.Approved,
+            volunteer.RegisteredAt,
+            completedCount == steps.Count ? DateTime.UtcNow : null
         );
     }
 

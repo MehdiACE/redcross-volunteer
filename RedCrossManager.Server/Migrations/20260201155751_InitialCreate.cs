@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RedCrossManager.Server.Infrastructure.Migrations
+namespace RedCrossManager.Server.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -54,6 +54,19 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Trainings",
                 columns: table => new
                 {
@@ -73,6 +86,22 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Trainings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastLoginAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,6 +159,30 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                         name: "FK_CommunicationRecipients_CommunicationMessages_MessageId",
                         column: x => x.MessageId,
                         principalTable: "CommunicationMessages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserRoles_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -278,7 +331,7 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                         column: x => x.VolunteerId,
                         principalTable: "Volunteers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -376,6 +429,12 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Roles_Name",
+                table: "Roles",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TrainingEnrollments_CertificateId",
                 table: "TrainingEnrollments",
                 column: "CertificateId");
@@ -395,6 +454,17 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                 name: "IX_Trainings_StartAt_Published",
                 table: "Trainings",
                 columns: new[] { "StartAt", "Published" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRoles_RoleId",
+                table: "UserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Volunteers_Email",
@@ -422,6 +492,9 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                 name: "TrainingEnrollments");
 
             migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
                 name: "Missions");
 
             migrationBuilder.DropTable(
@@ -432,6 +505,12 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Trainings");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Documents");

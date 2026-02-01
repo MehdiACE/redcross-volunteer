@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedCrossManager.Server.Infrastructure;
 
 #nullable disable
 
-namespace RedCrossManager.Server.Infrastructure.Migrations
+namespace RedCrossManager.Server.Migrations
 {
     [DbContext(typeof(RedCrossDbContext))]
-    [Migration("20260126183517_AddUserAndRoleEntities")]
-    partial class AddUserAndRoleEntities
+    partial class RedCrossDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -712,7 +709,7 @@ namespace RedCrossManager.Server.Infrastructure.Migrations
                     b.HasOne("RedCrossManager.Server.Domain.Entities.Volunteer", "Volunteer")
                         .WithMany("Certifications")
                         .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Document");

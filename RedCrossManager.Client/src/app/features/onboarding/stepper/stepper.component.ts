@@ -127,9 +127,40 @@ export class StepperComponent implements OnInit, OnDestroy {
     return prevStep ? prevStep.status !== 'Submitted' && prevStep.status !== 'Completed' : true;
   }
 
-  getStepStatus(stepIndex: number): string {
+  getStepStatus(stepIndex: number): 'completed' | 'current' | 'pending' {
     if (!this.progress?.steps?.[stepIndex]) return 'pending';
-    return this.progress.steps[stepIndex].status.toLowerCase();
+    
+    const step = this.progress.steps[stepIndex];
+    if (step.status === 'Completed') {
+      return 'completed';
+    }
+    
+    // Current step is the first non-completed step
+    const currentStepIndex = this.progress.steps.findIndex(s => 
+      s.status !== 'Completed'
+    );
+    
+    if (currentStepIndex === stepIndex) {
+      return 'current';
+    }
+    
+    return 'pending';
+  }
+
+  onStepClick(stepIndex: number): void {
+    if (this.isStepLocked(stepIndex)) {
+      this.snackBar.open(
+        this.translate.instant('onboarding.errors.stepLocked'),
+        this.translate.instant('common.close'),
+        { duration: 3000 }
+      );
+      return;
+    }
+    
+    // Allow clicking on current and completed steps
+    if (this.getStepStatus(stepIndex) !== 'pending') {
+      this.selectedStepIndex = stepIndex;
+    }
   }
 
   getStepStatusLabel(stepIndex: number): string {
