@@ -74,6 +74,12 @@ export class StepperComponent implements OnInit, OnDestroy {
         next: (progress) => {
           this.progress = progress;
           this.isLoading = false;
+          const firstName = progress.volunteer?.firstName ?? '';
+          const lastName = progress.volunteer?.lastName ?? '';
+          const fullName = `${firstName} ${lastName}`.trim();
+          if (fullName) {
+            localStorage.setItem('userName', fullName);
+          }
           // Set initial step index based on progress
           this.selectedStepIndex = this.getNextIncompleteStepIndex();
         },

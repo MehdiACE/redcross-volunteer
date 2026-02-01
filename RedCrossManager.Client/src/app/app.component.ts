@@ -41,7 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDarkMode = savedTheme === 'dark';
     document.documentElement.classList.toggle('dark', this.isDarkMode);
 
-    this.setDisplayName();
 
     this.router.events
       .pipe(
@@ -83,16 +82,25 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private setDisplayName(): void {
-    const userId = this.authService.getUserId();
     const storedName = localStorage.getItem('userName');
     if (storedName) {
       this.displayName = storedName;
       return;
     }
-    if (userId) {
-      this.displayName = `Utilisateur ${userId.slice(0, 8)}`;
-      return;
-    }
     this.displayName = 'Utilisateur';
+  }
+
+  getDisplayName(): string {
+    const storedName = localStorage.getItem('userName');
+    return storedName || this.displayName;
+  }
+
+  getDisplayInitials(): string {
+    const name = this.getDisplayName().trim();
+    if (!name) return 'U';
+    const parts = name.split(' ').filter(Boolean);
+    const first = parts[0]?.[0] ?? 'U';
+    const second = parts.length > 1 ? parts[1]?.[0] : '';
+    return `${first}${second}`.toUpperCase();
   }
 }

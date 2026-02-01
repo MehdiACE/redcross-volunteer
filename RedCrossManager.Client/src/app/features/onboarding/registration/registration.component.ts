@@ -157,6 +157,7 @@ export class RegistrationComponent implements OnInit {
         // Store auth token and userId for authentication
         localStorage.setItem('authToken', response.accessToken);
         localStorage.setItem('userId', response.userId);
+        localStorage.setItem('userName', `${formValue.firstName} ${formValue.lastName}`.trim());
         this.snackBar.open(
           this.translate.instant('registration.success'),
           this.translate.instant('common.close'),

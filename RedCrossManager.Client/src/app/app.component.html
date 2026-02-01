@@ -13,10 +13,10 @@
             (click)="toggleUserMenu()"
             class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-text-dark dark:hover:bg-gray-800">
             <span class="h-6 w-6 rounded-full bg-red-100 text-red-600 text-xs font-semibold flex items-center justify-center">
-              {{ displayName.charAt(0) }}
+              {{ getDisplayInitials() }}
             </span>
             <span class="text-sm font-medium text-gray-700 dark:text-[#F5F5F0]">
-              {{ displayName }}
+              {{ getDisplayName() }}
             </span>
           </button>
 
