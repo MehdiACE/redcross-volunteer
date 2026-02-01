@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -25,6 +26,7 @@ import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatStepperModule,
     MatSelectModule,
     MatChipsModule,
     MatDatepickerModule,
@@ -38,15 +40,30 @@ import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   isLoading = false;
-  availableInterests = [
-    'First Aid',
-    'Disaster Response',
-    'Community Programs',
-    'Blood Drive',
-    'Emergency Services',
-    'Youth Programs'
+  currentStepIndex = 0;
+  stepTitles = [
+    'registration.sections.personalInfo',
+    'registration.sections.address',
+    'registration.sections.emergencyContact',
+    'registration.sections.preferences'
   ];
-  daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  availableInterests = [
+    { value: 'First Aid', labelKey: 'registration.interests.firstAid' },
+    { value: 'Disaster Response', labelKey: 'registration.interests.disasterResponse' },
+    { value: 'Community Programs', labelKey: 'registration.interests.communityPrograms' },
+    { value: 'Blood Drive', labelKey: 'registration.interests.bloodDrive' },
+    { value: 'Emergency Services', labelKey: 'registration.interests.emergencyServices' },
+    { value: 'Youth Programs', labelKey: 'registration.interests.youthPrograms' }
+  ];
+  daysOfWeek = [
+    { value: 'Monday', labelKey: 'registration.days.monday' },
+    { value: 'Tuesday', labelKey: 'registration.days.tuesday' },
+    { value: 'Wednesday', labelKey: 'registration.days.wednesday' },
+    { value: 'Thursday', labelKey: 'registration.days.thursday' },
+    { value: 'Friday', labelKey: 'registration.days.friday' },
+    { value: 'Saturday', labelKey: 'registration.days.saturday' },
+    { value: 'Sunday', labelKey: 'registration.days.sunday' }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -174,5 +191,9 @@ export class RegistrationComponent implements OnInit {
       return this.translate.instant('registration.errors.maxLength', { max: control.errors['maxlength'].requiredLength });
     }
     return '';
+  }
+
+  onStepChange(event: any): void {
+    this.currentStepIndex = event.selectedIndex ?? 0;
   }
 }

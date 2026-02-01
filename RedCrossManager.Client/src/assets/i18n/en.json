@@ -66,6 +66,23 @@
       "availableDays": "Available Days",
       "timePreference": "Preferred Time"
     },
+    "interests": {
+      "firstAid": "First Aid",
+      "disasterResponse": "Disaster Response",
+      "communityPrograms": "Community Programs",
+      "bloodDrive": "Blood Drive",
+      "emergencyServices": "Emergency Services",
+      "youthPrograms": "Youth Programs"
+    },
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
     "hints": {
       "password": "Minimum 8 characters, with at least one uppercase letter, one lowercase letter, and one special character"
     },

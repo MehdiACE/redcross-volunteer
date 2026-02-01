@@ -66,6 +66,23 @@
       "availableDays": "Jours disponibles",
       "timePreference": "Période préférée"
     },
+    "interests": {
+      "firstAid": "Premiers secours",
+      "disasterResponse": "Réponse aux catastrophes",
+      "communityPrograms": "Programmes communautaires",
+      "bloodDrive": "Collecte de sang",
+      "emergencyServices": "Services d'urgence",
+      "youthPrograms": "Programmes jeunesse"
+    },
+    "days": {
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
+    },
     "hints": {
       "password": "Minimum 8 caractères, avec au moins une majuscule, une minuscule et un caractère spécial"
     },
