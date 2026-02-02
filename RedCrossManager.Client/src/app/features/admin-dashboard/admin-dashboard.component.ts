@@ -4,11 +4,13 @@ import { RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
 import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 @Component({
   selector: 'app-admin-dashboard',

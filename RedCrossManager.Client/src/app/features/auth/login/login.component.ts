@@ -53,9 +53,10 @@ export class LoginComponent implements OnInit {
     // Get the return URL from route parameters or default to '/onboarding'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/onboarding';
 
-    // If already authenticated, redirect to return URL
+    // If already authenticated, redirect to admin dashboard or return URL
     if (this.authService.isAuthenticated()) {
-      this.router.navigate([this.returnUrl]);
+      const target = this.authService.hasRole('Admin') ? '/admin/dashboard' : this.returnUrl;
+      this.router.navigate([target]);
       return;
     }
 
@@ -81,7 +82,8 @@ export class LoginComponent implements OnInit {
           this.translate.instant('common.close'),
           { duration: 3000 }
         );
-        this.router.navigate([this.returnUrl]);
+        const target = this.authService.hasRole('Admin') ? '/admin/dashboard' : this.returnUrl;
+        this.router.navigate([target]);
       },
       error: (error) => {
         this.isLoading = false;
