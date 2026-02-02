@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterOutlet, NavigationEnd, RouterLink } from '@angular/router';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import { AuthService } from './core/services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterOutlet, TranslateModule],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {

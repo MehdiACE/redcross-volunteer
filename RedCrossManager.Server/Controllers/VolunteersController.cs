@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RedCrossManager.Server.DTOs.Auth;
+using RedCrossManager.Server.DTOs.Dashboard;
 using RedCrossManager.Server.DTOs.Volunteers;
+using RedCrossManager.Server.Services.Dashboard;
 using RedCrossManager.Server.Services.Volunteers;
 
 namespace RedCrossManager.Server.Controllers;
@@ -11,13 +13,16 @@ namespace RedCrossManager.Server.Controllers;
 public class VolunteersController : ControllerBase
 {
     private readonly IVolunteerService _volunteerService;
+    private readonly IDashboardService _dashboardService;
     private readonly ILogger<VolunteersController> _logger;
 
     public VolunteersController(
         IVolunteerService volunteerService,
+        IDashboardService dashboardService,
         ILogger<VolunteersController> logger)
     {
         _volunteerService = volunteerService;
+        _dashboardService = dashboardService;
         _logger = logger;
     }
 
@@ -63,23 +68,23 @@ public class VolunteersController : ControllerBase
     }
 
     [HttpGet("me")]
-    [Authorize(Policy = "Volunteer")]
-    [ProducesResponseType(typeof(VolunteerDto), StatusCodes.Status200OK)]
+    [Authorize(Policy = "Admin")]
+    [ProducesResponseType(typeof(VolunteerDashboardDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<VolunteerDto>> GetCurrentProfile(
+    public async Task<ActionResult<VolunteerDashboardDto>> GetCurrentProfile(
         CancellationToken cancellationToken)
     {
         try
         {
-            // Extract volunteer ID from JWT claims
-            var volunteerId = User.FindFirst("sub")?.Value;
-            if (string.IsNullOrEmpty(volunteerId) || !Guid.TryParse(volunteerId, out var id))
+            // Extract user ID from JWT claims
+            var userId = User.FindFirst("sub")?.Value;
+            if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var id))
             {
-                return Unauthorized(new { error = "Invalid or missing volunteer ID in token" });
+                return Unauthorized(new { error = "Invalid or missing user ID in token" });
             }
 
-            var volunteer = await _volunteerService.GetByIdAsync(id, cancellationToken);
-            return volunteer == null ? NotFound() : Ok(volunteer);
+            var dashboard = await _dashboardService.GetDashboardByUserIdAsync(id, cancellationToken);
+            return dashboard == null ? NotFound() : Ok(dashboard);
         }
         catch (Exception ex)
         {

@@ -1,0 +1,126 @@
+<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
+  <div class="max-w-6xl mx-auto p-6 space-y-6">
+    <div class="flex items-center justify-between">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        {{ 'dashboard.title' | translate }}
+      </h1>
+    </div>
+
+    <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+
+    <div *ngIf="loadError" class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+      {{ 'dashboard.errors.loadFailed' | translate }}
+    </div>
+
+    <div *ngIf="dashboard && !isLoading" class="space-y-6">
+      <div class="grid gap-6 lg:grid-cols-3">
+        <section data-testid="dashboard-status-card" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            {{ 'dashboard.status' | translate }}
+          </p>
+          <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+            {{ dashboard.status }}
+          </p>
+          <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
+            {{ 'dashboard.onboardingProgress' | translate:{ completed: dashboard.onboarding.completedCount, total: dashboard.onboarding.totalCount } }}
+          </div>
+          <div class="mt-1 text-xs text-gray-500">
+            {{ 'dashboard.currentStep' | translate }}: {{ dashboard.onboarding.currentStep }}
+          </div>
+        </section>
+
+        <section data-testid="dashboard-alerts" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {{ 'dashboard.alerts.title' | translate }}
+          </h2>
+          <div *ngIf="dashboard.alerts.length === 0" class="mt-3 text-sm text-gray-500">
+            {{ 'dashboard.alerts.empty' | translate }}
+          </div>
+          <ul *ngIf="dashboard.alerts.length > 0" class="mt-3 space-y-3">
+            <li *ngFor="let alert of dashboard.alerts" data-testid="dashboard-alert-item" class="rounded-lg border border-red-100 bg-red-50 p-3 text-sm text-red-700">
+              <p class="font-semibold">{{ alert.type }}</p>
+              <p>{{ alert.message }}</p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {{ 'dashboard.actions.title' | translate }}
+          </h2>
+          <div class="mt-4 space-y-2">
+            <a routerLink="/onboarding" class="block rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:border-red-300 hover:text-red-700 dark:border-gray-700 dark:text-gray-200">
+              {{ 'dashboard.actions.continueOnboarding' | translate }}
+            </a>
+            <a routerLink="/missions" class="block rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:border-red-300 hover:text-red-700 dark:border-gray-700 dark:text-gray-200">
+              {{ 'dashboard.actions.viewMissions' | translate }}
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div class="grid gap-6 lg:grid-cols-3">
+        <section data-testid="dashboard-assignments" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 lg:col-span-2">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {{ 'dashboard.assignments.title' | translate }}
+          </h2>
+          <div *ngIf="dashboard.upcomingAssignments.length === 0" class="mt-3 text-sm text-gray-500">
+            {{ 'dashboard.assignments.empty' | translate }}
+          </div>
+          <div *ngIf="dashboard.upcomingAssignments.length > 0" class="mt-4 overflow-x-auto">
+            <table class="min-w-full text-left text-sm text-gray-600">
+              <thead class="text-xs uppercase text-gray-400">
+                <tr>
+                  <th class="py-2">{{ 'dashboard.assignments.headers.title' | translate }}</th>
+                  <th class="py-2">{{ 'dashboard.assignments.headers.date' | translate }}</th>
+                  <th class="py-2">{{ 'dashboard.assignments.headers.location' | translate }}</th>
+                  <th class="py-2">{{ 'dashboard.assignments.headers.status' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let assignment of dashboard.upcomingAssignments" class="border-t border-gray-100">
+                  <td class="py-3 font-medium text-gray-900 dark:text-gray-100">{{ assignment.title }}</td>
+                  <td class="py-3">{{ assignment.startAt | date:'mediumDate' }}</td>
+                  <td class="py-3">{{ assignment.location }}</td>
+                  <td class="py-3">{{ assignment.status }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section data-testid="dashboard-trainings" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {{ 'dashboard.trainings.title' | translate }}
+          </h2>
+          <div *ngIf="dashboard.trainings.length === 0" class="mt-3 text-sm text-gray-500">
+            {{ 'dashboard.trainings.empty' | translate }}
+          </div>
+          <ul *ngIf="dashboard.trainings.length > 0" class="mt-3 space-y-3">
+            <li *ngFor="let training of dashboard.trainings" class="rounded-lg border border-gray-100 p-3 text-sm text-gray-700 dark:border-gray-800 dark:text-gray-200">
+              <p class="font-semibold">{{ training.title }}</p>
+              <p class="text-xs text-gray-500">{{ training.category }} • {{ training.startAt | date:'mediumDate' }}</p>
+            </li>
+          </ul>
+        </section>
+      </div>
+
+      <section data-testid="dashboard-certifications" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'dashboard.certs.title' | translate }}
+        </h2>
+        <div *ngIf="dashboard.certifications.length === 0" class="mt-3 text-sm text-gray-500">
+          {{ 'dashboard.certs.empty' | translate }}
+        </div>
+        <ul *ngIf="dashboard.certifications.length > 0" class="mt-3 grid gap-3 md:grid-cols-2">
+          <li *ngFor="let cert of dashboard.certifications" class="rounded-lg border border-gray-100 p-3 text-sm text-gray-700 dark:border-gray-800 dark:text-gray-200">
+            <p class="font-semibold">{{ cert.type }}</p>
+            <p class="text-xs text-gray-500">{{ 'dashboard.certs.expires' | translate }} {{ cert.expiresAt | date:'mediumDate' }}</p>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>

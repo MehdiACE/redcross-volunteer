@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,11 @@ export const routes: Routes = [
     path: 'onboarding',
     loadComponent: () => import('./features/onboarding/stepper/stepper.component').then(m => m.StepperComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    canActivate: [adminGuard]
   },
   {
     path: 'benevole-ponctuel',

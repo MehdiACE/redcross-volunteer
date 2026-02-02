@@ -34,6 +34,7 @@ export class AuthService {
       tap(response => {
         localStorage.setItem('authToken', response.accessToken);
         localStorage.setItem('userId', response.userId);
+        localStorage.setItem('roles', JSON.stringify(response.roles ?? []));
         this.isAuthenticatedSubject.next(true);
       })
     );
@@ -42,6 +43,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem('roles');
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
   }
@@ -56,5 +58,23 @@ export class AuthService {
 
   getUserId(): string | null {
     return localStorage.getItem('userId');
+  }
+
+  getRoles(): string[] {
+    const roles = localStorage.getItem('roles');
+    if (!roles) {
+      return [];
+    }
+
+    try {
+      const parsed = JSON.parse(roles) as string[];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  hasRole(role: string): boolean {
+    return this.getRoles().includes(role);
   }
 }

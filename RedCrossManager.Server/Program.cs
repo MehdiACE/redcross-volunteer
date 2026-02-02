@@ -10,6 +10,7 @@ using RedCrossManager.Server.Services.Notifications;
 using RedCrossManager.Server.Services.Onboarding;
 using RedCrossManager.Server.Services.Consents;
 using RedCrossManager.Server.Services.Auth;
+using RedCrossManager.Server.Services.Dashboard;
 using RedCrossManager.Server.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IVolunteerService, VolunteerService>();
 builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };
@@ -110,6 +112,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
     await DatabaseSeeder.SeedRolesAsync(dbContext);
+    await DatabaseSeeder.SeedAdminUserAsync(dbContext);
 }
 
 // Configure the HTTP request pipeline.

@@ -220,5 +220,71 @@
     "communicationPreferences": "Communication Preferences",
     "smsOptIn": "Opt-in to SMS notifications",
     "smsOptInDescription": "Receive important updates and reminders via SMS text message. This includes event notifications, assignment confirmations, and urgent alerts."
+  },
+  "dashboard": {
+    "title": "Volunteer Dashboard",
+    "status": "Status",
+    "onboardingProgress": "Onboarding progress: {{completed}} / {{total}}",
+    "currentStep": "Current step",
+    "errors": {
+      "loadFailed": "Unable to load dashboard data."
+    },
+    "alerts": {
+      "title": "Alerts",
+      "empty": "No alerts right now."
+    },
+    "actions": {
+      "title": "Quick actions",
+      "continueOnboarding": "Continue onboarding",
+      "viewMissions": "Browse available missions"
+    },
+    "assignments": {
+      "title": "Upcoming assignments",
+      "empty": "No upcoming assignments.",
+      "headers": {
+        "title": "Mission",
+        "date": "Date",
+        "location": "Location",
+        "status": "Status"
+      }
+    },
+    "trainings": {
+      "title": "My trainings",
+      "empty": "No completed trainings yet."
+    },
+    "certs": {
+      "title": "Certifications",
+      "empty": "No certifications on file.",
+      "expires": "Expires"
+    }
+  },
+  "b1jComms": {
+    "title": "B1J Communications",
+    "fields": {
+      "segment": "Segment",
+      "segmentPlaceholder": "Select a segment",
+      "subject": "Subject",
+      "message": "Message",
+      "sendEmail": "Send via email",
+      "sendSms": "Send via SMS"
+    },
+    "segments": {
+      "missingConsent": "B1J - Missing consent",
+      "inOnboarding": "B1J - In onboarding",
+      "assigned": "B1J - Assigned"
+    },
+    "actions": {
+      "send": "Send message"
+    },
+    "status": {
+      "title": "Delivery status",
+      "empty": "No messages sent yet.",
+      "headers": {
+        "recipient": "Recipient",
+        "channel": "Channel",
+        "status": "Status",
+        "sentAt": "Sent at"
+      }
+    }
   }
 }

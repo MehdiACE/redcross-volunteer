@@ -87,18 +87,18 @@ description: "Tasks for volunteer onboarding & management system"
 
 ## Phase 5: User Story 3 - Volunteer Dashboard & Status Overview (Priority: P2)
 
-**Goal**: Dashboard shows status, onboarding progress, assignments, trainings, certifications, alerts.
+**Goal**: Dashboard shows status, onboarding progress, assignments, trainings, certifications, alerts (access restricted to role 'Admin').
 
 **Independent Test**: Login as Pending/InTraining/Active shows correct cards, alerts, and lists.
 
 ### Tests (write first)
-- [ ] T027 [P] [US3] Backend integration test for `/volunteers/me` dashboard data shape in `RedCrossManager.Server/Tests/Integration/DashboardTests.cs`
-- [ ] T028 [P] [US3] Frontend component test for dashboard cards/alerts rendering in `RedCrossManager.Client/src/app/features/dashboard/dashboard.component.spec.ts`
+- [X] T027 [P] [US3] Backend integration test for `/volunteers/me` dashboard data shape in `RedCrossManager.Server/Tests/Integration/DashboardTests.cs`
+- [X] T028 [P] [US3] Frontend component test for dashboard cards/alerts rendering in `RedCrossManager.Client/src/app/features/dashboard/dashboard.component.spec.ts`
 
 ### Implementation
-- [ ] T029 [US3] Add dashboard DTO aggregator (assignments, trainings, certs, alerts) in `RedCrossManager.Server/Services/Dashboard`
-- [ ] T030 [US3] Implement dashboard controller endpoint in `RedCrossManager.Server/Controllers/DashboardController.cs`
-- [ ] T031 [US3] Build dashboard UI with cards, tables, alerts in `RedCrossManager.Client/src/app/features/dashboard`
+- [X] T029 [US3] Add dashboard DTO aggregator (assignments, trainings, certs, alerts) in `RedCrossManager.Server/Services/Dashboard`
+- [X] T030 [US3] Implement dashboard controller endpoint in `RedCrossManager.Server/Controllers/DashboardController.cs`
+- [X] T031 [US3] Build dashboard UI with cards, tables, alerts in `RedCrossManager.Client/src/app/features/dashboard`
 
 ---
 
@@ -129,7 +129,7 @@ description: "Tasks for volunteer onboarding & management system"
 
 ### Tests (write first)
 - [ ] T039 [P] [US7] Integration test for communications send + status tracking in `RedCrossManager.Server/Tests/Integration/CommunicationsTests.cs`
-- [ ] T040 [P] [US7] Frontend component test for comms composer and status table in `RedCrossManager.Client/src/app/features/b1j-comms/b1j-comms.component.spec.ts`
+- [X] T040 [P] [US7] Frontend component test for comms composer and status table in `RedCrossManager.Client/src/app/features/b1j-comms/b1j-comms.component.spec.ts`
 
 ### Implementation
 - [ ] T041 [P] [US7] Implement `CommunicationMessage` + `CommunicationRecipient` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`

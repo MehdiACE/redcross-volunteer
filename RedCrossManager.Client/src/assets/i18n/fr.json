@@ -220,5 +220,70 @@
     "communicationPreferences": "Préférences de communication",
     "smsOptIn": "Accepter les notifications par SMS",
     "smsOptInDescription": "Recevez des mises à jour importantes et des rappels par SMS. Cela comprend les notifications d'événements, les confirmations d'attribution et les alertes urgentes."
-  }
+  },
+  "dashboard": {
+    "title": "Tableau de bord bénévole",
+    "status": "Statut",
+    "onboardingProgress": "Progression de l'embarquement : {{completed}} / {{total}}",
+    "currentStep": "Étape en cours",
+    "errors": {
+      "loadFailed": "Impossible de charger les données du tableau de bord."
+    },
+    "alerts": {
+      "title": "Alertes",
+      "empty": "Aucune alerte pour le moment."
+    },
+    "actions": {
+      "title": "Actions rapides",
+      "continueOnboarding": "Continuer l'embarquement",
+      "viewMissions": "Voir les missions disponibles"
+    },
+    "assignments": {
+      "title": "Affectations à venir",
+      "empty": "Aucune affectation à venir.",
+      "headers": {
+        "title": "Mission",
+        "date": "Date",
+        "location": "Lieu",
+        "status": "Statut"
+      }
+    },
+    "trainings": {
+      "title": "Mes formations",
+      "empty": "Aucune formation complétée pour le moment."
+    },
+    "certs": {
+      "title": "Certifications",
+      "empty": "Aucune certification enregistrée.",
+      "expires": "Expire"
+    }
+  },
+  "b1jComms": {
+    "title": "Communications B1J",
+    "fields": {
+      "segment": "Segment",
+      "segmentPlaceholder": "Sélectionner un segment",
+      "subject": "Objet",
+      "message": "Message",
+      "sendEmail": "Envoyer par courriel",
+      "sendSms": "Envoyer par SMS"
+    },
+    "segments": {
+      "missingConsent": "B1J - Consentement manquant",
+      "inOnboarding": "B1J - En embarquement",
+      "assigned": "B1J - Affecté"
+    },
+    "actions": {
+      "send": "Envoyer le message"
+    },
+    "status": {
+      "title": "Statut de livraison",
+      "empty": "Aucun message envoyé.",
+      "headers": {
+        "recipient": "Destinataire",
+        "channel": "Canal",
+        "status": "Statut",
+        "sentAt": "Envoyé le"
+      }
+    }
 }
