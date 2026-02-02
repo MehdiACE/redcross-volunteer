@@ -9,6 +9,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
 import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
+import { NotificationItem } from '../../core/models/notification.model';
+import { NotificationService } from '../../core/services/notification.service';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -21,10 +23,13 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 export class AdminDashboardComponent implements OnInit, OnDestroy {
   volunteers: AdminVolunteerListItem[] = [];
   pendingSteps: AdminOnboardingStep[] = [];
+  notifications: NotificationItem[] = [];
   isLoadingVolunteers = false;
   isLoadingSteps = false;
+  isLoadingNotifications = false;
   volunteerError = false;
   stepsError = false;
+  notificationsError = false;
 
   colDefs: ColDef[] = [
     {
@@ -48,11 +53,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private adminDashboardService: AdminDashboardService) {}
+  constructor(
+    private adminDashboardService: AdminDashboardService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.loadVolunteers();
     this.loadPendingSteps();
+    this.loadNotifications();
   }
 
   ngOnDestroy(): void {
@@ -112,6 +121,23 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         error: () => {
           this.stepsError = true;
           this.isLoadingSteps = false;
+        }
+      });
+  }
+
+  private loadNotifications(): void {
+    this.isLoadingNotifications = true;
+    this.notificationsError = false;
+    this.notificationService.getMyNotifications()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.notifications = data;
+          this.isLoadingNotifications = false;
+        },
+        error: () => {
+          this.notificationsError = true;
+          this.isLoadingNotifications = false;
         }
       });
   }

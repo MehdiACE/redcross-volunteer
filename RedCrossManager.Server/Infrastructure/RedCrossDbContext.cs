@@ -23,6 +23,7 @@ public class RedCrossDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -205,6 +206,26 @@ public class RedCrossDbContext : DbContext
             entity.HasOne(cr => cr.Message)
                 .WithMany(cm => cm.Recipients)
                 .HasForeignKey(cr => cr.MessageId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Notification configuration
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(n => n.Id);
+            entity.HasIndex(n => new { n.UserId, n.CreatedAt });
+            entity.Property(n => n.Title).IsRequired().HasMaxLength(200);
+            entity.Property(n => n.Message).IsRequired().HasMaxLength(2000);
+            entity.Property(n => n.ActionUrl).HasMaxLength(1024);
+
+            entity.HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(n => n.Volunteer)
+                .WithMany()
+                .HasForeignKey(n => n.VolunteerId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

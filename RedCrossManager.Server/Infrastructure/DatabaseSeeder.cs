@@ -113,5 +113,24 @@ public static class DatabaseSeeder
             dbContext.Volunteers.Add(adminVolunteer);
             await dbContext.SaveChangesAsync();
         }
+
+        var hasAdminNotification = await dbContext.Notifications.AnyAsync(n => n.UserId == adminUser.Id);
+        if (!hasAdminNotification)
+        {
+            dbContext.Notifications.Add(new Notification
+            {
+                Id = Guid.NewGuid(),
+                UserId = adminUser.Id,
+                VolunteerId = adminVolunteer.Id,
+                Title = "Bienvenue, admin",
+                Message = "Vous pouvez valider les étapes des bénévoles et gérer les notifications.",
+                Type = NotificationType.Info,
+                CreatedAt = DateTime.UtcNow,
+                IsRead = false,
+                ActionUrl = "/admin/dashboard"
+            });
+
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

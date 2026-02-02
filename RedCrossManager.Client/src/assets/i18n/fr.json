@@ -229,11 +229,16 @@
     "onboardingProgress": "Progression de l'embarquement : {{completed}} / {{total}}",
     "currentStep": "Étape en cours",
     "errors": {
-      "loadFailed": "Impossible de charger les données du tableau de bord."
+      "loadFailed": "Impossible de charger les données du tableau de bord.",
+      "notifications": "Impossible de charger les notifications."
     },
     "alerts": {
       "title": "Alertes",
       "empty": "Aucune alerte pour le moment."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "Aucune notification."
     },
     "actions": {
       "title": "Actions rapides",
@@ -304,7 +309,8 @@
     },
     "errors": {
       "volunteers": "Impossible de charger la liste des bénévoles.",
-      "steps": "Impossible de charger les étapes en attente."
+      "steps": "Impossible de charger les étapes en attente.",
+      "notifications": "Impossible de charger les notifications."
     }
   },
   "b1jComms": {

@@ -57,6 +57,7 @@ builder.Services.AddScoped<IOnboardingStepRepository, OnboardingStepRepository>(
 builder.Services.AddScoped<IParentalConsentRepository, ParentalConsentRepository>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingEnrollmentRepository, TrainingEnrollmentRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -65,6 +66,7 @@ builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ITrainingService, TrainingService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };

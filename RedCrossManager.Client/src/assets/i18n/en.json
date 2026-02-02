@@ -229,14 +229,42 @@
     "onboardingProgress": "Onboarding progress: {{completed}} / {{total}}",
     "currentStep": "Current step",
     "errors": {
-      "loadFailed": "Unable to load dashboard data."
+      "loadFailed": "Unable to load dashboard data.",
+      "notifications": "Unable to load notifications."
     },
     "alerts": {
       "title": "Alerts",
       "empty": "No alerts right now."
     },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications."
+    },
     "actions": {
       "title": "Quick actions",
+      "continueOnboarding": "Continue onboarding",
+      "viewMissions": "Browse available missions"
+    },
+    "assignments": {
+      "title": "Upcoming assignments",
+      "empty": "No upcoming assignments.",
+      "headers": {
+        "title": "Mission",
+        "date": "Date",
+        "location": "Location",
+        "status": "Status"
+      }
+    },
+    "trainings": {
+      "title": "My trainings",
+      "empty": "No completed trainings yet."
+    },
+    "certs": {
+      "title": "Certifications",
+      "empty": "No certifications on file.",
+      "expires": "Expires"
+    }
+  },
   "adminDashboard": {
     "title": "Admin dashboard",
     "subtitle": "Manage volunteers, validate steps, and monitor activity.",
@@ -281,30 +309,8 @@
     },
     "errors": {
       "volunteers": "Unable to load volunteers.",
-      "steps": "Unable to load pending steps."
-    }
-  },
-      "continueOnboarding": "Continue onboarding",
-      "viewMissions": "Browse available missions"
-    },
-    "assignments": {
-      "title": "Upcoming assignments",
-      "empty": "No upcoming assignments.",
-      "headers": {
-        "title": "Mission",
-        "date": "Date",
-        "location": "Location",
-        "status": "Status"
-      }
-    },
-    "trainings": {
-      "title": "My trainings",
-      "empty": "No completed trainings yet."
-    },
-    "certs": {
-      "title": "Certifications",
-      "empty": "No certifications on file.",
-      "expires": "Expires"
+      "steps": "Unable to load pending steps.",
+      "notifications": "Unable to load notifications."
     }
   },
   "b1jComms": {

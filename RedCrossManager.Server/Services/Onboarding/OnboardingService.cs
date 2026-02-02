@@ -2,6 +2,7 @@ using AutoMapper;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.DTOs.Onboarding;
 using RedCrossManager.Server.Repositories;
+using RedCrossManager.Server.Services.Notifications;
 
 namespace RedCrossManager.Server.Services.Onboarding;
 
@@ -21,17 +22,20 @@ public class OnboardingService : IOnboardingService
     private readonly IVolunteerRepository _volunteerRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<OnboardingService> _logger;
+    private readonly INotificationService _notificationService;
 
     public OnboardingService(
         IOnboardingStepRepository stepRepository,
         IVolunteerRepository volunteerRepository,
         IMapper mapper,
-        ILogger<OnboardingService> logger)
+        ILogger<OnboardingService> logger,
+        INotificationService notificationService)
     {
         _stepRepository = stepRepository;
         _volunteerRepository = volunteerRepository;
         _mapper = mapper;
         _logger = logger;
+        _notificationService = notificationService;
     }
 
     public async Task<OnboardingProgressDto> GetProgressAsync(Guid volunteerId, CancellationToken cancellationToken = default)
@@ -185,6 +189,23 @@ public class OnboardingService : IOnboardingService
 
         await _stepRepository.UpdateAsync(step, cancellationToken);
         _logger.LogInformation("Onboarding step {StepId} reviewed by {ReviewerId}: {Status}", stepId, reviewerId, step.Status);
+
+        if (step.Volunteer.UserId.HasValue)
+        {
+            var title = dto.Approved ? "Étape approuvée" : "Étape rejetée";
+            var message = dto.Approved
+                ? $"Votre étape {step.StepType} a été approuvée."
+                : $"Votre étape {step.StepType} a été rejetée. Veuillez vérifier les commentaires.";
+
+            await _notificationService.CreateAsync(new DTOs.Notifications.CreateNotificationDto(
+                step.Volunteer.UserId,
+                step.VolunteerId,
+                title,
+                message,
+                dto.Approved ? "Success" : "Warning",
+                "/onboarding"
+            ), cancellationToken);
+        }
 
         return _mapper.Map<OnboardingStepDto>(step);
     }

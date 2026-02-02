@@ -6,7 +6,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DashboardService } from '../../core/services/dashboard.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { VolunteerDashboardDto } from '../../core/models/dashboard.model';
+import { NotificationItem } from '../../core/models/notification.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,14 +18,21 @@ import { VolunteerDashboardDto } from '../../core/models/dashboard.model';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   dashboard: VolunteerDashboardDto | null = null;
+  notifications: NotificationItem[] = [];
   isLoading = false;
   loadError = false;
+  notificationsLoading = false;
+  notificationsError = false;
   private destroy$ = new Subject<void>();
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.fetchDashboard();
+    this.loadNotifications();
   }
 
   ngOnDestroy(): void {
@@ -45,6 +54,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error: () => {
           this.loadError = true;
           this.isLoading = false;
+        }
+      });
+  }
+
+  private loadNotifications(): void {
+    this.notificationsLoading = true;
+    this.notificationsError = false;
+
+    this.notificationService.getMyNotifications()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (notifications) => {
+          this.notifications = notifications;
+          this.notificationsLoading = false;
+        },
+        error: () => {
+          this.notificationsError = true;
+          this.notificationsLoading = false;
+        }
+      });
+  }
+
+  markAsRead(notificationId: string): void {
+    this.notificationService.markAsRead(notificationId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          const notification = this.notifications.find(n => n.id === notificationId);
+          if (notification) {
+            notification.isRead = true;
+          }
+        },
+        error: (err) => {
+          console.error('Failed to mark notification as read', err);
         }
       });
   }
