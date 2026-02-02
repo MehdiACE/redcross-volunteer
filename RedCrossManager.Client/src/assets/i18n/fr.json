@@ -16,7 +16,8 @@
     "back": "Retour",
     "next": "Suivant",
     "loading": "Chargement...",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "dashboard": "Tableau de bord"
   },
   "login": {
     "title": "Connexion",

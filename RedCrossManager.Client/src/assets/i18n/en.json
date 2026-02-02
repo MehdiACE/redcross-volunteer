@@ -16,7 +16,8 @@
     "back": "Back",
     "next": "Next",
     "loading": "Loading...",
-    "logout": "Logout"
+    "logout": "Logout",
+    "dashboard": "Dashboard"
   },
   "login": {
     "title": "Login",

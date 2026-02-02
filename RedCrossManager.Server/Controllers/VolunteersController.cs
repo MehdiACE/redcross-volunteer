@@ -77,7 +77,7 @@ public class VolunteersController : ControllerBase
         try
         {
             // Extract user ID from JWT claims
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var id))
             {
                 return Unauthorized(new { error = "Invalid or missing user ID in token" });
@@ -126,7 +126,7 @@ public class VolunteersController : ControllerBase
         try
         {
             // Extract volunteer ID from JWT claims
-            var volunteerId = User.FindFirst("sub")?.Value;
+            var volunteerId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(volunteerId) || !Guid.TryParse(volunteerId, out var id))
             {
                 return BadRequest(new { error = "Invalid or missing volunteer ID in token" });

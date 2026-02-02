@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { OnboardingService } from '../../../core/services/onboarding.service';
 import { OnboardingProgressDto } from '../../../core/models/onboarding.model';
+import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-stepper',
@@ -34,6 +35,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   isLoading = true;
   isSubmitting = false;
   selectedStepIndex = 0;
+  isAdmin = false;
   private destroy$ = new Subject<void>();
 
   stepTitles = [
@@ -54,10 +56,12 @@ export class StepperComponent implements OnInit, OnDestroy {
     private onboardingService: OnboardingService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.isAdmin = this.authService.hasRole('Admin');
     this.loadProgress();
   }
 
