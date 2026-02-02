@@ -85,11 +85,21 @@ export class StepperComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.isLoading = false;
-          this.snackBar.open(
-            this.translate.instant('onboarding.errors.loadFailed'),
-            this.translate.instant('common.close'),
-            { duration: 5000 }
-          );
+          if (error.status === 404) {
+            // No volunteer profile found - redirect to registration
+            this.snackBar.open(
+              this.translate.instant('onboarding.errors.noProfile'),
+              this.translate.instant('common.close'),
+              { duration: 5000 }
+            );
+            this.router.navigate(['/onboarding/registration']);
+          } else {
+            this.snackBar.open(
+              this.translate.instant('onboarding.errors.loadFailed'),
+              this.translate.instant('common.close'),
+              { duration: 5000 }
+            );
+          }
           console.error('Failed to load progress:', error);
         }
       });

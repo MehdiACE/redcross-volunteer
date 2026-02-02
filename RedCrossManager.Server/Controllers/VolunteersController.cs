@@ -9,7 +9,7 @@ using RedCrossManager.Server.Services.Volunteers;
 namespace RedCrossManager.Server.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/volunteers")]
 public class VolunteersController : ControllerBase
 {
     private readonly IVolunteerService _volunteerService;

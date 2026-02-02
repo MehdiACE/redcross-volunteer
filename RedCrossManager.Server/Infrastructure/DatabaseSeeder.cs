@@ -80,5 +80,38 @@ public static class DatabaseSeeder
 
             await dbContext.SaveChangesAsync();
         }
+
+        // Create volunteer profile for admin if it doesn't exist
+        var adminVolunteer = await dbContext.Volunteers.FirstOrDefaultAsync(v => v.UserId == adminUser.Id);
+        if (adminVolunteer == null)
+        {
+            adminVolunteer = new Volunteer
+            {
+                Id = Guid.NewGuid(),
+                UserId = adminUser.Id,
+                FirstName = "Admin",
+                LastName = "System",
+                Email = adminEmail,
+                Phone = "+33123456789",
+                DateOfBirth = new DateTime(1980, 1, 1),
+                AddressStreet = "1 Rue de la Croix-Rouge",
+                AddressCity = "Paris",
+                AddressStateProvince = "Île-de-France",
+                AddressPostalCode = "75000",
+                AddressCountry = "France",
+                EmergencyContactName = "Emergency Contact",
+                EmergencyContactPhone = "+33987654321",
+                AreasOfInterest = "[\"Emergency Services\",\"Community Programs\"]",
+                Availability = "{\"daysOfWeek\":[\"Monday\",\"Tuesday\",\"Wednesday\",\"Thursday\",\"Friday\"],\"timePreference\":\"flexible\"}",
+                LanguagePreference = "fr",
+                Status = VolunteerStatus.Active,
+                IsMinor = false,
+                SmsOptIn = true,
+                RegisteredAt = DateTime.UtcNow
+            };
+
+            dbContext.Volunteers.Add(adminVolunteer);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

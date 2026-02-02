@@ -152,7 +152,8 @@
     "errors": {
       "loadFailed": "Échec du chargement de la progression de l'embarquement.",
       "submitFailed": "Échec de la soumission de l'étape. Veuillez réessayer.",
-      "stepLocked": "Cette étape est verrouillée. Complétez d'abord les étapes précédentes."
+      "stepLocked": "Cette étape est verrouillée. Complétez d'abord les étapes précédentes.",
+      "noProfile": "Aucun profil de bénévole trouvé. Veuillez compléter l'inscription d'abord."
     },
     "warnings": {
       "minorConsentRequired": "En tant que mineur, vous avez besoin du consentement parental/tutélaire pour poursuivre l'embarquement."

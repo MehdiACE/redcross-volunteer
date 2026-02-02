@@ -152,7 +152,8 @@
     "errors": {
       "loadFailed": "Failed to load onboarding progress.",
       "submitFailed": "Failed to submit step. Please try again.",
-      "stepLocked": "This step is locked. Complete the previous steps first."
+      "stepLocked": "This step is locked. Complete the previous steps first.",
+      "noProfile": "No volunteer profile found. Please complete registration first."
     },
     "warnings": {
       "minorConsentRequired": "As a minor, you need parental/guardian consent to proceed with onboarding."

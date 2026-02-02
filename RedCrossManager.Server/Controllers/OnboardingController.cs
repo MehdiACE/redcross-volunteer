@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace RedCrossManager.Server.Controllers;
 
 [ApiController]
-[Route("api/v1/[controller]")]
+[Route("api/v1/onboarding")]
 public class OnboardingController : ControllerBase
 {
     private readonly IOnboardingService _onboardingService;
@@ -36,7 +36,12 @@ public class OnboardingController : ControllerBase
         var progress = await _onboardingService.GetProgressByUserIdAsync(userId, cancellationToken);
         if (progress == null)
         {
-            return NotFound(new { error = "No volunteer profile found for this user" });
+            _logger.LogWarning("No volunteer profile found for user {UserId}. User should register through the volunteer registration flow.", userId);
+            return NotFound(new { 
+                error = "No volunteer profile found for this user",
+                message = "Please complete the volunteer registration process first.",
+                redirectTo = "/onboarding/registration"
+            });
         }
 
         return Ok(progress);
