@@ -46,4 +46,13 @@ public class OnboardingStepRepository : IOnboardingStepRepository
         return await _context.OnboardingSteps
             .FirstOrDefaultAsync(s => s.VolunteerId == volunteerId && s.StepType == stepType, cancellationToken);
     }
+
+    public async Task<List<OnboardingStep>> GetPendingForReviewAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.OnboardingSteps
+            .Include(s => s.Volunteer)
+            .Where(s => s.Status == StepStatus.Submitted)
+            .OrderBy(s => s.SubmittedAt)
+            .ToListAsync(cancellationToken);
+    }
 }

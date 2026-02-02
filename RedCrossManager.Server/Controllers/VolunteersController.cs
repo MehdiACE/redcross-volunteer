@@ -67,6 +67,15 @@ public class VolunteersController : ControllerBase
         return volunteer == null ? NotFound() : Ok(volunteer);
     }
 
+    [HttpGet]
+    [Authorize(Policy = "Admin")]
+    [ProducesResponseType(typeof(List<VolunteerDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<VolunteerDto>>> GetAll(CancellationToken cancellationToken)
+    {
+        var volunteers = await _volunteerService.GetAllAsync(cancellationToken);
+        return Ok(volunteers);
+    }
+
     [HttpGet("me")]
     [Authorize(Policy = "Admin")]
     [ProducesResponseType(typeof(VolunteerDashboardDto), StatusCodes.Status200OK)]

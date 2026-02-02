@@ -41,3 +41,13 @@ public record ReviewStepDto(
     bool Approved,
     string? ReviewerNotes
 );
+
+public record AdminOnboardingStepDto(
+    Guid Id,
+    Guid VolunteerId,
+    string VolunteerName,
+    string VolunteerEmail,
+    string StepType,
+    string Status,
+    DateTime? SubmittedAt
+);

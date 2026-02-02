@@ -1,0 +1,164 @@
+<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
+  <div class="max-w-7xl mx-auto p-6 space-y-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.title' | translate }}
+        </h1>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          {{ 'adminDashboard.subtitle' | translate }}
+        </p>
+      </div>
+      <a routerLink="/dashboard" class="text-sm text-red-600 hover:text-red-700">
+        {{ 'adminDashboard.switchToVolunteer' | translate }}
+      </a>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      <section class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.cards.pendingSteps' | translate }}
+        </h2>
+        <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {{ pendingSteps.length }}
+        </p>
+        <p class="text-xs text-gray-500">
+          {{ 'adminDashboard.cards.pendingStepsHint' | translate }}
+        </p>
+      </section>
+      <section class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.cards.volunteers' | translate }}
+        </h2>
+        <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          {{ volunteers.length }}
+        </p>
+        <p class="text-xs text-gray-500">
+          {{ 'adminDashboard.cards.volunteersHint' | translate }}
+        </p>
+      </section>
+      <section class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.cards.messages' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          {{ 'adminDashboard.cards.messagesHint' | translate }}
+        </p>
+      </section>
+    </div>
+
+    <div class="grid gap-6 lg:grid-cols-3">
+      <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900 lg:col-span-2">
+        <div class="flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+            {{ 'adminDashboard.volunteerTable.title' | translate }}
+          </h2>
+          <span class="text-xs text-gray-500">AG Grid Community</span>
+        </div>
+
+        <div *ngIf="isLoadingVolunteers" class="flex justify-center items-center h-64">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+        <div *ngIf="volunteerError" class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {{ 'adminDashboard.errors.volunteers' | translate }}
+        </div>
+
+        <div *ngIf="!isLoadingVolunteers" class="ag-theme-quartz mt-4" style="height: 360px; width: 100%;">
+          <ag-grid-angular
+            class="w-full h-full"
+            [rowData]="volunteers"
+            [columnDefs]="colDefs"
+            [defaultColDef]="defaultColDef"
+            [animateRows]="true"
+            [pagination]="true"
+            [paginationPageSize]="10">
+          </ag-grid-angular>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.notifications.title' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          {{ 'adminDashboard.notifications.empty' | translate }}
+        </p>
+      </section>
+    </div>
+
+    <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-center justify-between">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.reviewQueue.title' | translate }}
+        </h2>
+        <span class="text-xs text-gray-500">
+          {{ pendingSteps.length }} {{ 'adminDashboard.reviewQueue.pending' | translate }}
+        </span>
+      </div>
+
+      <div *ngIf="isLoadingSteps" class="flex justify-center items-center h-48">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+      <div *ngIf="stepsError" class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        {{ 'adminDashboard.errors.steps' | translate }}
+      </div>
+
+      <div *ngIf="!isLoadingSteps && pendingSteps.length === 0" class="mt-4 text-sm text-gray-500">
+        {{ 'adminDashboard.reviewQueue.empty' | translate }}
+      </div>
+
+      <div *ngIf="pendingSteps.length > 0" class="mt-4 overflow-x-auto">
+        <table class="min-w-full text-left text-sm text-gray-600">
+          <thead class="text-xs uppercase text-gray-400">
+            <tr>
+              <th class="py-2">{{ 'adminDashboard.reviewQueue.headers.volunteer' | translate }}</th>
+              <th class="py-2">{{ 'adminDashboard.reviewQueue.headers.step' | translate }}</th>
+              <th class="py-2">{{ 'adminDashboard.reviewQueue.headers.submitted' | translate }}</th>
+              <th class="py-2 text-right">{{ 'adminDashboard.reviewQueue.headers.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let step of pendingSteps" class="border-t border-gray-100">
+              <td class="py-3">
+                <div class="font-medium text-gray-900 dark:text-gray-100">{{ step.volunteerName }}</div>
+                <div class="text-xs text-gray-500">{{ step.volunteerEmail }}</div>
+              </td>
+              <td class="py-3">{{ step.stepType }}</td>
+              <td class="py-3">{{ step.submittedAt | date:'mediumDate' }}</td>
+              <td class="py-3 text-right">
+                <div class="flex justify-end gap-2">
+                  <button class="rounded-md bg-green-600 px-3 py-1 text-xs font-semibold text-white hover:bg-green-700" (click)="approveStep(step)">
+                    {{ 'adminDashboard.reviewQueue.actions.approve' | translate }}
+                  </button>
+                  <button class="rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-700" (click)="rejectStep(step)">
+                    {{ 'adminDashboard.reviewQueue.actions.reject' | translate }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+      <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.chat.title' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          {{ 'adminDashboard.chat.placeholder' | translate }}
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          {{ 'adminDashboard.messages.title' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+          {{ 'adminDashboard.messages.placeholder' | translate }}
+        </p>
+      </section>
+    </div>
+  </div>
+</div>

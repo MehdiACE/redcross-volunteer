@@ -109,6 +109,15 @@ public class OnboardingController : ControllerBase
         }
     }
 
+    [HttpGet("steps/pending")]
+    [Authorize(Policy = "Coordinator")]
+    [ProducesResponseType(typeof(List<AdminOnboardingStepDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<AdminOnboardingStepDto>>> GetPendingSteps(CancellationToken cancellationToken)
+    {
+        var steps = await _onboardingService.GetPendingStepsAsync(cancellationToken);
+        return Ok(steps);
+    }
+
     [HttpPost("steps/{stepId:guid}/review")]
     [Authorize(Policy = "Coordinator")]
     [ProducesResponseType(typeof(OnboardingStepDto), StatusCodes.Status200OK)]

@@ -260,6 +260,53 @@
       "expires": "Expire"
     }
   },
+  "adminDashboard": {
+    "title": "Tableau de bord administrateur",
+    "subtitle": "Gérez les bénévoles, validez les étapes et suivez l'activité.",
+    "switchToVolunteer": "Voir le tableau bénévole",
+    "cards": {
+      "pendingSteps": "Étapes en attente",
+      "pendingStepsHint": "Étapes soumises à valider",
+      "volunteers": "Bénévoles",
+      "volunteersHint": "Total des profils actifs",
+      "messages": "Messages",
+      "messagesHint": "Canal de communication interne"
+    },
+    "volunteerTable": {
+      "title": "Liste des bénévoles"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "Aucune notification pour le moment."
+    },
+    "reviewQueue": {
+      "title": "Validation des étapes",
+      "pending": "en attente",
+      "empty": "Aucune étape à valider pour le moment.",
+      "headers": {
+        "volunteer": "Bénévole",
+        "step": "Étape",
+        "submitted": "Soumise",
+        "actions": "Actions"
+      },
+      "actions": {
+        "approve": "Approuver",
+        "reject": "Rejeter"
+      }
+    },
+    "chat": {
+      "title": "Chat",
+      "placeholder": "Module de chat à connecter."
+    },
+    "messages": {
+      "title": "Messages",
+      "placeholder": "Historique des échanges à venir."
+    },
+    "errors": {
+      "volunteers": "Impossible de charger la liste des bénévoles.",
+      "steps": "Impossible de charger les étapes en attente."
+    }
+  },
   "b1jComms": {
     "title": "Communications B1J",
     "fields": {

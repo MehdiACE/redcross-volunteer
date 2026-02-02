@@ -9,6 +9,7 @@ public interface IOnboardingService
 {
     Task<OnboardingProgressDto> GetProgressAsync(Guid volunteerId, CancellationToken cancellationToken = default);
     Task<OnboardingProgressDto?> GetProgressByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+    Task<List<AdminOnboardingStepDto>> GetPendingStepsAsync(CancellationToken cancellationToken = default);
     Task InitializeStepsAsync(Guid volunteerId, CancellationToken cancellationToken = default);
     Task<OnboardingStepDto> SubmitStepAsync(Guid volunteerId, SubmitStepDto dto, CancellationToken cancellationToken = default);
     Task<OnboardingStepDto> ReviewStepAsync(Guid stepId, Guid reviewerId, ReviewStepDto dto, CancellationToken cancellationToken = default);
@@ -113,6 +114,20 @@ public class OnboardingService : IOnboardingService
             volunteer.RegisteredAt,
             completedCount == steps.Count ? DateTime.UtcNow : null
         );
+    }
+
+    public async Task<List<AdminOnboardingStepDto>> GetPendingStepsAsync(CancellationToken cancellationToken = default)
+    {
+        var steps = await _stepRepository.GetPendingForReviewAsync(cancellationToken);
+        return steps.Select(step => new AdminOnboardingStepDto(
+            step.Id,
+            step.VolunteerId,
+            $"{step.Volunteer.FirstName} {step.Volunteer.LastName}".Trim(),
+            step.Volunteer.Email,
+            step.StepType.ToString(),
+            step.Status.ToString(),
+            step.SubmittedAt
+        )).ToList();
     }
 
     public async Task InitializeStepsAsync(Guid volunteerId, CancellationToken cancellationToken = default)

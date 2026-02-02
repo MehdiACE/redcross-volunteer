@@ -9,4 +9,5 @@ public interface IOnboardingStepRepository
     Task<OnboardingStep> AddAsync(OnboardingStep step, CancellationToken cancellationToken = default);
     Task UpdateAsync(OnboardingStep step, CancellationToken cancellationToken = default);
     Task<OnboardingStep?> GetByVolunteerAndTypeAsync(Guid volunteerId, StepType stepType, CancellationToken cancellationToken = default);
+    Task<List<OnboardingStep>> GetPendingForReviewAsync(CancellationToken cancellationToken = default);
 }

@@ -237,6 +237,53 @@
     },
     "actions": {
       "title": "Quick actions",
+  "adminDashboard": {
+    "title": "Admin dashboard",
+    "subtitle": "Manage volunteers, validate steps, and monitor activity.",
+    "switchToVolunteer": "View volunteer dashboard",
+    "cards": {
+      "pendingSteps": "Pending steps",
+      "pendingStepsHint": "Submitted steps awaiting review",
+      "volunteers": "Volunteers",
+      "volunteersHint": "Total active profiles",
+      "messages": "Messages",
+      "messagesHint": "Internal communication channel"
+    },
+    "volunteerTable": {
+      "title": "Volunteer list"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "empty": "No notifications yet."
+    },
+    "reviewQueue": {
+      "title": "Step review queue",
+      "pending": "pending",
+      "empty": "No steps to review right now.",
+      "headers": {
+        "volunteer": "Volunteer",
+        "step": "Step",
+        "submitted": "Submitted",
+        "actions": "Actions"
+      },
+      "actions": {
+        "approve": "Approve",
+        "reject": "Reject"
+      }
+    },
+    "chat": {
+      "title": "Chat",
+      "placeholder": "Chat module coming soon."
+    },
+    "messages": {
+      "title": "Messages",
+      "placeholder": "Message history coming soon."
+    },
+    "errors": {
+      "volunteers": "Unable to load volunteers.",
+      "steps": "Unable to load pending steps."
+    }
+  },
       "continueOnboarding": "Continue onboarding",
       "viewMissions": "Browse available missions"
     },
