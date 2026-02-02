@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
@@ -10,26 +11,32 @@ import { takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
 import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
 import { NotificationItem } from '../../core/models/notification.model';
+import { MessageItem } from '../../core/models/message.model';
 import { NotificationService } from '../../core/services/notification.service';
+import { MessageService } from '../../core/services/message.service';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular],
+  imports: [CommonModule, FormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular],
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
   volunteers: AdminVolunteerListItem[] = [];
   pendingSteps: AdminOnboardingStep[] = [];
   notifications: NotificationItem[] = [];
+  messages: MessageItem[] = [];
+  newMessageContent = '';
   isLoadingVolunteers = false;
   isLoadingSteps = false;
   isLoadingNotifications = false;
+  isLoadingMessages = false;
   volunteerError = false;
   stepsError = false;
   notificationsError = false;
+  messagesError = false;
 
   colDefs: ColDef[] = [
     {
@@ -55,13 +62,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private adminDashboardService: AdminDashboardService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.loadVolunteers();
     this.loadPendingSteps();
     this.loadNotifications();
+    this.loadInbox();
   }
 
   ngOnDestroy(): void {
@@ -87,6 +96,34 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         next: () => this.loadPendingSteps(),
         error: () => {
           this.stepsError = true;
+        }
+      });
+  }
+
+  sendMessage(): void {
+    if (!this.newMessageContent.trim()) return;
+
+    this.messageService.sendMessage({
+      content: this.newMessageContent
+    }).pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.newMessageContent = '';
+          this.loadInbox();
+        },
+        error: () => {
+          this.messagesError = true;
+        }
+      });
+  }
+
+  markMessageAsRead(message: MessageItem): void {
+    if (message.isRead) return;
+    this.messageService.markAsRead(message.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          message.isRead = true;
         }
       });
   }
@@ -138,6 +175,23 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         error: () => {
           this.notificationsError = true;
           this.isLoadingNotifications = false;
+        }
+      });
+  }
+
+  private loadInbox(): void {
+    this.isLoadingMessages = true;
+    this.messagesError = false;
+    this.messageService.getInbox()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: data => {
+          this.messages = data;
+          this.isLoadingMessages = false;
+        },
+        error: () => {
+          this.messagesError = true;
+          this.isLoadingMessages = false;
         }
       });
   }

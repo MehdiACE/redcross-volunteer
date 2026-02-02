@@ -170,9 +170,54 @@
         <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
           {{ 'adminDashboard.messages.title' | translate }}
         </h2>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-          {{ 'adminDashboard.messages.placeholder' | translate }}
-        </p>
+
+        <div *ngIf="isLoadingMessages" class="mt-4 flex justify-center">
+          <mat-spinner diameter="32"></mat-spinner>
+        </div>
+
+        <div *ngIf="messagesError" class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          {{ 'adminDashboard.errors.messages' | translate }}
+        </div>
+
+        <div *ngIf="!isLoadingMessages && !messagesError" class="mt-4 space-y-3">
+          <!-- Message input -->
+          <div class="flex gap-2">
+            <input
+              type="text"
+              [(ngModel)]="newMessageContent"
+              placeholder="{{ 'adminDashboard.messages.placeholder' | translate }}"
+              class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+              (keyup.enter)="sendMessage()"
+            />
+            <button
+              (click)="sendMessage()"
+              [disabled]="!newMessageContent.trim()"
+              class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              {{ 'adminDashboard.messages.send' | translate }}
+            </button>
+          </div>
+
+          <!-- Messages list -->
+          <div class="max-h-64 space-y-2 overflow-y-auto">
+            <div *ngIf="messages.length === 0" class="text-sm text-gray-500">
+              {{ 'adminDashboard.messages.empty' | translate }}
+            </div>
+            <div
+              *ngFor="let msg of messages"
+              [class.opacity-50]="msg.isRead"
+              (click)="markMessageAsRead(msg)"
+              class="cursor-pointer rounded-lg border border-gray-100 p-3 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-800"
+            >
+              <div class="flex items-start justify-between">
+                <p class="font-semibold text-gray-900 dark:text-gray-100">{{ msg.fromUserName }}</p>
+                <span *ngIf="!msg.isRead" class="text-xs text-red-600">●</span>
+              </div>
+              <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">{{ msg.content }}</p>
+              <p class="mt-2 text-xs text-gray-400">{{ msg.createdAt | date:'short' }}</p>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </div>

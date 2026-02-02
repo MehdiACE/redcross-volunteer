@@ -305,12 +305,27 @@
     },
     "messages": {
       "title": "Messages",
-      "placeholder": "Historique des échanges à venir."
+      "inbox": "Boîte de réception",
+      "sent": "Messages envoyés",
+      "newMessage": "Nouveau message",
+      "placeholder": "Écrire un message...",
+      "send": "Envoyer",
+      "empty": "Aucun message.",
+      "markAsRead": "Marquer comme lu",
+      "unreadCount": "{{count}} message(s) non lu(s)",
+      "headers": {
+        "from": "De",
+        "to": "À",
+        "content": "Contenu",
+        "date": "Date",
+        "status": "Statut"
+      }
     },
     "errors": {
       "volunteers": "Impossible de charger la liste des bénévoles.",
       "steps": "Impossible de charger les étapes en attente.",
-      "notifications": "Impossible de charger les notifications."
+      "notifications": "Impossible de charger les notifications.",
+      "messages": "Impossible de charger les messages."
     }
   },
   "b1jComms": {

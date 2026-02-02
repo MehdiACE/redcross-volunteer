@@ -305,12 +305,27 @@
     },
     "messages": {
       "title": "Messages",
-      "placeholder": "Message history coming soon."
+      "inbox": "Inbox",
+      "sent": "Sent messages",
+      "newMessage": "New message",
+      "placeholder": "Type a message...",
+      "send": "Send",
+      "empty": "No messages.",
+      "markAsRead": "Mark as read",
+      "unreadCount": "{{count}} unread message(s)",
+      "headers": {
+        "from": "From",
+        "to": "To",
+        "content": "Content",
+        "date": "Date",
+        "status": "Status"
+      }
     },
     "errors": {
       "volunteers": "Unable to load volunteers.",
       "steps": "Unable to load pending steps.",
-      "notifications": "Unable to load notifications."
+      "notifications": "Unable to load notifications.",
+      "messages": "Unable to load messages."
     }
   },
   "b1jComms": {

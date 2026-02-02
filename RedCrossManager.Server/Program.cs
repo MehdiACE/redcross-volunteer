@@ -7,6 +7,7 @@ using RedCrossManager.Server.Infrastructure;
 using RedCrossManager.Server.Repositories;
 using RedCrossManager.Server.Services.Volunteers;
 using RedCrossManager.Server.Services.Notifications;
+using RedCrossManager.Server.Services.Messages;
 using RedCrossManager.Server.Services.Onboarding;
 using RedCrossManager.Server.Services.Consents;
 using RedCrossManager.Server.Services.Auth;
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IParentalConsentRepository, ParentalConsentRepository
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingEnrollmentRepository, TrainingEnrollmentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -67,6 +69,7 @@ builder.Services.AddScoped<IConsentService, ConsentService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ITrainingService, TrainingService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };
