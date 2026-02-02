@@ -180,6 +180,22 @@
         </div>
 
         <div *ngIf="!isLoadingMessages && !messagesError" class="mt-4 space-y-3">
+          <!-- Volunteer selector -->
+          <div class="space-y-1">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+              {{ 'adminDashboard.messages.selectVolunteer' | translate }}
+            </label>
+            <select
+              [(ngModel)]="selectedVolunteerId"
+              class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+            >
+              <option value="">{{ 'adminDashboard.messages.selectVolunteerPlaceholder' | translate }}</option>
+              <option *ngFor="let volunteer of volunteers" [value]="volunteer.id">
+                {{ volunteer.firstName }} {{ volunteer.lastName }} ({{ volunteer.email }})
+              </option>
+            </select>
+          </div>
+
           <!-- Message input -->
           <div class="flex gap-2">
             <input
@@ -191,7 +207,7 @@
             />
             <button
               (click)="sendMessage()"
-              [disabled]="!newMessageContent.trim()"
+              [disabled]="!newMessageContent.trim() || !selectedVolunteerId"
               class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
             >
               {{ 'adminDashboard.messages.send' | translate }}

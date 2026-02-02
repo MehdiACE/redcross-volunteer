@@ -309,6 +309,8 @@
       "sent": "Sent messages",
       "newMessage": "New message",
       "placeholder": "Type a message...",
+      "selectVolunteer": "Select a volunteer",
+      "selectVolunteerPlaceholder": "Choose a volunteer...",
       "send": "Send",
       "empty": "No messages.",
       "markAsRead": "Mark as read",
