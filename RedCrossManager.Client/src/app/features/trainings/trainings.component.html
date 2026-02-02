@@ -1,0 +1,232 @@
+<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
+  <div class="max-w-7xl mx-auto p-6">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        {{ 'trainings.title' | translate }}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        {{ 'trainings.subtitle' | translate }}
+      </p>
+    </div>
+
+    <!-- Tabs for All Trainings and My Trainings -->
+    <mat-tab-group class="mb-6">
+      <!-- All Trainings Tab -->
+      <mat-tab [label]="'trainings.allTrainings' | translate">
+        <!-- Filter Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 shadow-sm">
+          <h2 class="text-lg font-semibold mb-4">{{ 'trainings.filters' | translate }}</h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Category Filter -->
+            <mat-form-field class="w-full">
+              <mat-label>{{ 'trainings.category' | translate }}</mat-label>
+              <mat-select [(ngModel)]="categoryFilter">
+                <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+                <mat-option *ngFor="let cat of getCategoryOptions()" [value]="cat">
+                  {{ cat }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Start Date Filter -->
+            <mat-form-field class="w-full">
+              <mat-label>{{ 'trainings.startDate' | translate }}</mat-label>
+              <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDateFilter">
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- End Date Filter -->
+            <mat-form-field class="w-full">
+              <mat-label>{{ 'trainings.endDate' | translate }}</mat-label>
+              <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDateFilter">
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Available Spots Only -->
+            <div class="flex items-end">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" [(ngModel)]="availableSpotsOnlyFilter" class="mr-2">
+                <span>{{ 'trainings.availableSpotsOnly' | translate }}</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Filter Buttons -->
+          <div class="flex gap-3 mt-6">
+            <button mat-raised-button color="primary" (click)="applyFilters()">
+              <mat-icon>search</mat-icon>
+              {{ 'common.search' | translate }}
+            </button>
+            <button mat-stroked-button (click)="clearFilters()">
+              <mat-icon>clear</mat-icon>
+              {{ 'common.clear' | translate }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="loadError && !isLoading" class="bg-red-100 text-red-700 p-4 rounded-lg mb-6">
+          {{ 'trainings.loadError' | translate }}
+        </div>
+
+        <!-- Trainings Grid -->
+        <div *ngIf="!isLoading && !loadError" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <mat-card *ngFor="let training of trainings" class="training-card" [attr.data-testid]="'training-card'">
+            <mat-card-header>
+              <mat-card-title>{{ training.title }}</mat-card-title>
+              <mat-card-subtitle>{{ training.category }}</mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="space-y-4">
+              <p class="text-sm text-gray-600">{{ training.description }}</p>
+
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-base">calendar_today</mat-icon>
+                  <span>{{ training.startDate | date: 'short' }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-base">location_on</mat-icon>
+                  <span>{{ training.locationName }}</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <mat-icon class="text-base">group</mat-icon>
+                  <span>{{ training.enrollmentCount }} / {{ training.maxEnrollment }} enrolled</span>
+                </div>
+              </div>
+
+              <!-- Availability Chip -->
+              <div>
+                <mat-chip *ngIf="hasAvailableSpots(training)" selected color="accent">
+                  {{ training.availableSpots }} spots available
+                </mat-chip>
+                <mat-chip *ngIf="!hasAvailableSpots(training)" color="warn">
+                  {{ 'trainings.noSpots' | translate }}
+                </mat-chip>
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions class="flex gap-2">
+              <button
+                mat-stroked-button
+                (click)="showTrainingDetails(training)"
+                [attr.data-testid]="'view-details-btn'">
+                {{ 'common.details' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="enrollInTraining(training)"
+                [disabled]="!hasAvailableSpots(training) || isAlreadyEnrolled(training)"
+                [attr.data-testid]="'enroll-btn'">
+                <span *ngIf="!isAlreadyEnrolled(training)">{{ 'trainings.enroll' | translate }}</span>
+                <span *ngIf="isAlreadyEnrolled(training)">{{ getEnrollmentStatus(training) }}</span>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && !loadError && trainings.length === 0" class="text-center py-12">
+          <mat-icon class="text-6xl text-gray-300 mb-4">search_off</mat-icon>
+          <p class="text-gray-500">{{ 'trainings.noTrainings' | translate }}</p>
+        </div>
+      </mat-tab>
+
+      <!-- My Trainings Tab -->
+      <mat-tab [label]="'trainings.myTrainings' | translate">
+        <div class="py-6">
+          <div *ngIf="myTrainings.length === 0" class="text-center py-12">
+            <mat-icon class="text-6xl text-gray-300 mb-4">assignment_ind</mat-icon>
+            <p class="text-gray-500">{{ 'trainings.noMyTrainings' | translate }}</p>
+          </div>
+
+          <div *ngIf="myTrainings.length > 0" class="space-y-4">
+            <div *ngFor="let enrollment of myTrainings" class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
+              <div class="flex items-start justify-between">
+                <div>
+                  <h3 class="text-lg font-semibold">Training ID: {{ enrollment.trainingId }}</h3>
+                  <p class="text-sm text-gray-600">
+                    {{ 'trainings.enrolledAt' | translate }}: {{ enrollment.enrolledAt | date: 'medium' }}
+                  </p>
+                  <div class="mt-3">
+                    <mat-chip [color]="enrollment.status === 'Completed' ? 'accent' : 'warn'" selected>
+                      {{ enrollment.status }}
+                    </mat-chip>
+                  </div>
+                </div>
+                <div *ngIf="enrollment.certificateNumber" class="text-right">
+                  <p class="text-sm font-semibold text-green-600">
+                    {{ 'trainings.certificateIssued' | translate }}
+                  </p>
+                  <p class="text-xs text-gray-600">{{ enrollment.certificateNumber }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- Details Modal -->
+    <div *ngIf="showDetailsModal && selectedTraining" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <h2 class="text-2xl font-bold">{{ selectedTraining.title }}</h2>
+            <p class="text-gray-600">{{ selectedTraining.category }}</p>
+          </div>
+          <button mat-icon-button (click)="closeDetailsModal()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <div class="space-y-4 mb-6">
+          <p>{{ selectedTraining.description }}</p>
+
+          <div class="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p class="font-semibold text-gray-700">{{ 'trainings.startDate' | translate }}</p>
+              <p>{{ selectedTraining.startDate | date: 'medium' }}</p>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-700">{{ 'trainings.endDate' | translate }}</p>
+              <p>{{ selectedTraining.endDate | date: 'medium' }}</p>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-700">{{ 'trainings.location' | translate }}</p>
+              <p>{{ selectedTraining.locationName }}</p>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-700">{{ 'trainings.capacity' | translate }}</p>
+              <p>{{ selectedTraining.enrollmentCount }} / {{ selectedTraining.maxEnrollment }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="enrollInTraining(selectedTraining)"
+            [disabled]="!hasAvailableSpots(selectedTraining)"
+            [attr.data-testid]="'modal-enroll-btn'">
+            {{ 'trainings.enroll' | translate }}
+          </button>
+          <button mat-stroked-button (click)="closeDetailsModal()">
+            {{ 'common.close' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

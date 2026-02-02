@@ -5,25 +5,16 @@ public class Training
     public Guid Id { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public TrainingCategory Category { get; set; }
-    public required string Location { get; set; }
-    public DateTime StartAt { get; set; }
-    public DateTime EndAt { get; set; }
-    public int Capacity { get; set; }
-    public string? Prerequisites { get; set; } // JSON list of CertificationType
-    public bool Published { get; set; }
-    public Guid CreatedBy { get; set; }
+    public required string Category { get; set; }
+    public required string LocationName { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public int MaxEnrollment { get; set; }
+    public string Status { get; set; } = "Draft"; // Draft, Published, Archived
+    public Guid CreatedByCoordinatorId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? UpdatedAt { get; set; }
 
     // Navigation properties
     public ICollection<TrainingEnrollment> Enrollments { get; set; } = new List<TrainingEnrollment>();
-}
-
-public enum TrainingCategory
-{
-    Orientation,
-    FirstAid,
-    CPR,
-    DisasterResponse,
-    Other
 }

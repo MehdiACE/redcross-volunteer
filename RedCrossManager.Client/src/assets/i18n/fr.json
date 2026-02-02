@@ -286,5 +286,27 @@
         "sentAt": "Envoyé le"
       }
     }
+  },
+  "trainings": {
+    "title": "Catalogue de formations",
+    "subtitle": "Parcourez et inscrivez-vous aux formations disponibles pour les bénévoles",
+    "allTrainings": "Toutes les formations",
+    "myTrainings": "Mes formations",
+    "filters": "Filtrer les formations",
+    "category": "Catégorie",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "availableSpotsOnly": "Seulement les places disponibles",
+    "loadError": "Échec du chargement des formations. Veuillez réessayer plus tard.",
+    "noTrainings": "Aucune formation ne correspond à vos filtres.",
+    "noMyTrainings": "Vous n'êtes pas encore inscrit à des formations.",
+    "noSpots": "Aucune place disponible",
+    "enroll": "S'inscrire maintenant",
+    "enrolledAt": "Inscrit",
+    "location": "Lieu",
+    "capacity": "Capacité",
+    "certificateIssued": "Certificat délivré",
+    "search": "Rechercher"
   }
 }
+

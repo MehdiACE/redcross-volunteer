@@ -109,14 +109,14 @@ description: "Tasks for volunteer onboarding & management system"
 **Independent Test**: Create training, enroll volunteer, mark attendance -> certificate issued and visible.
 
 ### Tests (write first)
-- [ ] T032 [P] [US4] Contract/integration test for training create/list/enroll in `RedCrossManager.Server/Tests/Integration/TrainingTests.cs`
-- [ ] T033 [P] [US4] Frontend component test for training catalog filters/enroll flow in `RedCrossManager.Client/src/app/features/trainings/trainings.component.spec.ts`
+- [X] T032 [P] [US4] Contract/integration test for training create/list/enroll in `RedCrossManager.Server/Tests/Integration/TrainingTests.cs`
+- [X] T033 [P] [US4] Frontend component test for training catalog filters/enroll flow in `RedCrossManager.Client/src/app/features/trainings/trainings.component.spec.ts`
 
 ### Implementation
-- [ ] T034 [P] [US4] Implement `Training`, `TrainingEnrollment` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`
-- [ ] T035 [US4] Implement training service (create/publish/enroll/waitlist/attendance) in `RedCrossManager.Server/Services/Trainings`
-- [ ] T036 [US4] Implement trainings controller endpoints in `RedCrossManager.Server/Controllers/TrainingsController.cs`
-- [ ] T037 [US4] Build training catalog + enrollment UI in `RedCrossManager.Client/src/app/features/trainings`
+- [X] T034 [P] [US4] Implement `Training`, `TrainingEnrollment` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`
+- [X] T035 [US4] Implement training service (create/publish/enroll/waitlist/attendance) in `RedCrossManager.Server/Services/Trainings`
+- [X] T036 [US4] Implement trainings controller endpoints in `RedCrossManager.Server/Controllers/TrainingsController.cs`
+- [X] T037 [US4] Build training catalog + enrollment UI in `RedCrossManager.Client/src/app/features/trainings`
 - [ ] T038 [US4] Generate certificates and link to documents in `RedCrossManager.Server/Services/Certificates`
 
 ---

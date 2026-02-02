@@ -11,6 +11,7 @@ using RedCrossManager.Server.Services.Onboarding;
 using RedCrossManager.Server.Services.Consents;
 using RedCrossManager.Server.Services.Auth;
 using RedCrossManager.Server.Services.Dashboard;
+using RedCrossManager.Server.Services.Trainings;
 using RedCrossManager.Server.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -54,6 +55,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IVolunteerRepository, VolunteerRepository>();
 builder.Services.AddScoped<IOnboardingStepRepository, OnboardingStepRepository>();
 builder.Services.AddScoped<IParentalConsentRepository, ParentalConsentRepository>();
+builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
+builder.Services.AddScoped<ITrainingEnrollmentRepository, TrainingEnrollmentRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -61,6 +64,7 @@ builder.Services.AddScoped<IVolunteerService, VolunteerService>();
 builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ITrainingService, TrainingService>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };

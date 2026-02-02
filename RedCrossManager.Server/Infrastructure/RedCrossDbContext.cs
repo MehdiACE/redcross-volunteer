@@ -105,10 +105,12 @@ public class RedCrossDbContext : DbContext
         modelBuilder.Entity<Training>(entity =>
         {
             entity.HasKey(t => t.Id);
-            entity.HasIndex(t => new { t.StartAt, t.Published });
+            entity.HasIndex(t => new { t.StartDate, t.Status });
             entity.Property(t => t.Title).IsRequired().HasMaxLength(255);
             entity.Property(t => t.Description).IsRequired().HasMaxLength(2000);
-            entity.Property(t => t.Location).IsRequired().HasMaxLength(500);
+            entity.Property(t => t.Category).IsRequired().HasMaxLength(100);
+            entity.Property(t => t.LocationName).IsRequired().HasMaxLength(500);
+            entity.Property(t => t.Status).IsRequired().HasMaxLength(50);
         });
 
         // TrainingEnrollment configuration
@@ -116,7 +118,8 @@ public class RedCrossDbContext : DbContext
         {
             entity.HasKey(te => te.Id);
             entity.HasIndex(te => new { te.TrainingId, te.VolunteerId }).IsUnique();
-            entity.Property(te => te.Grade).HasMaxLength(50);
+            entity.Property(te => te.Status).IsRequired().HasMaxLength(50);
+            entity.Property(te => te.CertificateNumber).HasMaxLength(100);
 
             entity.HasOne(te => te.Training)
                 .WithMany(t => t.Enrollments)
@@ -124,14 +127,9 @@ public class RedCrossDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(te => te.Volunteer)
-                .WithMany(v => v.TrainingEnrollments)
+                .WithMany()
                 .HasForeignKey(te => te.VolunteerId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            entity.HasOne(te => te.Certificate)
-                .WithMany(c => c.TrainingEnrollments)
-                .HasForeignKey(te => te.CertificateId)
-                .OnDelete(DeleteBehavior.SetNull);
         });
 
         // Certification configuration

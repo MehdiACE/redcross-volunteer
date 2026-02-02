@@ -22,6 +22,11 @@ export const routes: Routes = [
     canActivate: [adminGuard]
   },
   {
+    path: 'trainings',
+    loadComponent: () => import('./features/trainings/trainings.component').then(m => m.TrainingsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'benevole-ponctuel',
     loadComponent: () => import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(m => m.OneTimeVolunteerComponent)
   },

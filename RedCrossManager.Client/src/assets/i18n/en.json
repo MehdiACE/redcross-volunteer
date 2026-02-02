@@ -286,5 +286,27 @@
         "sentAt": "Sent at"
       }
     }
+  },
+  "trainings": {
+    "title": "Training Catalog",
+    "subtitle": "Browse and enroll in available trainings for volunteers",
+    "allTrainings": "All Trainings",
+    "myTrainings": "My Trainings",
+    "filters": "Filter Trainings",
+    "category": "Category",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "availableSpotsOnly": "Available Spots Only",
+    "loadError": "Failed to load trainings. Please try again later.",
+    "noTrainings": "No trainings found matching your filters.",
+    "noMyTrainings": "You are not enrolled in any trainings yet.",
+    "noSpots": "No spaces available",
+    "enroll": "Enroll Now",
+    "enrolledAt": "Enrolled",
+    "location": "Location",
+    "capacity": "Capacity",
+    "certificateIssued": "Certificate Issued",
+    "search": "Search"
   }
 }
+

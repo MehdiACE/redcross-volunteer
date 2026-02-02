@@ -1,0 +1,30 @@
+.training-card {
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-content {
+    flex-grow: 1;
+  }
+
+  mat-card-actions {
+    margin-top: auto;
+    padding-top: 16px;
+  }
+}
+
+::ng-deep {
+  .mat-mdc-tab-labels {
+    background-color: transparent;
+  }
+
+  .mat-mdc-tab {
+    min-width: 150px;
+  }
+}
