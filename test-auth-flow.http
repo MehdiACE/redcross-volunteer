@@ -1,6 +1,6 @@
 ### Test Authentication Flow
 
-@baseUrl = http://localhost:5049/api/v1
+@baseUrl = http://localhost:3000/api/v1
 @email = test@example.com
 @password = SecurePass123!
 

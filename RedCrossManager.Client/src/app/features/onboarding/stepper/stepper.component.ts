@@ -44,10 +44,10 @@ export class StepperComponent implements OnInit, OnDestroy {
   ];
 
   stepDescriptions = [
-    'onboarding.steps.personalInfoDesc',
-    'onboarding.steps.backgroundDesc',
-    'onboarding.steps.trainingDesc',
-    'onboarding.steps.assignmentDesc'
+    'onboarding.stepDescriptions.personalInfoDesc',
+    'onboarding.stepDescriptions.backgroundDesc',
+    'onboarding.stepDescriptions.trainingDesc',
+    'onboarding.stepDescriptions.assignmentDesc'
   ];
 
   constructor(
