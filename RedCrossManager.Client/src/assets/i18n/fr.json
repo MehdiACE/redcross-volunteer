@@ -16,6 +16,7 @@
     "noMessageSelected": "Sélectionnez un message à afficher.",
     "readMessage": "Message",
     "composeMessage": "Nouveau message",
+    "toLabel": "À",
     "toVolunteer": "Bénévole",
     "selectVolunteer": "Choisir un bénévole",
     "volunteerSearchPlaceholder": "Rechercher par nom ou courriel",
@@ -25,7 +26,10 @@
     "adminContactMissing": "Aucun contact administrateur disponible",
     "message": "Message",
     "messageLabel": "Message",
+    "subjectLabel": "Sujet",
+    "subjectPlaceholder": "Titre de votre message",
     "composePlaceholder": "Écrivez votre message...",
+    "attachFile": "Ajouter une pièce jointe",
     "send": "Envoyer",
     "sendMessage": "Envoyer le message"
   },

@@ -1,0 +1,57 @@
+<div *ngIf="isVisible" class="absolute inset-0">
+  <div
+    class="absolute inset-0 bg-black/40 app-drawer-backdrop"
+    [ngClass]="{ 'app-drawer-backdrop-closing': isClosing }"
+    (click)="onBackdropClick()"
+  ></div>
+
+  <div
+    class="absolute top-0 h-screen w-full max-w-[548px] bg-white shadow-xl dark:bg-[#191a1f] flex flex-col app-drawer-panel"
+    [style.left.px]="position === 'left' ? 0 : null"
+    [style.right.px]="position !== 'left' ? 0 : null"
+    [ngClass]="{
+      'app-drawer-left': position === 'left' && !isClosing,
+      'app-drawer-right': position !== 'left' && !isClosing,
+      'app-drawer-left-close': position === 'left' && isClosing,
+      'app-drawer-right-close': position !== 'left' && isClosing
+    }"
+  >
+    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-text-dark">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">
+        {{ title }}
+      </h2>
+      <button
+        type="button"
+        (click)="onCloseClick()"
+        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+        aria-label="Close drawer"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-6 py-4">
+      <ng-content></ng-content>
+    </div>
+
+    <div class="sticky bottom-0 border-t border-gray-100 bg-white px-6 py-4 dark:border-text-dark dark:bg-[#191a1f]">
+      <div class="grid grid-cols-2 gap-4">
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="w-full rounded-xl border border-gray-200 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 dark:border-text-dark dark:text-gray-200 dark:hover:bg-gray-800"
+        >
+          {{ cancelLabel }}
+        </button>
+        <button
+          type="button"
+          (click)="onValidate()"
+          [disabled]="validateDisabled"
+          class="w-full rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {{ validateLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

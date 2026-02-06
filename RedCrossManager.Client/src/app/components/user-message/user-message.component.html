@@ -62,35 +62,37 @@
   </div>
 </div>
 
-<div *ngIf="showMessageDrawer" class="fixed inset-0 z-50">
-  <div class="absolute inset-0 bg-black/40" (click)="closeMessageDrawer()"></div>
-  <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-[#191a1f] p-6 shadow-xl overflow-y-auto">
-    <div class="flex items-center justify-between">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">
-        {{ drawerMode === 'read' ? ('header.readMessage' | translate) : ('header.composeMessage' | translate) }}
-      </h2>
-      <button type="button" (click)="closeMessageDrawer()" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-        ✕
-      </button>
-    </div>
+<app-drawer
+  [open]="showMessageDrawer"
+  [title]="drawerMode === 'read' ? ('header.readMessage' | translate) : ('header.composeMessage' | translate)"
+  [position]="'right'"
+  [cancelLabel]="'common.cancel' | translate"
+  [validateLabel]="drawerMode === 'read' ? ('common.close' | translate) : ('header.sendMessage' | translate)"
+  [validateDisabled]="drawerValidateDisabled"
+  (closed)="closeMessageDrawer()"
+  (cancelled)="closeMessageDrawer()"
+  (validated)="onDrawerValidated()"
+>
+  <app-read-message
+    *ngIf="drawerMode === 'read'"
+    [message]="selectedMessage"
+  ></app-read-message>
 
-    <app-read-message
-      *ngIf="drawerMode === 'read'"
-      [message]="selectedMessage"
-    ></app-read-message>
-
-    <app-compose-message
-      *ngIf="drawerMode === 'compose'"
-      [isAdmin]="isAdmin"
-      [volunteers]="filteredComposeVolunteers"
-      [composeContent]="composeContent"
-      [composeVolunteerSearch]="composeVolunteerSearch"
-      [composeVolunteerId]="composeVolunteerId"
-      [adminTargetUserId]="adminTargetUserId"
-      (composeContentChange)="onComposeContentChange($event)"
-      (composeVolunteerSearchChange)="onComposeVolunteerSearchChange($event)"
-      (volunteerSelected)="onVolunteerComposeSelected($event)"
-      (send)="sendDrawerMessage()"
-    ></app-compose-message>
-  </div>
-</div>
+  <app-compose-message
+    *ngIf="drawerMode === 'compose'"
+    [isAdmin]="isAdmin"
+    [volunteers]="filteredComposeVolunteers"
+    [composeContent]="composeContent"
+    [composeSubject]="composeSubject"
+    [composeVolunteerSearch]="composeVolunteerSearch"
+    [composeVolunteerId]="composeVolunteerId"
+    [composeRecipientType]="composeRecipientType"
+    [adminTargetUserId]="adminTargetUserId"
+    (composeContentChange)="onComposeContentChange($event)"
+    (composeSubjectChange)="onComposeSubjectChange($event)"
+    (composeRecipientTypeChange)="onComposeRecipientTypeChange($event)"
+    (composeVolunteerSearchChange)="onComposeVolunteerSearchChange($event)"
+    (volunteerSelected)="onVolunteerComposeSelected($event)"
+    (send)="sendDrawerMessage()"
+  ></app-compose-message>
+</app-drawer>

@@ -24,18 +24,22 @@ export class ComposeMessageComponent {
   @Input() isAdmin = false;
   @Input() volunteers: AdminVolunteerListItem[] = [];
   @Input() composeContent = '';
+  @Input() composeSubject = '';
   @Input() composeVolunteerSearch = '';
   @Input() composeVolunteerId = '';
+  @Input() composeRecipientType: 'admin' | 'volunteer' = 'admin';
   @Input() adminTargetUserId: string | null = null;
 
   @Output() composeContentChange = new EventEmitter<string>();
+  @Output() composeSubjectChange = new EventEmitter<string>();
   @Output() composeVolunteerSearchChange = new EventEmitter<string>();
+  @Output() composeRecipientTypeChange = new EventEmitter<'admin' | 'volunteer'>();
   @Output() volunteerSelected = new EventEmitter<MatAutocompleteSelectedEvent>();
   @Output() send = new EventEmitter<void>();
 
   get sendDisabled(): boolean {
     if (!this.composeContent.trim()) return true;
-    if (this.isAdmin) return !this.composeVolunteerId;
+    if (this.composeRecipientType === 'volunteer') return !this.composeVolunteerId;
     return !this.adminTargetUserId;
   }
 

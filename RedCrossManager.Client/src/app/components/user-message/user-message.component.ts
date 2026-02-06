@@ -14,6 +14,7 @@ import { MessageItem } from '../../core/models/message.model';
 import { AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
 import { ReadMessageComponent } from './read-message.component';
 import { ComposeMessageComponent } from './compose-message.component';
+import { AppDrawerComponent } from '../drawer/app-drawer.component';
 
 @Component({
   selector: 'app-user-message',
@@ -25,6 +26,7 @@ import { ComposeMessageComponent } from './compose-message.component';
     MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
+    AppDrawerComponent,
     ReadMessageComponent,
     ComposeMessageComponent
   ],
@@ -44,13 +46,14 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   volunteers: AdminVolunteerListItem[] = [];
   isAdmin = false;
   private destroy$ = new Subject<void>();
+  composeSubject = '';
+  composeRecipientType: 'admin' | 'volunteer' = 'admin';
 
   constructor(
     private messageService: MessageService,
     private adminDashboardService: AdminDashboardService,
     private authService: AuthService
   ) {}
-
   ngOnInit(): void {
     this.isAdmin = this.authService.hasRole('Admin');
     this.loadMessageSummary();
@@ -75,8 +78,10 @@ export class UserMessageComponent implements OnInit, OnDestroy {
     this.drawerMode = mode;
     this.selectedMessage = message ?? null;
     this.composeContent = '';
+    this.composeSubject = '';
     this.composeVolunteerSearch = '';
     this.composeVolunteerId = '';
+    this.composeRecipientType = this.isAdmin ? 'volunteer' : 'admin';
     this.showMessageDrawer = true;
     this.showMessageMenu = false;
 
@@ -100,10 +105,38 @@ export class UserMessageComponent implements OnInit, OnDestroy {
     this.showMessageDrawer = false;
   }
 
+  onDrawerValidated(): void {
+    if (this.drawerMode === 'compose') {
+      this.sendDrawerMessage();
+      this.closeMessageDrawer();
+      return;
+    }
+    this.closeMessageDrawer();
+  }
+
+  onComposeSubjectChange(value: string): void {
+    this.composeSubject = value;
+  }
+
+  onComposeRecipientTypeChange(value: 'admin' | 'volunteer'): void {
+    this.composeRecipientType = value;
+    if (value === 'admin') {
+      this.composeVolunteerId = '';
+      this.composeVolunteerSearch = '';
+    }
+  }
+
+  get drawerValidateDisabled(): boolean {
+    if (this.drawerMode !== 'compose') return false;
+    if (!this.composeContent.trim()) return true;
+    if (this.composeRecipientType === 'volunteer') return !this.composeVolunteerId;
+    return !this.adminTargetUserId;
+  }
+
   sendDrawerMessage(): void {
     if (!this.composeContent.trim()) return;
 
-    if (this.isAdmin) {
+    if (this.composeRecipientType === 'volunteer') {
       if (!this.composeVolunteerId) return;
       this.messageService.sendToVolunteer({
         volunteerId: this.composeVolunteerId,
@@ -112,6 +145,7 @@ export class UserMessageComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             this.composeContent = '';
+            this.composeSubject = '';
             this.composeVolunteerSearch = '';
             this.composeVolunteerId = '';
             this.loadMessageSummary();
@@ -128,6 +162,7 @@ export class UserMessageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.composeContent = '';
+          this.composeSubject = '';
           this.loadMessageSummary();
         }
       });

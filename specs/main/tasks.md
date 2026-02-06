@@ -99,6 +99,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T029 [US3] Add dashboard DTO aggregator (assignments, trainings, certs, alerts) in `RedCrossManager.Server/Services/Dashboard`
 - [X] T030 [US3] Implement dashboard controller endpoint in `RedCrossManager.Server/Controllers/DashboardController.cs`
 - [X] T031 [US3] Build dashboard UI with cards, tables, alerts in `RedCrossManager.Client/src/app/features/dashboard`
+- [ ] T031a [US3] Build reusable drawer component (left/right position, title input, close button, sticky footer with cancel/validate, full-height) that hosts child content in `RedCrossManager.Client/src/app/components/drawer`
 
 ---
 

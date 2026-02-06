@@ -1,5 +1,35 @@
-<div class="mt-6 space-y-4">
-  <div *ngIf="isAdmin">
+<div class="mt-6 space-y-5">
+  <div>
+    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+      {{ 'header.toLabel' | translate }}
+    </label>
+    <div class="grid grid-cols-2 gap-2 rounded-xl bg-gray-100 p-1 dark:bg-[#2a2b30]">
+      <button
+        type="button"
+        (click)="composeRecipientTypeChange.emit('admin')"
+        [disabled]="!adminTargetUserId && !isAdmin"
+        class="rounded-lg px-3 py-2 text-xs font-semibold transition"
+        [ngClass]="composeRecipientType === 'admin'
+          ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3b40] dark:text-white'
+          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+      >
+        {{ 'header.toAdmin' | translate }}
+      </button>
+      <button
+        type="button"
+        (click)="composeRecipientTypeChange.emit('volunteer')"
+        [disabled]="!isAdmin"
+        class="rounded-lg px-3 py-2 text-xs font-semibold transition"
+        [ngClass]="composeRecipientType === 'volunteer'
+          ? 'bg-white text-gray-900 shadow-sm dark:bg-[#3a3b40] dark:text-white'
+          : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'"
+      >
+        {{ 'header.toVolunteer' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="composeRecipientType === 'volunteer'">
     <label class="mb-1 block text-xs font-semibold text-gray-500 dark:text-gray-400">
       {{ 'header.selectVolunteer' | translate }}
     </label>
@@ -19,12 +49,26 @@
     </mat-form-field>
   </div>
 
-  <div *ngIf="!isAdmin" class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-600 dark:border-text-dark dark:bg-[#111216] dark:text-gray-300">
+  <div *ngIf="composeRecipientType === 'admin'" class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-600 dark:border-text-dark dark:bg-[#111216] dark:text-gray-300">
     {{ 'header.messageToAdmin' | translate }}
   </div>
 
   <div>
-    <label class="mb-1 block text-xs font-semibold text-gray-500 dark:text-gray-400">
+    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+      {{ 'header.subjectLabel' | translate }}
+    </label>
+    <mat-form-field appearance="outline" class="w-full">
+      <input
+        matInput
+        [ngModel]="composeSubject"
+        (ngModelChange)="composeSubjectChange.emit($event)"
+        placeholder="{{ 'header.subjectPlaceholder' | translate }}"
+      />
+    </mat-form-field>
+  </div>
+
+  <div>
+    <label class="mb-2 block text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
       {{ 'header.messageLabel' | translate }}
     </label>
     <mat-form-field appearance="outline" class="w-full">
@@ -38,11 +82,17 @@
     </mat-form-field>
   </div>
 
-  <button
-    type="button"
-    (click)="send.emit()"
-    [disabled]="sendDisabled"
-    class="w-full rounded-xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60">
-    {{ 'header.sendMessage' | translate }}
-  </button>
+  <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-text-dark dark:text-gray-300 dark:hover:bg-gray-800">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.657 6.343a4 4 0 0 1 0 5.657l-6.95 6.95a3 3 0 1 1-4.243-4.243l7.778-7.778a2 2 0 1 1 2.828 2.828l-7.07 7.07" />
+      </svg>
+    </button>
+    <button type="button" class="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 dark:border-text-dark dark:text-gray-300 dark:hover:bg-gray-800">
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8 13l2.5 3 3.5-4.5L19 17H5l3-4z" />
+      </svg>
+    </button>
+    <span>{{ 'header.attachFile' | translate }}</span>
+  </div>
 </div>

@@ -16,6 +16,7 @@
     "noMessageSelected": "Select a message to view.",
     "readMessage": "Message",
     "composeMessage": "New message",
+    "toLabel": "To",
     "toVolunteer": "Volunteer",
     "selectVolunteer": "Select a volunteer",
     "volunteerSearchPlaceholder": "Search by name or email",
@@ -25,7 +26,10 @@
     "adminContactMissing": "No administrator contact available",
     "message": "Message",
     "messageLabel": "Message",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "Message subject",
     "composePlaceholder": "Write your message...",
+    "attachFile": "Add an attachment",
     "send": "Send",
     "sendMessage": "Send message"
   },
