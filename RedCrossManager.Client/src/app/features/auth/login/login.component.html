@@ -8,18 +8,29 @@
           class="md:h-24 md:w-48 h-12 w-24"
         />
       </div>
-      <button
-        mat-icon-button
-        type="button"
-        (click)="toggleLanguage()"
-        [attr.aria-label]="currentLang === 'fr' ? 'Passer en anglais' : 'Switch to French'"
-        class="h-10 w-10 rounded-full bg-white border border-rose-100 text-rose-600 shadow-sm relative"
-      >
-        <mat-icon>language</mat-icon>
-        <span class="absolute -bottom-1 -right-1 text-[10px] font-semibold bg-white text-rose-600 px-1 rounded">
-          {{ currentLang.toUpperCase() }}
-        </span>
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDarkMode ? 'Passer en mode clair' : 'Passer en mode sombre'"
+          class="icon-btn h-10 w-10 rounded-full bg-white dark:bg-slate-800 border border-rose-100 dark:border-slate-700 text-rose-600 dark:text-rose-200 shadow-sm"
+        >
+          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleLanguage()"
+          [attr.aria-label]="currentLang === 'fr' ? 'Passer en anglais' : 'Switch to French'"
+          class="icon-btn h-10 w-10 rounded-full bg-white dark:bg-slate-800 border border-rose-100 dark:border-slate-700 text-rose-600 dark:text-rose-200 shadow-sm relative"
+        >
+          <mat-icon>language</mat-icon>
+          <span class="absolute -bottom-1 -right-1 text-[10px] font-semibold bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-200 px-1 rounded">
+            {{ currentLang.toUpperCase() }}
+          </span>
+        </button>
+      </div>
     </div>
   </header>
 

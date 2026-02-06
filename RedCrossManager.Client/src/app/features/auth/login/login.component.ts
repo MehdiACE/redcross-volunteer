@@ -34,6 +34,7 @@ export class LoginComponent implements OnInit {
   isLoading = false;
   hidePassword = true;
   currentLang: string = 'fr';
+  isDarkMode = false;
   private returnUrl: string = '/onboarding';
 
   constructor(
@@ -49,6 +50,10 @@ export class LoginComponent implements OnInit {
     const savedLang = localStorage.getItem('lang');
     this.currentLang = savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
     this.translate.use(this.currentLang);
+
+    const savedTheme = localStorage.getItem('theme');
+    this.isDarkMode = savedTheme === 'dark';
+    document.documentElement.classList.toggle('dark', this.isDarkMode);
 
     // Get the return URL from route parameters or default to '/onboarding'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/onboarding';
@@ -112,5 +117,11 @@ export class LoginComponent implements OnInit {
     this.currentLang = this.currentLang === 'fr' ? 'en' : 'fr';
     this.translate.use(this.currentLang);
     localStorage.setItem('lang', this.currentLang);
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    document.documentElement.classList.toggle('dark', this.isDarkMode);
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
   }
 }
