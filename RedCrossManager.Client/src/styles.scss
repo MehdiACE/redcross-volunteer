@@ -4,3 +4,11 @@
 
 @import "ag-grid-community/styles/ag-grid.css";
 @import "ag-grid-community/styles/ag-theme-quartz.css";
+
+.dark .login-submit.mat-mdc-raised-button.mat-mdc-button-disabled,
+.dark .login-submit.mat-mdc-raised-button.mat-mdc-button-disabled:disabled {
+	background-color: #dc2626 !important;
+	color: #ffe4e6 !important;
+	opacity: 0.4 !important;
+	border: 1px solid #ef4444 !important;
+}

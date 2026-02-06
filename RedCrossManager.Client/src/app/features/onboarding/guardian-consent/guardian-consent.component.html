@@ -19,8 +19,8 @@
 
       <form [formGroup]="consentForm" (ngSubmit)="submit()">
         <!-- Volunteer Information (Read-only) -->
-        <mat-card class="mb-6 shadow-sm">
-          <mat-card-header class="bg-blue-50 border-b">
+        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <mat-card-title>{{ 'guardianConsent.volunteerInformation' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
@@ -49,8 +49,8 @@
         </mat-card>
 
         <!-- Guardian Information -->
-        <mat-card class="mb-6 shadow-sm">
-          <mat-card-header class="bg-blue-50 border-b">
+        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <mat-card-title>{{ 'guardianConsent.guardianInformation' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
@@ -94,13 +94,13 @@
         </mat-card>
 
         <!-- Consent Agreements -->
-        <mat-card class="mb-6 shadow-sm">
-          <mat-card-header class="bg-blue-50 border-b">
+        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <mat-card-title>{{ 'guardianConsent.agreements' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6 space-y-4">
             <!-- Guardian Agreement -->
-            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800/60 dark:border dark:border-gray-700 rounded-lg">
               <mat-checkbox formControlName="guardianAgreement" class="pt-1"></mat-checkbox>
               <div class="flex-1">
                 <p class="font-semibold text-gray-900">
@@ -113,7 +113,7 @@
             </div>
 
             <!-- Data Processing Agreement -->
-            <div class="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800/60 dark:border dark:border-gray-700 rounded-lg">
               <mat-checkbox formControlName="dataProcessingAgreement" class="pt-1"></mat-checkbox>
               <div class="flex-1">
                 <p class="font-semibold text-gray-900">
@@ -126,7 +126,7 @@
             </div>
 
             <!-- Accept Terms -->
-            <div class="flex items-start space-x-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="flex items-start space-x-3 p-4 bg-blue-50 dark:bg-gray-800/60 dark:border-gray-700 rounded-lg border border-blue-200">
               <mat-checkbox formControlName="acceptTerms" required class="pt-1"></mat-checkbox>
               <div class="flex-1">
                 <p class="font-semibold text-gray-900">
@@ -141,8 +141,8 @@
         </mat-card>
 
         <!-- Signature Section -->
-        <mat-card class="mb-6 shadow-sm">
-          <mat-card-header class="bg-blue-50 border-b">
+        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
+          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <mat-card-title>{{ 'guardianConsent.signature' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
@@ -150,7 +150,7 @@
               {{ 'guardianConsent.signatureInstructions' | translate }}
             </p>
 
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50 mb-4">
+            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-800/60 mb-4">
               <p class="text-center text-gray-500 text-sm py-12">
                 {{ 'guardianConsent.signaturePadPlaceholder' | translate }}
               </p>

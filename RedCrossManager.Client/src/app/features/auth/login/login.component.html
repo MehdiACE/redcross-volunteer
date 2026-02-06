@@ -40,7 +40,7 @@
       </div>
 
       <div class="flex justify-center">
-        <div class="w-full max-w-sm md:max-w-md lg:max-w-lg bg-white rounded-2xl shadow-lg p-5 md:p-8">
+        <div class="w-full max-w-sm md:max-w-md lg:max-w-lg bg-white dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none rounded-2xl shadow-lg p-5 md:p-8">
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
             <mat-form-field class="w-full">
               <mat-label>{{ 'login.fields.email' | translate }}</mat-label>
@@ -69,7 +69,7 @@
             <button
               mat-raised-button
               type="submit"
-              class="w-full h-12 text-base bg-red-600 hover:bg-red-700 text-white"
+              class="w-full h-12 text-base bg-red-600 text-white hover:bg-red-700 border border-red-600 login-submit"
               [disabled]="isLoading || loginForm.invalid">
               <mat-spinner *ngIf="isLoading" diameter="20" class="inline-block mr-2"></mat-spinner>
               <span *ngIf="!isLoading">{{ 'login.submit' | translate }}</span>

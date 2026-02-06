@@ -5,6 +5,11 @@
 **Status**: Draft  
 **Input**: User description: "Application gestion bénévoles Croix-Rouge : onboarding (workflow stepper : inscription, formation, certification, assignation missions, documents), dashboard volontaire, gestion formations/assignments/certifications. Entités : Volunteer (profil, status), Training, Assignment, Document, OnboardingStep."
 
+## UI/UX Requirements
+
+- **Dark mode visual spec**: Dark mode MUST follow the provided onboarding design reference with **dark cards** and **dark form surfaces**, while **preserving the same accent color** (buttons, stepper, highlights) used in light mode.
+- Applies to onboarding registration and stepper flows, and serves as the baseline for other forms/cards to keep visual consistency.
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
