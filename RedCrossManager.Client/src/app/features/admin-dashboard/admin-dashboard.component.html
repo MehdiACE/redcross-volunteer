@@ -63,9 +63,10 @@
           {{ 'adminDashboard.errors.volunteers' | translate }}
         </div>
 
-        <div *ngIf="!isLoadingVolunteers" class="ag-theme-quartz mt-4" style="height: 360px; width: 100%;">
+        <div *ngIf="!isLoadingVolunteers" class="mt-4" style="height: 360px; width: 100%;">
           <ag-grid-angular
             class="w-full h-full"
+            [ngClass]="agGridThemeClass$ | async"
             [rowData]="volunteers"
             [columnDefs]="colDefs"
             [defaultColDef]="defaultColDef"

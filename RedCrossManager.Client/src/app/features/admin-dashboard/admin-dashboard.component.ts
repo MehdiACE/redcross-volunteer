@@ -6,7 +6,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
 import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
@@ -14,6 +14,7 @@ import { NotificationItem } from '../../core/models/notification.model';
 import { MessageItem } from '../../core/models/message.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { MessageService } from '../../core/services/message.service';
+import { AgGridThemeService } from '../../core/services/ag-grid-theme.service';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 
@@ -29,6 +30,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   notifications: NotificationItem[] = [];
   messages: MessageItem[] = [];
   newMessageContent = '';
+  selectedVolunteerId = '';
   isLoadingVolunteers = false;
   isLoadingSteps = false;
   isLoadingNotifications = false;
@@ -37,6 +39,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   stepsError = false;
   notificationsError = false;
   messagesError = false;
+  agGridThemeClass$!: Observable<string>;
 
   colDefs: ColDef[] = [
     {
@@ -63,8 +66,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   constructor(
     private adminDashboardService: AdminDashboardService,
     private notificationService: NotificationService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private agGridThemeService: AgGridThemeService
+  ) {
+    this.agGridThemeClass$ = this.agGridThemeService.themeClass$;
+  }
 
   ngOnInit(): void {
     this.loadVolunteers();
@@ -101,14 +107,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    if (!this.newMessageContent.trim()) return;
+    if (!this.newMessageContent.trim() || !this.selectedVolunteerId) return;
 
     this.messageService.sendMessage({
+      toVolunteerId: this.selectedVolunteerId,
       content: this.newMessageContent
     }).pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.newMessageContent = '';
+          this.selectedVolunteerId = '';
           this.loadInbox();
         },
         error: () => {

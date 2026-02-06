@@ -5,6 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
+import { AgGridThemeService } from './core/services/ag-grid-theme.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private translate: TranslateService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private agGridThemeService: AgGridThemeService
   ) {
     // Set default language
     this.translate.setDefaultLang('fr');
@@ -40,6 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const savedTheme = localStorage.getItem('theme');
     this.isDarkMode = savedTheme === 'dark';
     document.documentElement.classList.toggle('dark', this.isDarkMode);
+    this.agGridThemeService.setDarkMode(this.isDarkMode);
 
 
     this.router.events
@@ -70,6 +73,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isDarkMode = !this.isDarkMode;
     document.documentElement.classList.toggle('dark', this.isDarkMode);
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+    this.agGridThemeService.setDarkMode(this.isDarkMode);
   }
 
   toggleUserMenu(): void {

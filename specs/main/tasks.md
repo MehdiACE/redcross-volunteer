@@ -183,6 +183,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [ ] T101 [P] Add logging/enrichment for PII-safe telemetry in `RedCrossManager.Server`
 - [ ] T102 [P] Harden validation (FluentValidation + data annotations) across DTOs in `RedCrossManager.Server/DTOs`
 - [ ] T103 Improve accessibility (focus states, ARIA, contrast) in `RedCrossManager.Client/src`
+- [ ] T106 [P] Sync Ag Grid theme with app dark mode via `AgGridThemeService` (Prereqs: T010, ag-theme-quartz.css import) in `RedCrossManager.Client/src/app/core/services/ag-grid-theme.service.ts` and `features/*`
 - [ ] T104 Final CI pass: lint, tests, build artifacts for API and UI in repo root pipelines
 - [ ] T105 Configure CI/CD coverage gate: enforce ≥80% line coverage for services/repositories; fail build if coverage drops; add PR template with constitution compliance checklist in `.github/pull_request_template.md`
 

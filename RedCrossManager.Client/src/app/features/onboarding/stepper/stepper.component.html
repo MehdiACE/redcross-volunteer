@@ -81,19 +81,19 @@
                 <div>
                   <p class="text-xs text-gray-500">{{ 'onboarding.fields.name' | translate }}</p>
                   <p class="text-sm font-semibold text-gray-900">
-                    {{ progress.volunteer?.firstName }} {{ progress.volunteer?.lastName }}
+                    {{ progress.volunteer.firstName }} {{ progress.volunteer.lastName }}
                   </p>
                 </div>
                 <div>
                   <p class="text-xs text-gray-500">{{ 'onboarding.fields.phone' | translate }}</p>
                   <p class="text-sm font-semibold text-gray-900">
-                    {{ progress.volunteer?.phone }}
+                    {{ progress.volunteer.phone }}
                   </p>
                 </div>
                 <div class="md:col-span-2">
                   <p class="text-xs text-gray-500">{{ 'onboarding.fields.email' | translate }}</p>
                   <p class="text-sm font-semibold text-gray-900">
-                    {{ progress.volunteer?.email }}
+                    {{ progress.volunteer.email }}
                   </p>
                 </div>
               </div>
@@ -231,15 +231,15 @@
                 <div class="space-y-2 mb-4">
                   <p class="text-sm text-gray-700">
                     <span class="font-medium">{{ 'onboarding.fields.name' | translate }}:</span>
-                    {{ progress.volunteer?.firstName }} {{ progress.volunteer?.lastName }}
+                    {{ progress.volunteer.firstName }} {{ progress.volunteer.lastName }}
                   </p>
                   <p class="text-sm text-gray-700">
                     <span class="font-medium">{{ 'onboarding.fields.email' | translate }}:</span>
-                    {{ progress.volunteer?.email }}
+                    {{ progress.volunteer.email }}
                   </p>
                   <p class="text-sm text-gray-700">
                     <span class="font-medium">{{ 'onboarding.fields.phone' | translate }}:</span>
-                    {{ progress.volunteer?.phone }}
+                    {{ progress.volunteer.phone }}
                   </p>
                 </div>
                 <button mat-raised-button color="primary"
