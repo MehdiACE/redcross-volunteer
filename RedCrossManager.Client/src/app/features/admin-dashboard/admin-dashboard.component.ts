@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
 import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
 import { NotificationItem } from '../../core/models/notification.model';
@@ -21,7 +24,7 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular],
+  imports: [CommonModule, FormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
@@ -31,6 +34,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   messages: MessageItem[] = [];
   newMessageContent = '';
   selectedVolunteerId = '';
+  volunteerSearch = '';
   isLoadingVolunteers = false;
   isLoadingSteps = false;
   isLoadingNotifications = false;
@@ -40,6 +44,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   notificationsError = false;
   messagesError = false;
   agGridThemeClass$!: Observable<string>;
+  processingStepId: string | null = null;
 
   colDefs: ColDef[] = [
     {
@@ -85,8 +90,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   approveStep(step: AdminOnboardingStep): void {
+    if (this.processingStepId) return;
+    this.processingStepId = step.id;
     this.adminDashboardService.reviewStep(step.id, { approved: true })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.processingStepId = null;
+        })
+      )
       .subscribe({
         next: () => this.loadPendingSteps(),
         error: () => {
@@ -96,8 +108,15 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   }
 
   rejectStep(step: AdminOnboardingStep): void {
+    if (this.processingStepId) return;
+    this.processingStepId = step.id;
     this.adminDashboardService.reviewStep(step.id, { approved: false })
-      .pipe(takeUntil(this.destroy$))
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.processingStepId = null;
+        })
+      )
       .subscribe({
         next: () => this.loadPendingSteps(),
         error: () => {
@@ -123,6 +142,33 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           this.messagesError = true;
         }
       });
+  }
+
+  syncSelectedVolunteerId(): void {
+    this.selectedVolunteerId = '';
+  }
+
+  onVolunteerSelected(event: MatAutocompleteSelectedEvent): void {
+    const volunteer = event.option.value as AdminVolunteerListItem;
+    if (!volunteer) {
+      this.selectedVolunteerId = '';
+      return;
+    }
+    this.selectedVolunteerId = volunteer.id;
+    this.volunteerSearch = this.getVolunteerDisplay(volunteer);
+  }
+
+  getVolunteerDisplay(volunteer: AdminVolunteerListItem): string {
+    return `${volunteer.firstName} ${volunteer.lastName} (${volunteer.email})`;
+  }
+
+  get filteredVolunteers(): AdminVolunteerListItem[] {
+    const query = this.volunteerSearch.trim().toLowerCase();
+    if (!query) return this.volunteers;
+    return this.volunteers.filter(volunteer => {
+      const fullName = `${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
+      return fullName.includes(query) || volunteer.email.toLowerCase().includes(query);
+    });
   }
 
   markMessageAsRead(message: MessageItem): void {

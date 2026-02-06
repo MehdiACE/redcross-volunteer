@@ -53,7 +53,6 @@
           <h2 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
             {{ 'adminDashboard.volunteerTable.title' | translate }}
           </h2>
-          <span class="text-xs text-gray-500">AG Grid Community</span>
         </div>
 
         <div *ngIf="isLoadingVolunteers" class="flex justify-center items-center h-64">
@@ -142,13 +141,18 @@
               <td class="py-3">{{ step.stepType }}</td>
               <td class="py-3">{{ step.submittedAt | date:'mediumDate' }}</td>
               <td class="py-3 text-right">
-                <div class="flex justify-end gap-2">
-                  <button class="rounded-md bg-green-600 px-3 py-1 text-xs font-semibold text-white hover:bg-green-700" (click)="approveStep(step)">
-                    {{ 'adminDashboard.reviewQueue.actions.approve' | translate }}
-                  </button>
-                  <button class="rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-700" (click)="rejectStep(step)">
-                    {{ 'adminDashboard.reviewQueue.actions.reject' | translate }}
-                  </button>
+                <div class="flex justify-end">
+                  <div *ngIf="processingStepId === step.id" class="flex items-center justify-center w-28">
+                    <mat-spinner diameter="20"></mat-spinner>
+                  </div>
+                  <div *ngIf="processingStepId !== step.id" class="flex justify-end gap-2">
+                    <button class="rounded-md bg-green-600 px-3 py-1 text-xs font-semibold text-white hover:bg-green-700" (click)="approveStep(step)">
+                      {{ 'adminDashboard.reviewQueue.actions.approve' | translate }}
+                    </button>
+                    <button class="rounded-md bg-red-600 px-3 py-1 text-xs font-semibold text-white hover:bg-red-700" (click)="rejectStep(step)">
+                      {{ 'adminDashboard.reviewQueue.actions.reject' | translate }}
+                    </button>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -183,35 +187,42 @@
         <div *ngIf="!isLoadingMessages && !messagesError" class="mt-4 space-y-3">
           <!-- Volunteer selector -->
           <div class="space-y-1">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {{ 'adminDashboard.messages.selectVolunteer' | translate }}
-            </label>
-            <select
-              [(ngModel)]="selectedVolunteerId"
-              class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-            >
-              <option value="">{{ 'adminDashboard.messages.selectVolunteerPlaceholder' | translate }}</option>
-              <option *ngFor="let volunteer of volunteers" [value]="volunteer.id">
-                {{ volunteer.firstName }} {{ volunteer.lastName }} ({{ volunteer.email }})
-              </option>
-            </select>
+            <mat-form-field class="w-full" appearance="outline">
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="volunteerSearch"
+                (input)="syncSelectedVolunteerId()"
+                [matAutocomplete]="volunteerAuto"
+                placeholder="{{ 'adminDashboard.messages.selectVolunteerPlaceholder' | translate }}"
+                class="text-sm"
+              />
+              <mat-autocomplete #volunteerAuto="matAutocomplete" (optionSelected)="onVolunteerSelected($event)">
+                <mat-option *ngFor="let volunteer of filteredVolunteers" [value]="volunteer">
+                  {{ getVolunteerDisplay(volunteer) }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
           </div>
 
           <!-- Message input -->
-          <div class="flex gap-2">
-            <input
-              type="text"
+          <div class="relative">
+            <textarea
+              rows="2"
               [(ngModel)]="newMessageContent"
               placeholder="{{ 'adminDashboard.messages.placeholder' | translate }}"
-              class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-              (keyup.enter)="sendMessage()"
-            />
+              class="w-full resize-none rounded-lg border border-gray-200 px-3 py-2 pr-12 text-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+            ></textarea>
             <button
+              type="button"
               (click)="sendMessage()"
               [disabled]="!newMessageContent.trim() || !selectedVolunteerId"
-              class="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+              class="absolute bottom-2 right-2 flex h-8 w-8 items-center justify-center rounded-full text-red-600 hover:bg-red-600 hover:text-white disabled:opacity-50"
+              aria-label="{{ 'adminDashboard.messages.send' | translate }}"
             >
-              {{ 'adminDashboard.messages.send' | translate }}
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M2 6l19-4-4 19-5-5-7 3 3-7-6-6zm9 8l3 3 2-8-8 2 3 3z" />
+              </svg>
             </button>
           </div>
 
