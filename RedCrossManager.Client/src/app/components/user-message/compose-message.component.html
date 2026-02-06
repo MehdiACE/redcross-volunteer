@@ -1,0 +1,48 @@
+<div class="mt-6 space-y-4">
+  <div *ngIf="isAdmin">
+    <label class="mb-1 block text-xs font-semibold text-gray-500 dark:text-gray-400">
+      {{ 'header.selectVolunteer' | translate }}
+    </label>
+    <mat-form-field appearance="outline" class="w-full">
+      <input
+        matInput
+        [matAutocomplete]="auto"
+        [ngModel]="composeVolunteerSearch"
+        (ngModelChange)="composeVolunteerSearchChange.emit($event)"
+        placeholder="{{ 'header.volunteerSearchPlaceholder' | translate }}"
+      />
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="volunteerSelected.emit($event)">
+        <mat-option *ngFor="let volunteer of volunteers" [value]="volunteer">
+          {{ getVolunteerLabel(volunteer) }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="!isAdmin" class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-xs text-gray-600 dark:border-text-dark dark:bg-[#111216] dark:text-gray-300">
+    {{ 'header.messageToAdmin' | translate }}
+  </div>
+
+  <div>
+    <label class="mb-1 block text-xs font-semibold text-gray-500 dark:text-gray-400">
+      {{ 'header.messageLabel' | translate }}
+    </label>
+    <mat-form-field appearance="outline" class="w-full">
+      <textarea
+        matInput
+        rows="6"
+        [ngModel]="composeContent"
+        (ngModelChange)="composeContentChange.emit($event)"
+        placeholder="{{ 'header.composePlaceholder' | translate }}"
+      ></textarea>
+    </mat-form-field>
+  </div>
+
+  <button
+    type="button"
+    (click)="send.emit()"
+    [disabled]="sendDisabled"
+    class="w-full rounded-xl bg-rose-600 px-4 py-3 text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60">
+    {{ 'header.sendMessage' | translate }}
+  </button>
+</div>

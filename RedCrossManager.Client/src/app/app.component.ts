@@ -6,11 +6,12 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
 import { AgGridThemeService } from './core/services/ag-grid-theme.service';
+import { UserMessageComponent } from './components/user-message';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TranslateModule],
+  imports: [CommonModule, RouterOutlet, TranslateModule, UserMessageComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
