@@ -120,6 +120,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T031a [US3] Build reusable drawer component (left/right position, title input, close button, sticky footer with cancel/validate, full-height) that hosts child content in `RedCrossManager.Client/src/app/components/drawer`
 - [X] T031b [US3] Wire "Voir tous les messages" button to call inbox API and list messages for the connected user in `RedCrossManager.Client/src/app/components/user-message` and `RedCrossManager.Client/src/app/core/services/message.service.ts`
 - [X] T031c [US3] Show unread message count badge on notification icon by default using inbox unread count API in `RedCrossManager.Client/src/app/components/user-message`
+- [X] T031d [US3] In admin dashboard Ag Grid, make volunteer name clickable and route to a new volunteer detail page with all profile sections, message history, and document exchange in `RedCrossManager.Client/src/app/features/admin-dashboard` and `RedCrossManager.Client/src/app/features/volunteers/detail`
 
 ---
 

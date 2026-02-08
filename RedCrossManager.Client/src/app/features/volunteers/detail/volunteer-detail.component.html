@@ -1,0 +1,163 @@
+<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
+  <div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="flex items-center gap-2 text-sm text-gray-500">
+      <a routerLink="/admin/dashboard" class="hover:text-gray-700">{{ 'volunteerDetail.breadcrumbRoot' | translate }}</a>
+      <span>/</span>
+      <span class="text-gray-700">{{ fullName || ('volunteerDetail.breadcrumbFallback' | translate) }}</span>
+    </div>
+
+    <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-semibold text-gray-900 dark:text-[#F5F5F0]">{{ 'volunteerDetail.title' | translate }}</h1>
+        <p class="text-sm text-gray-500">{{ fullName }}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button *ngIf="volunteer?.status?.toLowerCase() !== 'active'" type="button" class="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+          {{ 'volunteerDetail.validateProfile' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="mt-8 text-sm text-gray-500">{{ 'volunteerDetail.loading' | translate }}</div>
+    <div *ngIf="loadError" class="mt-8 text-sm text-red-600">{{ 'volunteerDetail.loadError' | translate }}</div>
+
+    <div *ngIf="!isLoading && !loadError" class="mt-8 grid gap-6 lg:grid-cols-[320px,1fr,300px]">
+      <div class="space-y-6">
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex flex-col items-center text-center">
+            <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=400&auto=format&fit=facearea&facepad=3" alt="Volunteer" class="h-24 w-24 rounded-2xl object-cover" />
+            <h2 class="mt-4 text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">{{ fullName }}</h2>
+            <p class="text-xs text-gray-500">{{ 'volunteerDetail.registeredOn' | translate }} {{ volunteer?.registeredAt | date:'dd MMM yyyy' }}</p>
+            <span class="mt-3 rounded-full bg-amber-100 px-3 py-1 text-[11px] font-semibold text-amber-600">{{ volunteer?.status || ('volunteerDetail.statusPending' | translate) }}</span>
+          </div>
+          <div class="mt-4 space-y-2 text-xs text-gray-500">
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">✉</span>
+              <span>{{ volunteer?.email }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">☎</span>
+              <span>{{ volunteer?.phone }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-gray-400">📍</span>
+              <span>Paris, France</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <h3 class="text-xs font-semibold uppercase text-gray-400">{{ 'volunteerDetail.statsTitle' | translate }}</h3>
+          <div class="mt-4 grid grid-cols-2 gap-4">
+            <div class="rounded-xl bg-gray-50 p-4 text-center dark:bg-[#15161b]">
+              <p class="text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">0</p>
+              <p class="text-xs text-gray-500">{{ 'volunteerDetail.statsHours' | translate }}</p>
+            </div>
+            <div class="rounded-xl bg-gray-50 p-4 text-center dark:bg-[#15161b]">
+              <p class="text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">0</p>
+              <p class="text-xs text-gray-500">{{ 'volunteerDetail.statsMissions' | translate }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="space-y-6">
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-[#F5F5F0]">
+            <span>👤</span>
+            <span>{{ 'volunteerDetail.personalInfoTitle' | translate }}</span>
+          </div>
+          <div class="mt-4 grid gap-4 text-sm text-gray-600 dark:text-gray-300 md:grid-cols-2">
+            <div>
+              <p class="text-[11px] uppercase text-gray-400">{{ 'volunteerDetail.birthDate' | translate }}</p>
+              <p>{{ volunteer?.dateOfBirth | date:'longDate' }}</p>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase text-gray-400">{{ 'volunteerDetail.language' | translate }}</p>
+              <p>{{ volunteer?.languagePreference || 'fr' }}</p>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase text-gray-400">{{ 'volunteerDetail.address' | translate }}</p>
+              <p>{{ 'volunteerDetail.addressPlaceholder' | translate }}</p>
+            </div>
+            <div>
+              <p class="text-[11px] uppercase text-gray-400">{{ 'volunteerDetail.status' | translate }}</p>
+              <p>{{ volunteer?.status }}</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-[#F5F5F0]">
+            <span>🎓</span>
+            <span>{{ 'volunteerDetail.skillsTitle' | translate }}</span>
+          </div>
+          <div class="mt-4 flex flex-wrap gap-2">
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 dark:bg-[#15161b] dark:text-gray-300">Premiers secours</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 dark:bg-[#15161b] dark:text-gray-300">Logistique</span>
+            <span class="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-600 dark:bg-[#15161b] dark:text-gray-300">Gestion de crise</span>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div class="rounded-xl border border-gray-100 p-4 text-sm text-gray-600 dark:border-gray-800 dark:text-gray-300">
+              <div class="flex items-center justify-between">
+                <span>PSC1 - Premiers Secours</span>
+                <span class="text-xs text-gray-400">Validé</span>
+              </div>
+            </div>
+            <div class="rounded-xl border border-gray-100 p-4 text-sm text-gray-600 dark:border-gray-800 dark:text-gray-300">
+              <div class="flex items-center justify-between">
+                <span>Diplôme d'État Infirmier</span>
+                <span class="text-xs text-gray-400">Validé</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-[#F5F5F0]">
+            <span>🕒</span>
+            <span>{{ 'volunteerDetail.missionsTitle' | translate }}</span>
+          </div>
+          <div class="mt-6 rounded-2xl border border-dashed border-gray-200 p-8 text-center text-sm text-gray-500 dark:border-gray-700">
+            {{ 'volunteerDetail.missionsEmpty' | translate }}
+          </div>
+        </section>
+      </div>
+
+      <div class="space-y-6">
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase text-gray-400">{{ 'volunteerDetail.documentsTitle' | translate }}</h3>
+            <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500 dark:bg-[#15161b]">{{ documents.length }} {{ 'volunteerDetail.documentsCount' | translate }}</span>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div *ngFor="let doc of documents" class="flex items-center justify-between rounded-xl border border-gray-100 p-3 text-sm text-gray-600 dark:border-gray-800 dark:text-gray-300">
+              <div>
+                <p class="font-semibold text-gray-800 dark:text-gray-100">{{ doc.name }}</p>
+                <p class="text-xs text-gray-400">{{ doc.type }} · {{ doc.size }}</p>
+              </div>
+              <button type="button" class="text-gray-400 hover:text-gray-600">⬇</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs font-semibold uppercase text-gray-400">{{ 'volunteerDetail.messagesTitle' | translate }}</h3>
+            <span class="text-[11px] text-gray-400">{{ 'volunteerDetail.messagesSince' | translate }}</span>
+          </div>
+          <div class="mt-4 space-y-3">
+            <div *ngFor="let message of messages" class="rounded-2xl p-3 text-sm" [ngClass]="message.isAdmin ? 'bg-rose-600 text-white ml-6' : 'bg-gray-100 text-gray-700 mr-6 dark:bg-[#15161b] dark:text-gray-200'">
+              <p>{{ message.content }}</p>
+              <p class="mt-2 text-[10px] opacity-70">{{ message.timestamp }}</p>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center gap-2 rounded-xl border border-gray-100 px-3 py-2 text-xs text-gray-500 dark:border-gray-800">
+            <input class="flex-1 bg-transparent outline-none" placeholder="{{ 'volunteerDetail.messagesPlaceholder' | translate }}" />
+            <button type="button" class="text-rose-600">➤</button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

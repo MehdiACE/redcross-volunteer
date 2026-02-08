@@ -82,9 +82,11 @@
               type="submit"
               class="w-full h-12 text-base bg-red-600 text-white hover:bg-red-700 border border-red-600 login-submit"
               [disabled]="isLoading || loginForm.invalid">
-              <mat-spinner *ngIf="isLoading" diameter="20" class="inline-block mr-2"></mat-spinner>
+              <span *ngIf="isLoading" class="flex items-center justify-center gap-2">
+                <mat-spinner diameter="20" class="inline-block shrink-0"></mat-spinner>
+                <span>{{ 'common.loading' | translate }}</span>
+              </span>
               <span *ngIf="!isLoading">{{ 'login.submit' | translate }}</span>
-              <span *ngIf="isLoading">{{ 'common.loading' | translate }}</span>
             </button>
 
             <div class="flex items-center gap-4 text-gray-400 text-sm">

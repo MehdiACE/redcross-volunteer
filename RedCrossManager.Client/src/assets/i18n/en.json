@@ -411,5 +411,33 @@
     "certificateIssued": "Certificate Issued",
     "search": "Search"
   }
+  ,
+  "volunteerDetail": {
+    "breadcrumbRoot": "Volunteers",
+    "breadcrumbFallback": "Details",
+    "title": "Volunteer profile",
+    "validateProfile": "Validate profile",
+    "loading": "Loading...",
+    "loadError": "Unable to load the profile.",
+    "registeredOn": "Registered on",
+    "statusPending": "Pending",
+    "statsTitle": "Statistics",
+    "statsHours": "Hours",
+    "statsMissions": "Missions",
+    "personalInfoTitle": "Personal information",
+    "birthDate": "Date of birth",
+    "language": "Language",
+    "address": "Full address",
+    "addressPlaceholder": "15 Rue de la République, 75001 Paris",
+    "status": "Status",
+    "skillsTitle": "Skills & training",
+    "missionsTitle": "Mission history",
+    "missionsEmpty": "No missions recorded yet.",
+    "documentsTitle": "Documents",
+    "documentsCount": "files",
+    "messagesTitle": "Messages",
+    "messagesSince": "Conversation started 06/02/2024",
+    "messagesPlaceholder": "Write a message..."
+  }
 }
 

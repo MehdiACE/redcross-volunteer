@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ClientSideRowModelModule, ColDef, ModuleRegistry } from 'ag-grid-community';
+import { ClientSideRowModelModule, ColDef, ICellRendererParams, ModuleRegistry } from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
@@ -25,6 +25,7 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
   selector: 'app-admin-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
+  providers: [DatePipe],
   templateUrl: './admin-dashboard.component.html'
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
@@ -51,11 +52,24 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       headerName: 'Name',
       valueGetter: params => `${params.data?.firstName ?? ''} ${params.data?.lastName ?? ''}`.trim(),
       flex: 1,
-      minWidth: 180
+      minWidth: 180,
+      cellRenderer: (params: ICellRendererParams) => {
+        const value = `${params.data?.firstName ?? ''} ${params.data?.lastName ?? ''}`.trim();
+        const span = document.createElement('span');
+        span.className = 'font-semibold hover:underline hover:text-red-700 cursor-pointer';
+        span.textContent = value;
+        return span;
+      },
+      onCellClicked: params => this.openVolunteerDetail(params.data?.id)
     },
     { field: 'email', headerName: 'Email', flex: 1, minWidth: 220 },
     { field: 'status', headerName: 'Status', minWidth: 120 },
-    { field: 'registeredAt', headerName: 'Registered', minWidth: 140 },
+    {
+      field: 'registeredAt',
+      headerName: 'Registered',
+      minWidth: 140,
+      valueFormatter: params => this.datePipe.transform(params.value, 'dd/MM/yyyy') ?? ''
+    },
     { field: 'languagePreference', headerName: 'Lang', minWidth: 90 },
     { field: 'isMinor', headerName: 'Minor', minWidth: 90 }
   ];
@@ -72,7 +86,9 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private adminDashboardService: AdminDashboardService,
     private notificationService: NotificationService,
     private messageService: MessageService,
-    private agGridThemeService: AgGridThemeService
+    private agGridThemeService: AgGridThemeService,
+    private router: Router,
+    private datePipe: DatePipe
   ) {
     this.agGridThemeClass$ = this.agGridThemeService.themeClass$;
   }
@@ -248,5 +264,10 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
           this.isLoadingMessages = false;
         }
       });
+  }
+
+  private openVolunteerDetail(volunteerId?: string): void {
+    if (!volunteerId) return;
+    this.router.navigate(['/admin/volunteers', volunteerId]);
   }
 }

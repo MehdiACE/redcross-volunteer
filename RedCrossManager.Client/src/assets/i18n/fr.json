@@ -411,5 +411,33 @@
     "certificateIssued": "Certificat délivré",
     "search": "Rechercher"
   }
+  ,
+  "volunteerDetail": {
+    "breadcrumbRoot": "Volontaires",
+    "breadcrumbFallback": "Détails",
+    "title": "Profil du volontaire",
+    "validateProfile": "Valider le profil",
+    "loading": "Chargement...",
+    "loadError": "Impossible de charger le profil.",
+    "registeredOn": "Inscrit le",
+    "statusPending": "En attente",
+    "statsTitle": "Statistiques",
+    "statsHours": "Heures",
+    "statsMissions": "Missions",
+    "personalInfoTitle": "Informations personnelles",
+    "birthDate": "Date de naissance",
+    "language": "Langue",
+    "address": "Adresse complète",
+    "addressPlaceholder": "15 Rue de la République, 75001 Paris",
+    "status": "Statut",
+    "skillsTitle": "Compétences & formations",
+    "missionsTitle": "Historique des missions",
+    "missionsEmpty": "Aucune mission enregistrée pour le moment.",
+    "documentsTitle": "Documents",
+    "documentsCount": "fichiers",
+    "messagesTitle": "Messages",
+    "messagesSince": "Conversation débutée 06/02/2024",
+    "messagesPlaceholder": "Écrire un message..."
+  }
 }
 
