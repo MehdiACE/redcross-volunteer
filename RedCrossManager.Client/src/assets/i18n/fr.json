@@ -363,22 +363,42 @@
   },
   "b1jComms": {
     "title": "Communications B1J",
+    "subtitle": "Envoyez des communications ciblées aux bénévoles selon leur étape d'embarquement",
     "fields": {
-      "segment": "Segment",
+      "segment": "Segment cible",
       "segmentPlaceholder": "Sélectionner un segment",
-      "subject": "Objet",
+      "subject": "Objet du courriel",
       "message": "Message",
+      "body": "Corps du message",
+      "language": "Langue",
+      "channels": "Canaux de communication",
       "sendEmail": "Envoyer par courriel",
       "sendSms": "Envoyer par SMS"
     },
     "segments": {
       "missingConsent": "B1J - Consentement manquant",
       "inOnboarding": "B1J - En embarquement",
-      "assigned": "B1J - Affecté"
+      "assigned": "B1J - Affecté à une branche",
+      "activeVolunteers": "Bénévoles actifs"
     },
+    "channels": {
+      "email": "Courriel",
+      "sms": "SMS"
+    },
+    "channelHint": "Canal sélectionné",
+    "placeholders": "Paramètres disponibles",
     "actions": {
-      "send": "Envoyer le message"
+      "send": "Envoyer la communication",
+      "loadTemplate": "Charger le modèle"
     },
+    "errors": {
+      "segmentRequired": "Veuillez sélectionner un segment cible",
+      "subjectRequired": "L'objet du courriel est obligatoire",
+      "bodyRequired": "Le corps du message est obligatoire",
+      "channelRequired": "Au moins un canal de communication doit être sélectionné"
+    },
+    "success": "Communication envoyée avec succès à {{count}} destinataires",
+    "error": "Échec de l'envoi de la communication. Veuillez réessayer.",
     "status": {
       "title": "Statut de livraison",
       "empty": "Aucun message envoyé.",

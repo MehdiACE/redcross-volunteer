@@ -18,7 +18,7 @@ interface MessageTemplate {
 }
 
 @Component({
-  selector: 'app-b1j-comms',
+  selector: 'app-volunteer-communications',
   standalone: true,
   imports: [
     CommonModule, 
@@ -34,9 +34,9 @@ interface MessageTemplate {
     MatProgressSpinnerModule
   ],
   templateUrl: './b1j-comms.component.html',
-  styleUrls: ['./b1j-comms.component.scss']
+  styleUrls: ['./volunteer-communications.component.scss']
 })
-export class B1jCommsComponent implements OnInit {
+export class VolunteerCommunicationsComponent implements OnInit {
   composerForm!: FormGroup;
   isLoading = false;
 

@@ -363,22 +363,42 @@
   },
   "b1jComms": {
     "title": "B1J Communications",
+    "subtitle": "Send targeted communications to volunteers based on their onboarding stage",
     "fields": {
-      "segment": "Segment",
+      "segment": "Target Segment",
       "segmentPlaceholder": "Select a segment",
-      "subject": "Subject",
+      "subject": "Email Subject",
       "message": "Message",
+      "body": "Message Body",
+      "language": "Language",
+      "channels": "Communication Channels",
       "sendEmail": "Send via email",
       "sendSms": "Send via SMS"
     },
     "segments": {
-      "missingConsent": "B1J - Missing consent",
-      "inOnboarding": "B1J - In onboarding",
-      "assigned": "B1J - Assigned"
+      "missingConsent": "B1J - Missing Consent",
+      "inOnboarding": "B1J - In Onboarding",
+      "assigned": "B1J - Assigned to Branch",
+      "activeVolunteers": "Active Volunteers"
     },
+    "channels": {
+      "email": "Email",
+      "sms": "SMS"
+    },
+    "channelHint": "Selected channel",
+    "placeholders": "Available placeholders",
     "actions": {
-      "send": "Send message"
+      "send": "Send Communication",
+      "loadTemplate": "Load Template"
     },
+    "errors": {
+      "segmentRequired": "Please select a target segment",
+      "subjectRequired": "Email subject is required",
+      "bodyRequired": "Message body is required",
+      "channelRequired": "At least one communication channel must be selected"
+    },
+    "success": "Communication sent successfully to {{count}} recipients",
+    "error": "Failed to send communication. Please try again.",
     "status": {
       "title": "Delivery status",
       "empty": "No messages sent yet.",

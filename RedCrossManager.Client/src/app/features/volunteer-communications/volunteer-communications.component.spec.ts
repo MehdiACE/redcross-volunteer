@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { B1jCommsComponent } from './b1j-comms.component';
+import { VolunteerCommunicationsComponent } from './volunteer-communications.component';
 
-describe('B1jCommsComponent', () => {
-  let component: B1jCommsComponent;
+describe('VolunteerCommunicationsComponent', () => {
+  let component: VolunteerCommunicationsComponent;
   let fixture: ComponentFixture<B1jCommsComponent>;
 
   beforeEach(async () => {
