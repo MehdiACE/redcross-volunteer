@@ -48,7 +48,11 @@
     "next": "Next",
     "loading": "Loading...",
     "logout": "Logout",
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "clear": "Clear",
+    "search": "Search",
+    "details": "Details",
+    "all": "All"
   },
   "login": {
     "title": "Login",
@@ -62,10 +66,7 @@
       "password": "Password"
     },
     "errors": {
-    "clear": "Clear",
-    "search": "Search",
-    "details": "Details",
-    "all": "All"
+      "required": "This field is required",
       "invalidEmail": "Please enter a valid email address",
       "invalidCredentials": "Invalid email or password",
       "serverError": "An error occurred. Please try again later."
@@ -453,16 +454,35 @@
   "documents": {
     "title": "Documents",
     "subtitle": "Upload and manage your verification documents",
+    "addNew": "Add a new document",
     "uploadTitle": "Upload a document",
     "listTitle": "Your documents",
+    "myDocuments": "My documents",
     "category": "Category",
+    "selectCategory": "Select a type...",
     "file": "File",
     "upload": "Upload",
+    "uploadCta": "Upload the document",
+    "dropHint": "Drag & drop your file here or",
+    "browse": "browse",
+    "acceptedFormats": "PDF, JPG or PNG (Max 5MB)",
+    "uploadWarning": "Please ensure the document is readable and up to date. Accepted formats are PDF and standard images.",
     "empty": "No documents uploaded yet.",
     "loadError": "Failed to load documents.",
     "selectFile": "Please select a category and file",
     "uploadSuccess": "Document uploaded successfully",
     "uploadError": "Failed to upload document",
+    "updatedAt": "Updated",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved"
+    },
+    "status": {
+      "Pending": "Pending",
+      "Approved": "Approved",
+      "Rejected": "Rejected"
+    },
     "columns": {
       "fileName": "File name",
       "category": "Category",

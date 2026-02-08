@@ -7,7 +7,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -27,7 +26,6 @@ import { DocumentDto } from '../../core/models/document.model';
     MatSelectModule,
     MatInputModule,
     MatIconModule,
-    MatTableModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
     TranslateModule
@@ -37,9 +35,10 @@ import { DocumentDto } from '../../core/models/document.model';
 })
 export class DocumentsComponent implements OnInit {
   documents: DocumentDto[] = [];
-  displayedColumns: string[] = ['fileName', 'category', 'uploadedAt', 'status', 'actions'];
   isLoading = false;
   uploadInProgress = false;
+  statusFilter: 'all' | 'pending' | 'approved' = 'all';
+  isDragOver = false;
 
   categories = [
     'Identification',
@@ -92,6 +91,31 @@ export class DocumentsComponent implements OnInit {
     this.selectedFile = input.files[0];
   }
 
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragOver = false;
+
+    const files = event.dataTransfer?.files;
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    this.selectedFile = files[0];
+  }
+
   uploadDocument(): void {
     if (!this.selectedFile || !this.selectedCategory) {
       this.snackBar.open(this.translate.instant('documents.selectFile'), undefined, { duration: 3000 });
@@ -131,5 +155,40 @@ export class DocumentsComponent implements OnInit {
 
   downloadDocument(document: DocumentDto): void {
     window.open(document.fileUrl, '_blank');
+  }
+
+  setStatusFilter(filter: 'all' | 'pending' | 'approved'): void {
+    this.statusFilter = filter;
+  }
+
+  get filteredDocuments(): DocumentDto[] {
+    if (this.statusFilter === 'all') {
+      return this.documents;
+    }
+
+    const targetStatus = this.statusFilter === 'pending' ? 'Pending' : 'Approved';
+    return this.documents.filter(doc => doc.verificationStatus === targetStatus);
+  }
+
+  get groupedDocuments(): Array<{ category: string; items: DocumentDto[] }> {
+    const map = new Map<string, DocumentDto[]>();
+    for (const doc of this.filteredDocuments) {
+      const list = map.get(doc.category) ?? [];
+      list.push(doc);
+      map.set(doc.category, list);
+    }
+
+    return Array.from(map.entries()).map(([category, items]) => ({ category, items }));
+  }
+
+  getStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'Approved':
+        return 'bg-green-100 text-green-700';
+      case 'Rejected':
+        return 'bg-red-100 text-red-700';
+      default:
+        return 'bg-amber-100 text-amber-700';
+    }
   }
 }

@@ -1,96 +1,146 @@
 <div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
-  <div class="max-w-6xl mx-auto p-6">
-    <div class="mb-8">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+  <div class="max-w-6xl mx-auto p-6 space-y-8">
+    <div>
+      <h1 class="text-3xl font-semibold text-gray-900 dark:text-white">
         {{ 'documents.title' | translate }}
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
         {{ 'documents.subtitle' | translate }}
       </p>
     </div>
 
-    <mat-card class="mb-8">
-      <mat-card-header>
-        <mat-card-title>{{ 'documents.uploadTitle' | translate }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <mat-form-field class="w-full">
-            <mat-label>{{ 'documents.category' | translate }}</mat-label>
-            <mat-select [(ngModel)]="selectedCategory">
-              <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-              <mat-option *ngFor="let category of categories" [value]="category">
-                {{ ('documents.categories.' + category) | translate }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+    <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <mat-icon class="text-red-600">note_add</mat-icon>
+        {{ 'documents.addNew' | translate }}
+      </div>
 
-          <mat-form-field class="w-full">
-            <mat-label>{{ 'documents.file' | translate }}</mat-label>
-            <input matInput type="text" [value]="selectedFile?.name || ''" readonly>
-            <button mat-icon-button matSuffix (click)="$event.preventDefault(); fileInput.click()">
-              <mat-icon>attach_file</mat-icon>
-            </button>
+      <div class="mt-5 grid gap-6 lg:grid-cols-3">
+        <div class="space-y-4 lg:col-span-2">
+          <div>
+            <label class="text-xs font-semibold text-gray-500 uppercase">
+              {{ 'documents.category' | translate }}
+            </label>
+            <mat-form-field class="w-full mt-2" appearance="outline">
+              <mat-select [(ngModel)]="selectedCategory">
+                <mat-option value="">{{ 'documents.selectCategory' | translate }}</mat-option>
+                <mat-option *ngFor="let category of categories" [value]="category">
+                  {{ ('documents.categories.' + category) | translate }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div 
+            class="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center transition-colors"
+            [class.border-red-400]="isDragOver"
+            [class.bg-red-50]="isDragOver"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)">
+            <mat-icon class="text-gray-400" [class.text-red-500]="isDragOver">cloud_upload</mat-icon>
+            <p class="text-sm text-gray-600 mt-2">
+              {{ 'documents.dropHint' | translate }}
+              <button class="text-red-600 font-semibold" type="button" (click)="$event.preventDefault(); fileInput.click()">
+                {{ 'documents.browse' | translate }}
+              </button>
+            </p>
+            <p class="text-xs text-gray-400 mt-1">
+              {{ 'documents.acceptedFormats' | translate }}
+            </p>
+            <p *ngIf="selectedFile" class="text-xs text-gray-600 mt-3">
+              {{ selectedFile.name }}
+            </p>
             <input type="file" hidden (change)="onFileSelected($event)" #fileInput>
-          </mat-form-field>
+          </div>
         </div>
 
-        <div class="mt-4">
-          <button mat-raised-button color="primary" (click)="uploadDocument()" [disabled]="uploadInProgress">
-            <mat-icon>cloud_upload</mat-icon>
-            {{ 'documents.upload' | translate }}
+        <div class="flex flex-col h-full">
+          <div class="mt-auto space-y-4">
+            <div class="rounded-xl border border-red-100 bg-red-50 p-4 text-xs text-red-700">
+              {{ 'documents.uploadWarning' | translate }}
+            </div>
+            <button
+              mat-raised-button
+              color="primary"
+              class="w-full"
+              (click)="uploadDocument()"
+              [disabled]="uploadInProgress">
+              <mat-icon>cloud_upload</mat-icon>
+              {{ 'documents.uploadCta' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <mat-icon class="text-gray-400">folder</mat-icon>
+          {{ 'documents.myDocuments' | translate }}
+        </div>
+        <div class="flex items-center gap-2 rounded-full bg-gray-50 p-1 text-xs">
+          <button
+            class="status-tab px-3 py-1 rounded-full"
+            [class.is-active]="statusFilter === 'all'"
+            (click)="setStatusFilter('all')">
+            {{ 'documents.tabs.all' | translate }}
+          </button>
+          <button
+            class="status-tab px-3 py-1 rounded-full"
+            [class.is-active]="statusFilter === 'pending'"
+            (click)="setStatusFilter('pending')">
+            {{ 'documents.tabs.pending' | translate }}
+          </button>
+          <button
+            class="status-tab px-3 py-1 rounded-full"
+            [class.is-active]="statusFilter === 'approved'"
+            (click)="setStatusFilter('approved')">
+            {{ 'documents.tabs.approved' | translate }}
           </button>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{ 'documents.listTitle' | translate }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div *ngIf="isLoading" class="flex justify-center items-center py-8">
-          <mat-spinner diameter="40"></mat-spinner>
+      <div *ngIf="isLoading" class="flex justify-center items-center py-8">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading && filteredDocuments.length === 0" class="text-center py-6 text-gray-500">
+        {{ 'documents.empty' | translate }}
+      </div>
+
+      <div *ngIf="!isLoading && filteredDocuments.length > 0" class="mt-6 space-y-4">
+        <div *ngFor="let group of groupedDocuments" class="rounded-xl border border-gray-100">
+          <div class="flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase text-gray-500">
+            <span>{{ ('documents.categories.' + group.category) | translate }}</span>
+            <span class="rounded-full bg-gray-100 px-2 py-1 text-[10px]">{{ group.items.length }}</span>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div *ngFor="let doc of group.items" class="flex items-center justify-between px-4 py-3">
+              <div class="flex items-center gap-3">
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                  <mat-icon>description</mat-icon>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-gray-900">{{ doc.fileName }}</p>
+                  <p class="text-xs text-gray-500">
+                    {{ 'documents.updatedAt' | translate }} {{ doc.uploadedAt | date: 'shortDate' }}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="rounded-full px-3 py-1 text-xs font-semibold" [class]="getStatusBadgeClass(doc.verificationStatus)">
+                  {{ ('documents.status.' + doc.verificationStatus) | translate }}
+                </span>
+                <button mat-icon-button (click)="downloadDocument(doc)">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div *ngIf="!isLoading && documents.length === 0" class="text-center py-6 text-gray-500">
-          {{ 'documents.empty' | translate }}
-        </div>
-
-        <table *ngIf="!isLoading && documents.length > 0" mat-table [dataSource]="documents" class="w-full">
-          <ng-container matColumnDef="fileName">
-            <th mat-header-cell *matHeaderCellDef>{{ 'documents.columns.fileName' | translate }}</th>
-            <td mat-cell *matCellDef="let doc">{{ doc.fileName }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="category">
-            <th mat-header-cell *matHeaderCellDef>{{ 'documents.columns.category' | translate }}</th>
-            <td mat-cell *matCellDef="let doc">{{ ('documents.categories.' + doc.category) | translate }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="uploadedAt">
-            <th mat-header-cell *matHeaderCellDef>{{ 'documents.columns.uploadedAt' | translate }}</th>
-            <td mat-cell *matCellDef="let doc">{{ doc.uploadedAt | date: 'short' }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>{{ 'documents.columns.status' | translate }}</th>
-            <td mat-cell *matCellDef="let doc">{{ doc.verificationStatus }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let doc">
-              <button mat-icon-button (click)="downloadDocument(doc)">
-                <mat-icon>download</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </div>
   </div>
 </div>

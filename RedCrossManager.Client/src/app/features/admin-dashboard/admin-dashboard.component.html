@@ -9,9 +9,14 @@
           {{ 'adminDashboard.subtitle' | translate }}
         </p>
       </div>
-      <a routerLink="/dashboard" class="text-sm text-red-600 hover:text-red-700">
-        {{ 'adminDashboard.switchToVolunteer' | translate }}
-      </a>
+      <div class="flex items-center gap-4">
+        <a routerLink="/documents" class="text-sm text-gray-600 hover:text-red-700">
+          {{ 'documents.title' | translate }}
+        </a>
+        <a routerLink="/dashboard" class="text-sm text-red-600 hover:text-red-700">
+          {{ 'adminDashboard.switchToVolunteer' | translate }}
+        </a>
+      </div>
     </div>
 
     <div class="grid gap-6 lg:grid-cols-3">
@@ -180,11 +185,7 @@
           <mat-spinner diameter="32"></mat-spinner>
         </div>
 
-        <div *ngIf="messagesError" class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
-          {{ 'adminDashboard.errors.messages' | translate }}
-        </div>
-
-        <div *ngIf="!isLoadingMessages && !messagesError" class="mt-4 space-y-3">
+        <div *ngIf="!isLoadingMessages" class="mt-4 space-y-3">
           <!-- Volunteer selector -->
           <div class="space-y-1">
             <mat-form-field class="w-full" appearance="outline">
@@ -244,6 +245,14 @@
               <p class="mt-1 text-sm text-gray-600 dark:text-gray-300">{{ msg.content }}</p>
               <p class="mt-2 text-xs text-gray-400">{{ msg.createdAt | date:'short' }}</p>
             </div>
+          </div>
+
+          <!-- Warning and action footer -->
+          <div class="mt-4 flex items-end justify-between gap-4">
+            <div *ngIf="messagesError" class="flex-1 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {{ 'adminDashboard.errors.messages' | translate }}
+            </div>
+            <div *ngIf="!messagesError" class="h-12"></div>
           </div>
         </div>
       </section>

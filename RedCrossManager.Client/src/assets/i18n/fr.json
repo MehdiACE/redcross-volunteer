@@ -48,7 +48,11 @@
     "next": "Suivant",
     "loading": "Chargement...",
     "logout": "Déconnexion",
-    "dashboard": "Tableau de bord"
+    "dashboard": "Tableau de bord",
+    "clear": "Effacer",
+    "search": "Rechercher",
+    "details": "Détails",
+    "all": "Tous"
   },
   "login": {
     "title": "Connexion",
@@ -62,10 +66,7 @@
       "password": "Mot de passe"
     },
     "errors": {
-    "clear": "Effacer",
-    "search": "Rechercher",
-    "details": "Détails",
-    "all": "Tous"
+      "required": "Ce champ est obligatoire",
       "invalidEmail": "Veuillez entrer une adresse courriel valide",
       "invalidCredentials": "Courriel ou mot de passe incorrect",
       "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
@@ -453,16 +454,35 @@
   "documents": {
     "title": "Documents",
     "subtitle": "Téléversez et gérez vos documents de vérification",
+    "addNew": "Ajouter un nouveau document",
     "uploadTitle": "Téléverser un document",
     "listTitle": "Vos documents",
+    "myDocuments": "Mes documents",
     "category": "Catégorie",
+    "selectCategory": "Sélectionner un type...",
     "file": "Fichier",
     "upload": "Téléverser",
+    "uploadCta": "Téléverser le document",
+    "dropHint": "Glissez-déposez votre fichier ici ou",
+    "browse": "parcourez",
+    "acceptedFormats": "PDF, JPG ou PNG (Max 5 Mo)",
+    "uploadWarning": "Veuillez vous assurer que le document est lisible et à jour. Les formats acceptés sont le PDF et les images standards.",
     "empty": "Aucun document téléversé pour le moment.",
     "loadError": "Échec du chargement des documents.",
     "selectFile": "Veuillez sélectionner une catégorie et un fichier",
     "uploadSuccess": "Document téléversé avec succès",
     "uploadError": "Échec du téléversement du document",
+    "updatedAt": "Modifié le",
+    "tabs": {
+      "all": "Tous",
+      "pending": "En attente",
+      "approved": "Validés"
+    },
+    "status": {
+      "Pending": "En cours",
+      "Approved": "Validé",
+      "Rejected": "Refusé"
+    },
     "columns": {
       "fileName": "Nom du fichier",
       "category": "Catégorie",

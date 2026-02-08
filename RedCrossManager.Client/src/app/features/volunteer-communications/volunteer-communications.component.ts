@@ -33,8 +33,8 @@ interface MessageTemplate {
     MatSnackBarModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './b1j-comms.component.html',
-  styleUrls: ['./volunteer-communications.component.scss']
+    templateUrl: './volunteer-communications.component.html',
+    styleUrls: ['./volunteer-communications.component.scss']
 })
 export class VolunteerCommunicationsComponent implements OnInit {
   composerForm!: FormGroup;

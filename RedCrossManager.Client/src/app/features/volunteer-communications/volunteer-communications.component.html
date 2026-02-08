@@ -70,10 +70,10 @@
           ></textarea>
           <mat-hint>
             {{ 'b1jComms.placeholders' | translate }}: 
-            <code>{FirstName}</code>, 
-            <code>{LastName}</code>, 
-            <code>{FullName}</code>, 
-            <code>{ConsentLink}</code>
+            <code>{{ '{' }}FirstName{{ '}' }}</code>, 
+            <code>{{ '{' }}LastName{{ '}' }}</code>, 
+            <code>{{ '{' }}FullName{{ '}' }}</code>, 
+            <code>{{ '{' }}ConsentLink{{ '}' }}</code>
           </mat-hint>
           <mat-error *ngIf="composerForm.get('bodyTemplate')?.hasError('required')">
             {{ 'b1jComms.errors.bodyRequired' | translate }}
