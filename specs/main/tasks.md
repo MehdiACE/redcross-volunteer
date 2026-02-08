@@ -49,7 +49,7 @@ description: "Tasks for volunteer onboarding & management system"
 
 ### Tests (write first)
 - [X] T013 [P] [US1] Backend integration test for `/volunteers/register` (duplicate email, success) in `RedCrossManager.Server/Tests/Integration/VolunteersTests.cs` — **BLOCKED**: EF Core dual-provider issue with WebApplicationFactory needs resolution
-- [ ] T014 [P] [US1] Frontend component test for registration form validation in `RedCrossManager.Client/src/app/features/onboarding/registration/registration.component.spec.ts`
+- [X] T014 [P] [US1] Frontend component test for registration form validation in `RedCrossManager.Client/src/app/features/onboarding/registration/registration.component.spec.ts`
 
 ### Implementation
 - [X] T015 [P] [US1] Implement `Volunteer` entity, configuration, and repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
@@ -68,10 +68,10 @@ description: "Tasks for volunteer onboarding & management system"
 **Independent Test**: Volunteer moves through steps; minors blocked until guardian consent approved; status transitions Pending→InTraining→Active after final review.
 
 ### Tests (write first)
-- [ ] T020 [P] [US2] Integration test for onboarding step transitions and status updates in `RedCrossManager.Server/Tests/Integration/OnboardingTests.cs`
-- [ ] T020a [US2] Integration test for parental consent workflow (request → submission → approval/rejection) including SLA enforcement (48-hour coordinator review target) in `RedCrossManager.Server/Tests/Integration/ConsentTests.cs`
-- [ ] T021 [P] [US2] Frontend component test for stepper progression/resume state in `RedCrossManager.Client/src/app/features/onboarding/stepper/stepper.component.spec.ts`
-- [ ] T021a [US2] Unit/integration tests for guardian identity verification (email confirmation) in `RedCrossManager.Server/Tests/Integration/GuardianVerificationTests.cs`
+- [X] T020 [P] [US2] Integration test for onboarding step transitions and status updates in `RedCrossManager.Server/Tests/Integration/OnboardingTests.cs`
+- [X] T020a [US2] Integration test for parental consent workflow (request → submission → approval/rejection) including SLA enforcement (48-hour coordinator review target) in `RedCrossManager.Server/Tests/Integration/ConsentTests.cs`
+- [X] T021 [P] [US2] Frontend component test for stepper progression/resume state in `RedCrossManager.Client/src/app/features/onboarding/stepper/stepper.component.spec.ts`
+- [X] T021a [US2] Unit/integration tests for guardian identity verification (email confirmation) in `RedCrossManager.Server/Tests/Integration/GuardianVerificationTests.cs`
 
 ### Implementation
 - [X] T022 [P] [US2] Implement `OnboardingStep` entity/config + repository in `RedCrossManager.Server/Domain/Entities` and `Repositories`
@@ -80,8 +80,8 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T024b [US2] Refactor onboarding UI to Tailwind-only styling (remove component SCSS) — **COMPLETED**: Converted templates to Tailwind utilities and removed SCSS usage
 - [X] T025 [US2] Add status transitions in `VolunteersController` and onboarding controller endpoints in `RedCrossManager.Server/Controllers`; implement consent request/approval workflow in `ConsentsController` — **COMPLETED**: UpdateStatus endpoint added to VolunteersController; OnboardingController and ConsentsController already exist with all required endpoints
 - [X] T025a [US2] Implement parental consent service with guardian email notification, SLA tracking (48-hour coordinator review), and identity verification (email confirmation token) in `RedCrossManager.Server/Services/Consents`
-- [ ] T025b [US2] Build guardian consent form UI (read-only form display, signature capture, submit) in `RedCrossManager.Client/src/app/features/onboarding/guardian-consent`
-- [ ] T026 [US2] Persist progress/resume state in client store/service in `RedCrossManager.Client/src/app/core/services/onboarding-state.service.ts`
+- [X] T025b [US2] Build guardian consent form UI (read-only form display, signature capture, submit) in `RedCrossManager.Client/src/app/features/onboarding/guardian-consent`
+- [X] T026 [US2] Persist progress/resume state in client store/service in `RedCrossManager.Client/src/app/core/services/onboarding-state.service.ts`
 
 ---
 

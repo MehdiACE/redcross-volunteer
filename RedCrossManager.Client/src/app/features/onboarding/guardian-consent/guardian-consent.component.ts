@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -9,10 +9,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ConsentService } from '../../../core/services/consent.service';
+import { ConsentRequestDto, ConsentService, SubmitConsentDto } from '../../../core/services/consent.service';
 
 @Component({
   selector: 'app-guardian-consent',
@@ -33,27 +34,46 @@ import { ConsentService } from '../../../core/services/consent.service';
   templateUrl: './guardian-consent.component.html',
   styleUrls: ['./guardian-consent.component.scss']
 })
-export class GuardianConsentComponent implements OnInit, OnDestroy {
+export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewInit {
   consentForm!: FormGroup;
   isLoading = false;
   isSubmitting = false;
-  consentData: any;
-  showSignaturePad = false;
-  signaturePadRef: any;
+  consentData: ConsentRequestDto | null = null;
   isSignatureEmpty = true;
 
+  @ViewChild('signatureCanvas') signatureCanvas?: ElementRef<HTMLCanvasElement>;
+
+  private signatureContext: CanvasRenderingContext2D | null = null;
+  private isDrawing = false;
+  private volunteerId: string | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
     private consentService: ConsentService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute,
+    private translate: TranslateService
   ) {
     this.initializeForm();
   }
 
   ngOnInit(): void {
-    this.loadConsentRequest();
+    this.volunteerId = this.route.snapshot.paramMap.get('volunteerId');
+    if (!this.volunteerId) {
+      this.snackBar.open(
+        this.translate.instant('guardianConsent.errors.missingVolunteer'),
+        this.translate.instant('common.close'),
+        { duration: 5000 }
+      );
+      return;
+    }
+
+    this.loadConsentRequest(this.volunteerId);
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeSignaturePad();
   }
 
   ngOnDestroy(): void {
@@ -81,9 +101,9 @@ export class GuardianConsentComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadConsentRequest(): void {
+  private loadConsentRequest(volunteerId: string): void {
     this.isLoading = true;
-    this.consentService.getConsentRequest()
+    this.consentService.getConsentRequest(volunteerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -93,13 +113,17 @@ export class GuardianConsentComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Failed to load consent request:', error);
-          this.snackBar.open('Failed to load consent request', 'Close', { duration: 5000 });
+          this.snackBar.open(
+            this.translate.instant('guardianConsent.errors.loadFailed'),
+            this.translate.instant('common.close'),
+            { duration: 5000 }
+          );
           this.isLoading = false;
         }
       });
   }
 
-  private populateVolunteerInfo(data: any): void {
+  private populateVolunteerInfo(data: ConsentRequestDto): void {
     const volunteerGroup = this.consentForm.get('volunteerInfo');
     if (volunteerGroup) {
       volunteerGroup.patchValue({
@@ -119,44 +143,131 @@ export class GuardianConsentComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSignatureChange(isEmpty: boolean): void {
-    this.isSignatureEmpty = isEmpty;
+  private initializeSignaturePad(): void {
+    const canvas = this.signatureCanvas?.nativeElement;
+    if (!canvas) return;
+
+    const container = canvas.parentElement;
+    const width = container ? container.getBoundingClientRect().width : 600;
+    canvas.width = Math.max(300, Math.floor(width));
+    canvas.height = 200;
+
+    this.signatureContext = canvas.getContext('2d');
+    if (this.signatureContext) {
+      this.signatureContext.lineWidth = 2;
+      this.signatureContext.lineCap = 'round';
+      this.signatureContext.strokeStyle = '#111827';
+    }
+  }
+
+  startDrawing(event: MouseEvent | TouchEvent): void {
+    event.preventDefault();
+    if (!this.signatureContext || !this.signatureCanvas) return;
+
+    const point = this.getCanvasPoint(event);
+    if (!point) return;
+
+    this.isDrawing = true;
+    this.signatureContext.beginPath();
+    this.signatureContext.moveTo(point.x, point.y);
+  }
+
+  draw(event: MouseEvent | TouchEvent): void {
+    if (!this.isDrawing || !this.signatureContext) return;
+    event.preventDefault();
+
+    const point = this.getCanvasPoint(event);
+    if (!point) return;
+
+    this.signatureContext.lineTo(point.x, point.y);
+    this.signatureContext.stroke();
+    this.isSignatureEmpty = false;
+  }
+
+  endDrawing(): void {
+    if (!this.isDrawing) return;
+    this.isDrawing = false;
+    this.signatureContext?.closePath();
   }
 
   clearSignature(): void {
-    if (this.signaturePadRef) {
-      this.signaturePadRef.clear();
-      this.isSignatureEmpty = true;
+    const canvas = this.signatureCanvas?.nativeElement;
+    if (!canvas || !this.signatureContext) return;
+
+    this.signatureContext.clearRect(0, 0, canvas.width, canvas.height);
+    this.isSignatureEmpty = true;
+  }
+
+  private getCanvasPoint(event: MouseEvent | TouchEvent): { x: number; y: number } | null {
+    const canvas = this.signatureCanvas?.nativeElement;
+    if (!canvas) return null;
+
+    const rect = canvas.getBoundingClientRect();
+    if (event instanceof MouseEvent) {
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+      };
     }
+
+    const touch = event.touches[0] || event.changedTouches[0];
+    if (!touch) return null;
+
+    return {
+      x: touch.clientX - rect.left,
+      y: touch.clientY - rect.top
+    };
   }
 
   submit(): void {
-    if (!this.consentForm.valid || this.isSignatureEmpty) {
-      this.snackBar.open('Please complete all required fields and provide a signature', 'Close', { duration: 5000 });
+    if (!this.volunteerId) {
+      this.snackBar.open(
+        this.translate.instant('guardianConsent.errors.missingVolunteer'),
+        this.translate.instant('common.close'),
+        { duration: 5000 }
+      );
       return;
     }
 
-    this.isSubmitting = true;
+    if (!this.consentForm.valid || this.isSignatureEmpty) {
+      this.snackBar.open(
+        this.translate.instant('guardianConsent.errors.signatureRequired'),
+        this.translate.instant('common.close'),
+        { duration: 5000 }
+      );
+      return;
+    }
 
-    const formData = {
-      consentId: this.consentData?.id,
+    const canvas = this.signatureCanvas?.nativeElement;
+    const signature = canvas ? canvas.toDataURL('image/png') : '';
+
+    const formData: SubmitConsentDto = {
       guardianInfo: this.consentForm.get('guardianInfo')?.value,
       guardianAgreement: this.consentForm.get('guardianAgreement')?.value,
       dataProcessingAgreement: this.consentForm.get('dataProcessingAgreement')?.value,
-      signature: this.signaturePadRef?.toDataURL() || ''
+      signature
     };
 
-    this.consentService.submitConsent(formData)
+    this.isSubmitting = true;
+
+    this.consentService.submitConsent(this.volunteerId, formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.snackBar.open('Consent submitted successfully', 'Close', { duration: 3000 });
+          this.snackBar.open(
+            this.translate.instant('guardianConsent.messages.submitSuccess'),
+            this.translate.instant('common.close'),
+            { duration: 3000 }
+          );
           this.isSubmitting = false;
-          // Navigate back or show completion message
         },
         error: (error) => {
           console.error('Failed to submit consent:', error);
-          this.snackBar.open('Failed to submit consent', 'Close', { duration: 5000 });
+          this.snackBar.open(
+            this.translate.instant('guardianConsent.errors.submitFailed'),
+            this.translate.instant('common.close'),
+            { duration: 5000 }
+          );
           this.isSubmitting = false;
         }
       });

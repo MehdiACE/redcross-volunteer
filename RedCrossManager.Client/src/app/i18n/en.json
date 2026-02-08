@@ -9,13 +9,15 @@
     "cancel": "Cancel",
     "close": "Close",
     "submit": "Submit",
+    "submitting": "Submitting...",
     "save": "Save",
     "saving": "Saving...",
     "delete": "Delete",
     "edit": "Edit",
     "back": "Back",
     "next": "Next",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "clear": "Clear"
   },  "login": {
     "title": "Login",
     "subtitle": "Sign in to your volunteer account",
@@ -135,6 +137,41 @@
     "complete": "Complete Onboarding",
     "submitFinal": "Submit Final Step",
     "gotoDashboard": "Go to Dashboard"
+  },
+  "guardianConsent": {
+    "title": "Guardian Consent",
+    "subtitle": "Review the volunteer information and provide consent to proceed.",
+    "volunteerInformation": "Volunteer Information",
+    "guardianInformation": "Guardian Information",
+    "agreements": "Agreements",
+    "signature": "Signature",
+    "signatureInstructions": "Please sign below to confirm your consent.",
+    "signaturePadPlaceholder": "Sign here",
+    "signatureRequired": "Signature is required",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "dateOfBirth": "Date of Birth",
+    "email": "Email",
+    "guardianFullName": "Full Name",
+    "phone": "Phone",
+    "relationship": "Relationship to Volunteer",
+    "guardianAgreementLabel": "I am the legal guardian of the volunteer",
+    "guardianAgreementText": "I confirm I have the authority to provide this consent.",
+    "dataProcessingLabel": "Data processing consent",
+    "dataProcessingText": "I agree to the processing of the volunteer's personal data for onboarding purposes.",
+    "acceptTermsLabel": "I accept the consent terms",
+    "acceptTermsText": "I acknowledge the terms and provide my consent.",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "messages": {
+      "submitSuccess": "Consent submitted successfully."
+    },
+    "errors": {
+      "loadFailed": "Failed to load consent request.",
+      "submitFailed": "Failed to submit consent.",
+      "signatureRequired": "Please complete all required fields and provide a signature.",
+      "missingVolunteer": "Missing volunteer reference in the consent link."
+    }
   },
   "oneTimeVolunteer": {
     "title": "One-time Volunteer Form",

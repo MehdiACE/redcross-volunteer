@@ -9,13 +9,15 @@
     "cancel": "Annuler",
     "close": "Fermer",
     "submit": "Soumettre",
+    "submitting": "Envoi en cours...",
     "save": "Enregistrer",
     "saving": "Enregistrement...",
     "delete": "Supprimer",
     "edit": "Modifier",
     "back": "Retour",
     "next": "Suivant",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "clear": "Effacer"
   },
   "login": {
     "title": "Connexion",
@@ -137,6 +139,41 @@
     "complete": "Terminer l'embarquement",
     "submitFinal": "Soumettre l'étape finale",
     "gotoDashboard": "Aller au tableau de bord"
+  },
+  "guardianConsent": {
+    "title": "Consentement parental",
+    "subtitle": "Consultez les informations du bénévole et donnez votre consentement pour poursuivre.",
+    "volunteerInformation": "Informations du bénévole",
+    "guardianInformation": "Informations du tuteur",
+    "agreements": "Accords",
+    "signature": "Signature",
+    "signatureInstructions": "Veuillez signer ci-dessous pour confirmer votre consentement.",
+    "signaturePadPlaceholder": "Signez ici",
+    "signatureRequired": "La signature est requise",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "dateOfBirth": "Date de naissance",
+    "email": "Courriel",
+    "guardianFullName": "Nom complet",
+    "phone": "Téléphone",
+    "relationship": "Relation avec le bénévole",
+    "guardianAgreementLabel": "Je suis le tuteur légal du bénévole",
+    "guardianAgreementText": "Je confirme avoir l'autorité de fournir ce consentement.",
+    "dataProcessingLabel": "Consentement au traitement des données",
+    "dataProcessingText": "J'accepte le traitement des données personnelles du bénévole pour l'intégration.",
+    "acceptTermsLabel": "J'accepte les conditions de consentement",
+    "acceptTermsText": "Je reconnais les conditions et donne mon consentement.",
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Veuillez entrer une adresse courriel valide",
+    "messages": {
+      "submitSuccess": "Consentement soumis avec succès."
+    },
+    "errors": {
+      "loadFailed": "Échec du chargement de la demande de consentement.",
+      "submitFailed": "Échec de la soumission du consentement.",
+      "signatureRequired": "Veuillez remplir tous les champs requis et fournir une signature.",
+      "missingVolunteer": "Référence du bénévole manquante dans le lien de consentement."
+    }
   },
   "oneTimeVolunteer": {
     "title": "Formulaire bénévole ponctuel",

@@ -41,6 +41,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(m => m.OneTimeVolunteerComponent)
   },
   {
+    path: 'guardian-consent/:volunteerId',
+    loadComponent: () => import('./features/onboarding/guardian-consent/guardian-consent.component').then(m => m.GuardianConsentComponent)
+  },
+  {
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
