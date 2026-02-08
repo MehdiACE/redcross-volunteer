@@ -9,6 +9,7 @@ import { DashboardService } from '../../core/services/dashboard.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { VolunteerDashboardDto } from '../../core/models/dashboard.model';
 import { NotificationItem } from '../../core/models/notification.model';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,8 +28,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private dashboardService: DashboardService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService
   ) {}
+
+  get isAdmin(): boolean {
+    return this.authService.hasRole('Admin');
+  }
 
   ngOnInit(): void {
     this.fetchDashboard();

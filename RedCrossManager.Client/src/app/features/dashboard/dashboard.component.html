@@ -67,6 +67,9 @@
             <a routerLink="/missions" class="block rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:border-red-300 hover:text-red-700 dark:border-gray-700 dark:text-gray-200">
               {{ 'dashboard.actions.viewMissions' | translate }}
             </a>
+            <a *ngIf="isAdmin" routerLink="/documents" class="block rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 hover:border-red-300 hover:text-red-700 dark:border-gray-700 dark:text-gray-200">
+              {{ 'documents.title' | translate }}
+            </a>
           </div>
         </section>
       </div>
