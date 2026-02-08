@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { RegisterVolunteerDto, VolunteerDto, SmsOptInDto, LoginResponseDto } from '../models/volunteer.model';
+import { RegisterVolunteerDto, VolunteerDto, SmsOptInDto, LoginResponseDto, UpdateStatusDto } from '../models/volunteer.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,11 @@ export class VolunteerService {
   updateSmsOptIn(smsOptIn: boolean): Observable<VolunteerDto> {
     const dto: SmsOptInDto = { smsOptIn };
     return this.http.post<VolunteerDto>(`${this.apiUrl}/me/sms-opt-in`, dto);
+  }
+
+  updateStatus(id: string, status: string): Observable<VolunteerDto> {
+    const dto: UpdateStatusDto = { status };
+    return this.http.patch<VolunteerDto>(`${this.apiUrl}/${id}/status`, dto);
   }
 }
 

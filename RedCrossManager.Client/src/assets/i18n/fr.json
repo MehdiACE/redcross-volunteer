@@ -437,7 +437,8 @@
     "documentsCount": "fichiers",
     "messagesTitle": "Messages",
     "messagesSince": "Conversation débutée 06/02/2024",
-    "messagesPlaceholder": "Écrire un message..."
+    "messagesPlaceholder": "Écrire un message...",
+    "validateSuccess": "Profil validé."
   }
 }
 

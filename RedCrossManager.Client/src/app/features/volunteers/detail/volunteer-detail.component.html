@@ -12,7 +12,7 @@
         <p class="text-sm text-gray-500">{{ fullName }}</p>
       </div>
       <div class="flex items-center gap-3">
-        <button *ngIf="volunteer?.status?.toLowerCase() !== 'active'" type="button" class="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+        <button *ngIf="volunteer?.status?.toLowerCase() === 'pending'" type="button" (click)="validateProfile()" [disabled]="isUpdatingStatus" class="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700 disabled:opacity-60 disabled:cursor-not-allowed">
           {{ 'volunteerDetail.validateProfile' | translate }}
         </button>
       </div>

@@ -38,6 +38,10 @@ export interface SmsOptInDto {
   smsOptIn: boolean;
 }
 
+export interface UpdateStatusDto {
+  status: string;
+}
+
 export interface LoginResponseDto {
   userId: string;
   accessToken: string;

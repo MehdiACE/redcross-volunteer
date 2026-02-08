@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { VolunteerService } from '../../../core/services/volunteer.service';
@@ -23,13 +24,15 @@ interface VolunteerMessageItem {
 @Component({
   selector: 'app-volunteer-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, TranslateModule],
+  imports: [CommonModule, RouterLink, TranslateModule, MatSnackBarModule],
   templateUrl: './volunteer-detail.component.html'
 })
 export class VolunteerDetailComponent implements OnInit, OnDestroy {
   volunteer: VolunteerDto | null = null;
   isLoading = false;
   loadError = false;
+  isUpdatingStatus = false;
+  private volunteerId: string | null = null;
   documents: VolunteerDocumentItem[] = [];
   messages: VolunteerMessageItem[] = [];
 
@@ -37,7 +40,9 @@ export class VolunteerDetailComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private volunteerService: VolunteerService
+    private volunteerService: VolunteerService,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +51,7 @@ export class VolunteerDetailComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         const id = params.get('id');
         if (!id) return;
+        this.volunteerId = id;
         this.loadVolunteer(id);
       });
 
@@ -78,6 +84,26 @@ export class VolunteerDetailComponent implements OnInit, OnDestroy {
   get fullName(): string {
     if (!this.volunteer) return '';
     return `${this.volunteer.firstName} ${this.volunteer.lastName}`.trim();
+  }
+
+  validateProfile(): void {
+    if (!this.volunteerId || this.isUpdatingStatus) return;
+    this.isUpdatingStatus = true;
+    this.volunteerService.updateStatus(this.volunteerId, 'Active')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isUpdatingStatus = false;
+          this.snackBar.open(this.translate.instant('volunteerDetail.validateSuccess'), this.translate.instant('common.close'), {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.loadVolunteer(this.volunteerId!);
+        },
+        error: () => {
+          this.isUpdatingStatus = false;
+        }
+      });
   }
 
   private loadVolunteer(id: string): void {
