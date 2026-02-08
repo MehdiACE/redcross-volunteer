@@ -34,10 +34,10 @@ public class CertificateService : ICertificateService
             throw new InvalidOperationException("Certificate can only be generated for completed trainings");
         }
 
-        if (enrollment.CertificationId != null)
+        if (enrollment.CertificateId != null)
         {
             _logger.LogWarning($"Certificate already exists for enrollment {enrollmentId}");
-            var existing = await _context.Certifications.FindAsync(enrollment.CertificationId);
+            var existing = await _context.Certifications.FindAsync(enrollment.CertificateId);
             if (existing != null) return existing;
         }
 
@@ -57,7 +57,7 @@ public class CertificateService : ICertificateService
 
         _context.Certifications.Add(certification);
 
-        enrollment.CertificationId = certification.Id;
+        enrollment.CertificateId = certification.Id;
         enrollment.CertificateIssuedAt = DateTime.UtcNow;
         enrollment.CertificateNumber = $"CRC-{certification.Type}-{certification.Id:N}".ToUpperInvariant();
 
