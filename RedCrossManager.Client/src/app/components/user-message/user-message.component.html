@@ -54,7 +54,7 @@
       </button>
       <button
         type="button"
-        (click)="openMessageDrawer('read', recentMessages[0])"
+        (click)="openAllMessages()"
         class="mt-3 w-full text-center text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
         {{ 'header.viewAllNotifications' | translate }}
       </button>
@@ -64,15 +64,60 @@
 
 <app-drawer
   [open]="showMessageDrawer"
-  [title]="drawerMode === 'read' ? ('header.readMessage' | translate) : ('header.composeMessage' | translate)"
+  [title]="drawerMode === 'read'
+    ? ('header.readMessage' | translate)
+    : drawerMode === 'compose'
+      ? ('header.composeMessage' | translate)
+      : ('header.allMessages' | translate)"
   [position]="'right'"
   [cancelLabel]="'common.cancel' | translate"
-  [validateLabel]="drawerMode === 'read' ? ('common.close' | translate) : ('header.sendMessage' | translate)"
+  [validateLabel]="drawerMode === 'compose' ? ('header.sendMessage' | translate) : ('common.close' | translate)"
   [validateDisabled]="drawerValidateDisabled"
   (closed)="closeMessageDrawer()"
   (cancelled)="closeMessageDrawer()"
   (validated)="onDrawerValidated()"
 >
+  <div *ngIf="drawerMode === 'inbox'" class="space-y-4">
+    <div *ngIf="isLoadingAllMessages" class="text-sm text-gray-500 dark:text-gray-400">
+      {{ 'common.loading' | translate }}
+    </div>
+
+    <div *ngIf="!isLoadingAllMessages && hasInboxError" class="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+      {{ 'header.messagesLoadError' | translate }}
+    </div>
+
+    <div *ngIf="!isLoadingAllMessages && !hasInboxError && allMessages.length === 0" class="text-sm text-gray-500 dark:text-gray-400">
+      {{ 'header.noMessages' | translate }}
+    </div>
+
+    <div *ngIf="!isLoadingAllMessages && !hasInboxError" class="space-y-2">
+      <button
+        *ngFor="let message of allMessages"
+        type="button"
+        (click)="selectInboxMessage(message)"
+        class="w-full text-left rounded-xl border border-gray-100 px-4 py-3 hover:bg-gray-50 dark:border-text-dark dark:hover:bg-gray-800"
+        [class.opacity-60]="message.isRead"
+      >
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-semibold text-gray-900 dark:text-[#F5F5F0]">
+            {{ message.fromUserName }}
+          </span>
+          <span class="text-xs text-gray-400">
+            {{ message.createdAt | date:'short' }}
+          </span>
+        </div>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+          {{ message.content }}
+        </p>
+      </button>
+    </div>
+
+    <app-read-message
+      *ngIf="selectedMessage"
+      [message]="selectedMessage"
+    ></app-read-message>
+  </div>
+
   <app-read-message
     *ngIf="drawerMode === 'read'"
     [message]="selectedMessage"

@@ -37,8 +37,11 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   showMessageDrawer = false;
   unreadCount = 0;
   recentMessages: MessageItem[] = [];
+  allMessages: MessageItem[] = [];
+  isLoadingAllMessages = false;
+  hasInboxError = false;
   selectedMessage: MessageItem | null = null;
-  drawerMode: 'read' | 'compose' = 'read';
+  drawerMode: 'read' | 'compose' | 'inbox' = 'read';
   composeContent = '';
   composeVolunteerSearch = '';
   composeVolunteerId = '';
@@ -105,6 +108,14 @@ export class UserMessageComponent implements OnInit, OnDestroy {
     this.showMessageDrawer = false;
   }
 
+  openAllMessages(): void {
+    this.drawerMode = 'inbox';
+    this.selectedMessage = null;
+    this.showMessageDrawer = true;
+    this.showMessageMenu = false;
+    this.loadAllMessages();
+  }
+
   onDrawerValidated(): void {
     if (this.drawerMode === 'compose') {
       this.sendDrawerMessage();
@@ -112,6 +123,19 @@ export class UserMessageComponent implements OnInit, OnDestroy {
       return;
     }
     this.closeMessageDrawer();
+  }
+
+  selectInboxMessage(message: MessageItem): void {
+    this.selectedMessage = message;
+    if (message.isRead) return;
+    this.messageService.markAsRead(message.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          message.isRead = true;
+          this.loadMessageSummary();
+        }
+      });
   }
 
   onComposeSubjectChange(value: string): void {
@@ -218,6 +242,27 @@ export class UserMessageComponent implements OnInit, OnDestroy {
             .slice(0, 5);
           const adminMessage = messages.find(msg => msg.fromUserName.toLowerCase().includes('admin'));
           this.adminTargetUserId = adminMessage?.fromUserId ?? this.adminTargetUserId;
+        }
+      });
+  }
+
+  private loadAllMessages(): void {
+    this.isLoadingAllMessages = true;
+    this.hasInboxError = false;
+    this.messageService.getInbox()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: messages => {
+          this.allMessages = [...messages]
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+          if (!this.selectedMessage && this.allMessages.length > 0) {
+            this.selectedMessage = this.allMessages[0];
+          }
+          this.isLoadingAllMessages = false;
+        },
+        error: () => {
+          this.isLoadingAllMessages = false;
+          this.hasInboxError = true;
         }
       });
   }

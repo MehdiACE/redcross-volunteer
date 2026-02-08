@@ -29,7 +29,8 @@ public class MessageService : IMessageService
 
     public async Task<List<MessageDto>> GetInboxAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        return await _messageRepository.GetInboxAsync(userId, cancellationToken);
+        var volunteer = await _volunteerRepository.GetByUserIdAsync(userId, cancellationToken);
+        return await _messageRepository.GetInboxAsync(userId, volunteer?.Id, cancellationToken);
     }
 
     public async Task<List<MessageDto>> GetSentAsync(Guid userId, CancellationToken cancellationToken = default)
@@ -39,7 +40,8 @@ public class MessageService : IMessageService
 
     public async Task<int> GetUnreadCountAsync(Guid userId, CancellationToken cancellationToken = default)
     {
-        return await _messageRepository.GetUnreadCountAsync(userId, cancellationToken);
+        var volunteer = await _volunteerRepository.GetByUserIdAsync(userId, cancellationToken);
+        return await _messageRepository.GetUnreadCountAsync(userId, volunteer?.Id, cancellationToken);
     }
 
     public async Task<MessageDto> SendMessageAsync(Guid fromUserId, CreateMessageDto dto, CancellationToken cancellationToken = default)

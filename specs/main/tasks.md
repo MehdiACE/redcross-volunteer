@@ -99,7 +99,9 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T029 [US3] Add dashboard DTO aggregator (assignments, trainings, certs, alerts) in `RedCrossManager.Server/Services/Dashboard`
 - [X] T030 [US3] Implement dashboard controller endpoint in `RedCrossManager.Server/Controllers/DashboardController.cs`
 - [X] T031 [US3] Build dashboard UI with cards, tables, alerts in `RedCrossManager.Client/src/app/features/dashboard`
-- [ ] T031a [US3] Build reusable drawer component (left/right position, title input, close button, sticky footer with cancel/validate, full-height) that hosts child content in `RedCrossManager.Client/src/app/components/drawer`
+- [X] T031a [US3] Build reusable drawer component (left/right position, title input, close button, sticky footer with cancel/validate, full-height) that hosts child content in `RedCrossManager.Client/src/app/components/drawer`
+- [X] T031b [US3] Wire "Voir tous les messages" button to call inbox API and list messages for the connected user in `RedCrossManager.Client/src/app/components/user-message` and `RedCrossManager.Client/src/app/core/services/message.service.ts`
+- [X] T031c [US3] Show unread message count badge on notification icon by default using inbox unread count API in `RedCrossManager.Client/src/app/components/user-message`
 
 ---
 

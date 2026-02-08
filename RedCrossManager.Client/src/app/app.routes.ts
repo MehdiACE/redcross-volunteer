@@ -27,6 +27,11 @@ export const routes: Routes = [
     canActivate: [adminGuard]
   },
   {
+    path: 'admin/volunteers/:id',
+    loadComponent: () => import('./features/volunteers/detail/volunteer-detail.component').then(m => m.VolunteerDetailComponent),
+    canActivate: [adminGuard]
+  },
+  {
     path: 'trainings',
     loadComponent: () => import('./features/trainings/trainings.component').then(m => m.TrainingsComponent),
     canActivate: [authGuard]

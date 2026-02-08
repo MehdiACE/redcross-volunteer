@@ -29,12 +29,13 @@ public class MessageRepository : IMessageRepository
         return messages.Select(MapToDto).ToList();
     }
 
-    public async Task<List<MessageDto>> GetInboxAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<List<MessageDto>> GetInboxAsync(Guid userId, Guid? volunteerId, CancellationToken cancellationToken = default)
     {
         var messages = await _context.Messages
-            .Where(m => m.ToUserId == userId)
+            .Where(m => m.ToUserId == userId || (volunteerId.HasValue && m.ToVolunteerId == volunteerId))
             .Include(m => m.FromUser)
             .Include(m => m.ToUser)
+            .Include(m => m.ToVolunteer)
             .OrderByDescending(m => m.CreatedAt)
             .ToListAsync(cancellationToken);
 
@@ -61,10 +62,10 @@ public class MessageRepository : IMessageRepository
             .FirstOrDefaultAsync(m => m.Id == messageId, cancellationToken);
     }
 
-    public async Task<int> GetUnreadCountAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<int> GetUnreadCountAsync(Guid userId, Guid? volunteerId, CancellationToken cancellationToken = default)
     {
         return await _context.Messages
-            .Where(m => m.ToUserId == userId && !m.IsRead)
+            .Where(m => (m.ToUserId == userId || (volunteerId.HasValue && m.ToVolunteerId == volunteerId)) && !m.IsRead)
             .CountAsync(cancellationToken);
     }
 
