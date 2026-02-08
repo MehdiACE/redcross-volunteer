@@ -546,6 +546,54 @@
     "messagesSince": "Conversation débutée 06/02/2024",
     "messagesPlaceholder": "Écrire un message...",
     "validateSuccess": "Profil validé."
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "profile": "Mon Profil",
+    "missions": "Mes Missions",
+    "documents": "Mes Documents",
+    "messages": "Messagerie",
+    "trainings": "Formations",
+    "volunteers": "Volontaires",
+    "darkMode": "Mode sombre",
+    "settings": "Paramètres"
+  },
+  "documents": {
+    "title": "Mes Documents",
+    "subtitle": "Téléversez et gérez vos documents d'accréditation",
+    "addNew": "Téléverser un nouveau document",
+    "category": "Catégorie",
+    "selectCategory": "Sélectionner une catégorie",
+    "categories": {
+      "Identification": "Identification",
+      "BackgroundCheck": "Vérification des antécédents",
+      "Certification": "Certification",
+      "MedicalForm": "Formulaire médical",
+      "ConsentForm": "Formulaire de consentement"
+    },
+    "dropHint": "Glissez-déposez votre fichier ici ou",
+    "browse": "parcourez",
+    "acceptedFormats": "Formats acceptés : PDF, JPG, PNG (max 10MB)",
+    "uploadWarning": "Assurez-vous que vos documents sont clairs et lisibles. Les documents illisibles seront rejetés.",
+    "uploadCta": "Téléverser le document",
+    "uploadSuccess": "Document téléversé avec succès !",
+    "uploadError": "Erreur lors du téléversement. Veuillez réessayer.",
+    "selectFile": "Veuillez sélectionner un fichier et une catégorie.",
+    "loadError": "Erreur lors du chargement des documents.",
+    "myDocuments": "Mes documents",
+    "tabs": {
+      "all": "Tous",
+      "pending": "En attente",
+      "approved": "Approuvés"
+    },
+    "empty": "Aucun document téléversé pour le moment.",
+    "updatedAt": "Mis à jour le",
+    "status": {
+      "Pending": "En attente",
+      "Approved": "Approuvé",
+      "Rejected": "Rejeté"
+    }
   }
 }
+
 

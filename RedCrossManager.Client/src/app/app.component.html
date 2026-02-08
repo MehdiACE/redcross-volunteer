@@ -1,7 +1,16 @@
 <div class="min-h-screen bg-app-bg dark:bg-app-bg-dark text-gray-900 dark:text-[#F5F5F0]">
+  <app-sidebar [isOpen]="sidebarOpen" (closed)="closeSidebar()"></app-sidebar>
+
   <header *ngIf="showHeader" class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-[#191a1f]/90 dark:border-text-dark">
     <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="toggleSidebar()"
+          class="flex items-center justify-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          aria-label="Toggle sidebar">
+          <mat-icon>menu</mat-icon>
+        </button>
         <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="h-8 w-auto" />
 
       </div>

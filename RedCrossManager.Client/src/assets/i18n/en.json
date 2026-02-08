@@ -546,6 +546,54 @@
     "messagesSince": "Conversation started 06/02/2024",
     "messagesPlaceholder": "Write a message...",
     "validateSuccess": "Profile validated."
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "profile": "My Profile",
+    "missions": "My Missions",
+    "documents": "My Documents",
+    "messages": "Messages",
+    "trainings": "Trainings",
+    "volunteers": "Volunteers",
+    "darkMode": "Dark mode",
+    "settings": "Settings"
+  },
+  "documents": {
+    "title": "My Documents",
+    "subtitle": "Upload and manage your credential documents",
+    "addNew": "Upload new document",
+    "category": "Category",
+    "selectCategory": "Select a category",
+    "categories": {
+      "Identification": "Identification",
+      "BackgroundCheck": "Background Check",
+      "Certification": "Certification",
+      "MedicalForm": "Medical Form",
+      "ConsentForm": "Consent Form"
+    },
+    "dropHint": "Drag and drop your file here or",
+    "browse": "browse",
+    "acceptedFormats": "Accepted formats: PDF, JPG, PNG (max 10MB)",
+    "uploadWarning": "Make sure your documents are clear and readable. Illegible documents will be rejected.",
+    "uploadCta": "Upload document",
+    "uploadSuccess": "Document uploaded successfully!",
+    "uploadError": "Error uploading document. Please try again.",
+    "selectFile": "Please select a file and category.",
+    "loadError": "Error loading documents.",
+    "myDocuments": "My documents",
+    "tabs": {
+      "all": "All",
+      "pending": "Pending",
+      "approved": "Approved"
+    },
+    "empty": "No documents uploaded yet.",
+    "updatedAt": "Updated on",
+    "status": {
+      "Pending": "Pending",
+      "Approved": "Approved",
+      "Rejected": "Rejected"
+    }
   }
 }
+
 

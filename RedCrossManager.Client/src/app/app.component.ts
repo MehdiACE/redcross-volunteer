@@ -2,16 +2,18 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
 import { AgGridThemeService } from './core/services/ag-grid-theme.service';
 import { UserMessageComponent } from './components/user-message';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TranslateModule, UserMessageComponent],
+  imports: [CommonModule, RouterOutlet, TranslateModule, UserMessageComponent, MatIconModule, SidebarComponent],
   templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -20,6 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isDarkMode = false;
   showUserMenu = false;
   showHeader = true;
+  sidebarOpen = false;
   displayName = 'Utilisateur';
   private destroy$ = new Subject<void>();
 
@@ -79,6 +82,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
   toggleUserMenu(): void {
     this.showUserMenu = !this.showUserMenu;
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen = false;
   }
 
   logout(): void {
