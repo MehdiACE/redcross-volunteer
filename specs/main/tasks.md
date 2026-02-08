@@ -121,7 +121,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [X] T035 [US4] Implement training service (create/publish/enroll/waitlist/attendance) in `RedCrossManager.Server/Services/Trainings`
 - [X] T036 [US4] Implement trainings controller endpoints in `RedCrossManager.Server/Controllers/TrainingsController.cs`
 - [X] T037 [US4] Build training catalog + enrollment UI in `RedCrossManager.Client/src/app/features/trainings`
-- [ ] T038 [US4] Generate certificates and link to documents in `RedCrossManager.Server/Services/Certificates`
+- [X] T038 [US4] Generate certificates and link to documents in `RedCrossManager.Server/Services/Certificates`
 
 ---
 
@@ -183,14 +183,14 @@ description: "Tasks for volunteer onboarding & management system"
 
 ## Phase 10: Cross-Cutting Polish
 
-- [ ] T100 Add localization resources (fr/en) for all new UI strings and email/SMS templates in `RedCrossManager.Client/src/app/i18n` and `RedCrossManager.Server/Resources`
+- [X] T100 Add localization resources (fr/en) for all new UI strings and email/SMS templates in `RedCrossManager.Client/src/app/i18n` and `RedCrossManager.Server/Resources`
 - [ ] T101 [P] Add logging/enrichment for PII-safe telemetry in `RedCrossManager.Server`
-- [ ] T102 [P] Harden validation (FluentValidation + data annotations) across DTOs in `RedCrossManager.Server/DTOs`
+- [X] T102 [P] Harden validation (FluentValidation + data annotations) across DTOs in `RedCrossManager.Server/DTOs`
 - [ ] T103 Improve accessibility (focus states, ARIA, contrast) in `RedCrossManager.Client/src`
 - [ ] T106 [P] Sync Ag Grid theme with app dark mode via `AgGridThemeService` (Prereqs: T010, ag-theme-quartz.css import) in `RedCrossManager.Client/src/app/core/services/ag-grid-theme.service.ts` and `features/*`
 - [ ] T107 [P] Evolve onboarding cards to dark-mode surfaces (dark cards + dark form panels, keep accent color) in `RedCrossManager.Client/src/app/features/onboarding/**`
 - [ ] T104 Final CI pass: lint, tests, build artifacts for API and UI in repo root pipelines
-- [ ] T105 Configure CI/CD coverage gate: enforce ≥80% line coverage for services/repositories; fail build if coverage drops; add PR template with constitution compliance checklist in `.github/pull_request_template.md`
+- [X] T105 Configure CI/CD coverage gate: enforce ≥80% line coverage for services/repositories; fail build if coverage drops; add PR template with constitution compliance checklist in `.github/pull_request_template.md`
 
 ---
 

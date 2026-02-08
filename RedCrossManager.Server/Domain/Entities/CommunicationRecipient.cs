@@ -5,9 +5,9 @@ public class CommunicationRecipient
     public Guid Id { get; set; }
     public Guid MessageId { get; set; }
     public RecipientType RecipientType { get; set; }
-    public Guid VolunteerId { get; set; }
-    public string? GuardianEmail { get; set; }
-    public string? GuardianPhone { get; set; }
+    public Guid? VolunteerId { get; set; }
+    public string? RecipientEmail { get; set; }
+    public string? RecipientPhone { get; set; }
     public CommunicationChannel Channel { get; set; }
     public DeliveryStatus DeliveryStatus { get; set; } = DeliveryStatus.Queued;
     public string? LastError { get; set; }
@@ -16,6 +16,7 @@ public class CommunicationRecipient
 
     // Navigation properties
     public CommunicationMessage Message { get; set; } = null!;
+    public Volunteer? Volunteer { get; set; }
 }
 
 public enum RecipientType
@@ -28,5 +29,6 @@ public enum DeliveryStatus
 {
     Queued,
     Sent,
-    Failed
+    Failed,
+    Bounced
 }

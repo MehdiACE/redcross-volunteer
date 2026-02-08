@@ -15,8 +15,16 @@
 ## Testing
 - [ ] Unit tests added/updated
 - [ ] Integration tests added/updated
-- [ ] Test coverage ≥80% for affected services/repositories
+- [ ] Test coverage ≥80% for affected services/repositories (enforced by CI)
 - [ ] Manual testing performed
+
+## Constitution Compliance
+- [ ] **Architecture**: Follows layered architecture (Repository/Service/Controller/DTO)
+- [ ] **TDD**: Tests written before implementation
+- [ ] **Coverage Gate**: CI enforces ≥80% line coverage for services/repositories
+- [ ] **Multilingual**: FR/EN translations added (.resx and ngx-translate)
+- [ ] **Cloud-ready**: Compatible with Azure App Service, SQL, Blob, Key Vault
+- [ ] **Security-first**: JWT/RBAC enforced, input validation, no secrets in code
 
 ## Code Quality Checklist
 - [ ] Code follows project style guide (StyleCop, ESLint, Prettier)

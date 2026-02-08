@@ -46,6 +46,14 @@ public class VolunteerRepository : IVolunteerRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<List<Volunteer>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
+    {
+        return await _context.Volunteers
+            .Include(v => v.ParentalConsent)
+            .Where(v => ids.Contains(v.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<Volunteer> AddAsync(Volunteer volunteer, CancellationToken cancellationToken = default)
     {
         _context.Volunteers.Add(volunteer);

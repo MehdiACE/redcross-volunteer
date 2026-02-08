@@ -21,3 +21,10 @@ public record SendToVolunteerDto(
     Guid VolunteerId,
     string Content
 );
+
+public record ComposeMessageDto(
+    string Subject,
+    string Body,
+    string RecipientType,
+    List<Guid> RecipientIds
+);

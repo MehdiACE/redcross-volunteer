@@ -55,7 +55,7 @@ public class ConsentService : IConsentService
         {
             Id = Guid.NewGuid(),
             VolunteerId = volunteerId,
-            GuardianName = dto.GuardianName,
+            GuardianName = dto.GuardianFullName,
             GuardianEmail = dto.GuardianEmail,
             GuardianPhone = dto.GuardianPhone,
             ConsentStatus = ConsentStatus.Requested,
@@ -86,7 +86,10 @@ public class ConsentService : IConsentService
             throw new InvalidOperationException("Consent request not found");
 
         consent.ConsentStatus = ConsentStatus.Submitted;
-        consent.ConsentFormUrl = dto.ConsentFormUrl;
+        consent.GuardianName = dto.GuardianInfo.FullName;
+        consent.GuardianEmail = dto.GuardianInfo.Email;
+        consent.GuardianPhone = dto.GuardianInfo.Phone;
+        consent.ConsentFormUrl = dto.Signature; // Store signature data
         consent.SubmittedAt = DateTime.UtcNow;
         
         var auditTrail = JsonSerializer.Deserialize<List<object>>(consent.AuditTrail ?? "[]") ?? new List<object>();
@@ -105,13 +108,13 @@ public class ConsentService : IConsentService
         if (consent == null)
             throw new InvalidOperationException("Consent not found");
 
-        consent.ConsentStatus = dto.Approved ? ConsentStatus.Approved : ConsentStatus.Rejected;
+        consent.ConsentStatus = dto.Action == "Approve" ? ConsentStatus.Approved : ConsentStatus.Rejected;
         consent.ReviewedAt = DateTime.UtcNow;
         consent.ReviewerId = reviewerId;
         consent.ReviewerNotes = dto.ReviewerNotes;
 
         var auditTrail = JsonSerializer.Deserialize<List<object>>(consent.AuditTrail ?? "[]") ?? new List<object>();
-        auditTrail.Add(new { Status = dto.Approved ? "Approved" : "Rejected", Timestamp = DateTime.UtcNow, ReviewerId = reviewerId });
+        auditTrail.Add(new { Status = dto.Action, Timestamp = DateTime.UtcNow, ReviewerId = reviewerId });
         consent.AuditTrail = JsonSerializer.Serialize(auditTrail);
 
         await _repository.UpdateAsync(consent, cancellationToken);

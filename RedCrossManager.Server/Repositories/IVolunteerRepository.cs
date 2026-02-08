@@ -8,6 +8,7 @@ public interface IVolunteerRepository
     Task<Volunteer?> GetByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<Volunteer?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
     Task<List<Volunteer>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<List<Volunteer>> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default);
     Task<Volunteer> AddAsync(Volunteer volunteer, CancellationToken cancellationToken = default);
     Task UpdateAsync(Volunteer volunteer, CancellationToken cancellationToken = default);
     Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default);

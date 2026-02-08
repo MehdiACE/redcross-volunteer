@@ -4,7 +4,7 @@ public class CommunicationMessage
 {
     public Guid Id { get; set; }
     public required string Segment { get; set; }
-    public CommunicationChannel Channel { get; set; }
+    public CommunicationChannel Channels { get; set; }
     public required string Language { get; set; }
     public string? Subject { get; set; }
     public required string BodyTemplate { get; set; }
@@ -16,8 +16,10 @@ public class CommunicationMessage
     public ICollection<CommunicationRecipient> Recipients { get; set; } = new List<CommunicationRecipient>();
 }
 
+[Flags]
 public enum CommunicationChannel
 {
-    Email,
-    SMS
+    None = 0,
+    Email = 1,
+    SMS = 2
 }

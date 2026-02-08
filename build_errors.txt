@@ -1,0 +1,15 @@
+  Identification des projets ├á restaurer...
+  Tous les projets sont ├á jour pour la restauration.
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(37,24): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(40,79): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(60,20): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+
+├ëCHEC de la build.
+
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(37,24): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(40,79): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+C:\Work\redcross\RedCrossManager.Server\Services\Certificates\CertificateService.cs(60,20): error CS1061: 'TrainingEnrollment' ne contient pas de d├®finition pour 'CertificationId' et aucune m├®thode d'extension accessible 'CertificationId' acceptant un premier argument de type 'TrainingEnrollment' n'a ├®t├® trouv├®e (une directive using ou une r├®f├®rence d'assembly est-elle manquante┬á?) [C:\Work\redcross\RedCrossManager.Server\RedCrossManager.Server.csproj]
+    0 Avertissement(s)
+    3 Erreur(s)
+
+Temps ├®coul├® 00:00:01.38

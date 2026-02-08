@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RedCrossManager.Server.DTOs.Training;
 using RedCrossManager.Server.Services.Trainings;
+using RedCrossManager.Server.Services.Certificates;
 
 namespace RedCrossManager.Server.Controllers
 {
@@ -14,10 +15,14 @@ namespace RedCrossManager.Server.Controllers
     public class TrainingsController : ControllerBase
     {
         private readonly ITrainingService _trainingService;
+        private readonly ICertificateService _certificateService;
 
-        public TrainingsController(ITrainingService trainingService)
+        public TrainingsController(
+            ITrainingService trainingService,
+            ICertificateService certificateService)
         {
             _trainingService = trainingService;
+            _certificateService = certificateService;
         }
 
         /// <summary>
@@ -151,6 +156,41 @@ namespace RedCrossManager.Server.Controllers
 
             var trainings = await _trainingService.GetVolunteerTrainingsAsync(volunteerId);
             return Ok(trainings);
+        }
+
+        /// <summary>
+        /// Generate certificate for completed training enrollment
+        /// </summary>
+        [HttpPost("enrollments/{enrollmentId}/generate-certificate")]
+        [Authorize(Policy = "Coordinator")]
+        public async Task<IActionResult> GenerateCertificate(Guid enrollmentId)
+        {
+            try
+            {
+                var certificate = await _certificateService.GenerateCertificateAsync(enrollmentId);
+                return Ok(new { certificateId = certificate.Id, message = "Certificate generated successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Download certificate as PDF
+        /// </summary>
+        [HttpGet("certificates/{certificationId}/pdf")]
+        public async Task<IActionResult> DownloadCertificate(Guid certificationId)
+        {
+            try
+            {
+                var pdfBytes = await _certificateService.GenerateCertificatePdfAsync(certificationId);
+                return File(pdfBytes, "application/pdf", $"certificate-{certificationId}.pdf");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
         }
     }
 }

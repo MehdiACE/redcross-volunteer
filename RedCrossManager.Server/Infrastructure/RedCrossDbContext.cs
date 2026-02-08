@@ -132,6 +132,11 @@ public class RedCrossDbContext : DbContext
                 .WithMany()
                 .HasForeignKey(te => te.VolunteerId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(te => te.Certificate)
+                .WithMany(c => c.TrainingEnrollments)
+                .HasForeignKey(te => te.CertificateId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         // Certification configuration
@@ -200,14 +205,19 @@ public class RedCrossDbContext : DbContext
             entity.HasKey(cr => cr.Id);
             entity.HasIndex(cr => new { cr.MessageId, cr.VolunteerId });
             entity.HasIndex(cr => new { cr.DeliveryStatus, cr.Channel });
-            entity.Property(cr => cr.GuardianEmail).HasMaxLength(255);
-            entity.Property(cr => cr.GuardianPhone).HasMaxLength(50);
+            entity.Property(cr => cr.RecipientEmail).HasMaxLength(255);
+            entity.Property(cr => cr.RecipientPhone).HasMaxLength(50);
             entity.Property(cr => cr.LastError).HasMaxLength(2000);
 
             entity.HasOne(cr => cr.Message)
                 .WithMany(cm => cm.Recipients)
                 .HasForeignKey(cr => cr.MessageId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(cr => cr.Volunteer)
+                .WithMany()
+                .HasForeignKey(cr => cr.VolunteerId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         // Notification configuration

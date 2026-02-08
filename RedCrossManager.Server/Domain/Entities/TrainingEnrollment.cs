@@ -8,6 +8,7 @@ public class TrainingEnrollment
     public string Status { get; set; } = "Enrolled"; // Enrolled, Waitlisted, Completed, Cancelled
     public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
     public DateTime? AttendedAt { get; set; }
+    public Guid? CertificateId { get; set; }
     public string? CertificateNumber { get; set; }
     public DateTime? CertificateIssuedAt { get; set; }
     public string? Notes { get; set; }
@@ -15,4 +16,5 @@ public class TrainingEnrollment
     // Navigation properties
     public Training Training { get; set; } = null!;
     public Volunteer Volunteer { get; set; } = null!;
+    public Certification? Certificate { get; set; }
 }

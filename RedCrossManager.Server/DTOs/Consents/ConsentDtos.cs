@@ -15,16 +15,26 @@ public record ParentalConsentDto(
 );
 
 public record RequestConsentDto(
-    string GuardianName,
+    string GuardianFullName,
     string GuardianEmail,
     string GuardianPhone
 );
 
+public record GuardianInfoDto(
+    string FullName,
+    string Email,
+    string Phone,
+    string Relationship
+);
+
 public record SubmitConsentDto(
-    string ConsentFormUrl
+    GuardianInfoDto GuardianInfo,
+    bool GuardianAgreement,
+    bool DataProcessingAgreement,
+    string Signature
 );
 
 public record ReviewConsentDto(
-    bool Approved,
+    string Action,
     string? ReviewerNotes
 );

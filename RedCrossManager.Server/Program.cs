@@ -13,6 +13,8 @@ using RedCrossManager.Server.Services.Consents;
 using RedCrossManager.Server.Services.Auth;
 using RedCrossManager.Server.Services.Dashboard;
 using RedCrossManager.Server.Services.Trainings;
+using RedCrossManager.Server.Services.Certificates;
+using RedCrossManager.Server.Services.Communications;
 using RedCrossManager.Server.Domain.Entities;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -60,6 +62,7 @@ builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingEnrollmentRepository, TrainingEnrollmentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -68,8 +71,14 @@ builder.Services.AddScoped<IOnboardingService, OnboardingService>();
 builder.Services.AddScoped<IConsentService, ConsentService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<ITrainingService, TrainingService>();
+builder.Services.AddScoped<ICertificateService, CertificateService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<ICommunicationService, CommunicationService>();
+
+// Communication providers (email/SMS)
+builder.Services.AddScoped<IEmailProvider, SendGridEmailProvider>();
+builder.Services.AddScoped<ISmsProvider, AzureSmsProvider>();
 
 // CORS for Angular client
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:4200" };
