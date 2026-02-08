@@ -151,15 +151,15 @@ description: "Tasks for volunteer onboarding & management system"
 **Independent Test**: Create mission requiring First Aid -> qualified volunteers notified; applications accepted; assignments confirmed; reminder sent.
 
 ### Tests (write first)
-- [ ] T046 [P] [US5] Integration test for mission create/apply/assign/remind flow in `RedCrossManager.Server/Tests/Integration/MissionsTests.cs`
-- [ ] T047 [P] [US5] Frontend component test for mission list/detail/apply in `RedCrossManager.Client/src/app/features/missions/missions.component.spec.ts`
+- [X] T046 [P] [US5] Integration test for mission create/apply/assign/remind flow in `RedCrossManager.Server/Tests/Integration/MissionsTests.cs`
+- [X] T047 [P] [US5] Frontend component test for mission list/detail/apply in `RedCrossManager.Client/src/app/features/missions/missions.component.spec.ts`
 
 ### Implementation
 - [X] T048 [P] [US5] Implement `Mission` entity/repo in `RedCrossManager.Server/Domain/Entities` and `Repositories`; add `Mission.TravelBufferMinutes` field (int, default 120) for volunteer availability validation
-- [ ] T049 [US5] Implement mission service (qualification filter, notify, assign, reminders, at-risk logic) in `RedCrossManager.Server/Services/Missions`
-- [ ] T049a [US5] Implement time-overlap detection algorithm with configurable travel buffer (default 2 hours) in `AssignmentValidator.cs` to prevent conflicting mission assignments; add unit tests in `AssignmentValidatorTests.cs`
-- [ ] T050 [US5] Implement missions controller endpoints in `RedCrossManager.Server/Controllers/MissionsController.cs`
-- [ ] T051 [US5] Build missions UI (list, filters, detail, apply) in `RedCrossManager.Client/src/app/features/missions`
+- [X] T049 [US5] Implement mission service (qualification filter, notify, assign, reminders, at-risk logic) in `RedCrossManager.Server/Services/Missions`
+- [X] T049a [US5] Implement time-overlap detection algorithm with configurable travel buffer (default 2 hours) in `AssignmentValidator.cs` to prevent conflicting mission assignments; add unit tests in `AssignmentValidatorTests.cs`
+- [X] T050 [US5] Implement missions controller endpoints in `RedCrossManager.Server/Controllers/MissionsController.cs`
+- [X] T051 [US5] Build missions UI (list, filters, detail, apply) in `RedCrossManager.Client/src/app/features/missions`
 
 ---
 
@@ -170,14 +170,14 @@ description: "Tasks for volunteer onboarding & management system"
 **Independent Test**: Upload ID -> Pending; coordinator approves; expiry alerts fire; expired document blocks mission apply.
 
 ### Tests (write first)
-- [ ] T052 [P] [US6] Integration test for document upload/verify/expiry alert in `RedCrossManager.Server/Tests/Integration/DocumentsTests.cs`
-- [ ] T053 [P] [US6] Frontend component test for document upload/status view in `RedCrossManager.Client/src/app/features/documents/documents.component.spec.ts`
+- [X] T052 [P] [US6] Integration test for document upload/verify/expiry alert in `RedCrossManager.Server/Tests/Integration/DocumentsTests.cs`
+- [X] T053 [P] [US6] Frontend component test for document upload/status view in `RedCrossManager.Client/src/app/features/documents/documents.component.spec.ts`
 
 ### Implementation
-- [ ] T054 [P] [US6] Implement `Document` entity/repo with Blob storage adapter and virus scan hook in `RedCrossManager.Server/Infrastructure`
-- [ ] T055 [US6] Implement document service (upload URL, verify, expiry alerts) in `RedCrossManager.Server/Services/Documents`
-- [ ] T056 [US6] Implement documents controller endpoints in `RedCrossManager.Server/Controllers/DocumentsController.cs`
-- [ ] T057 [US6] Build documents UI (upload, status, color codes) in `RedCrossManager.Client/src/app/features/documents`
+- [X] T054 [P] [US6] Implement `Document` entity/repo with Blob storage adapter and virus scan hook in `RedCrossManager.Server/Infrastructure`
+- [X] T055 [US6] Implement document service (upload URL, verify, expiry alerts) in `RedCrossManager.Server/Services/Documents`
+- [X] T056 [US6] Implement documents controller endpoints in `RedCrossManager.Server/Controllers/DocumentsController.cs`
+- [X] T057 [US6] Build documents UI (upload, status, color codes) in `RedCrossManager.Client/src/app/features/documents`
 
 ---
 

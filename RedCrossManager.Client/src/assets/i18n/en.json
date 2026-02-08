@@ -62,7 +62,10 @@
       "password": "Password"
     },
     "errors": {
-      "required": "This field is required",
+    "clear": "Clear",
+    "search": "Search",
+    "details": "Details",
+    "all": "All"
       "invalidEmail": "Please enter a valid email address",
       "invalidCredentials": "Invalid email or password",
       "serverError": "An error occurred. Please try again later."
@@ -426,6 +429,53 @@
     "failed": "failed",
     "bounced": "bounced",
     "success": "success rate"
+  },
+  "missions": {
+    "title": "Missions",
+    "subtitle": "Browse and apply to volunteer missions",
+    "filters": "Filter Missions",
+    "missionType": "Mission Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "availableSpotsOnly": "Available Spots Only",
+    "loadError": "Failed to load missions. Please try again later.",
+    "noMissions": "No missions found matching your filters.",
+    "apply": "Apply",
+    "slots": "slots",
+    "location": "Location",
+    "availableSlots": "Available slots",
+    "requiredCertifications": "Required certifications",
+    "applySuccess": "Application submitted",
+    "applyError": "Unable to apply for mission",
+    "authRequired": "Please login to apply",
+    "missingVolunteerId": "Unable to resolve volunteer ID"
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Upload and manage your verification documents",
+    "uploadTitle": "Upload a document",
+    "listTitle": "Your documents",
+    "category": "Category",
+    "file": "File",
+    "upload": "Upload",
+    "empty": "No documents uploaded yet.",
+    "loadError": "Failed to load documents.",
+    "selectFile": "Please select a category and file",
+    "uploadSuccess": "Document uploaded successfully",
+    "uploadError": "Failed to upload document",
+    "columns": {
+      "fileName": "File name",
+      "category": "Category",
+      "uploadedAt": "Uploaded at",
+      "status": "Status"
+    },
+    "categories": {
+      "Identification": "Identification",
+      "BackgroundCheck": "Background check",
+      "Certification": "Certification",
+      "MedicalForm": "Medical form",
+      "ConsentForm": "Consent form"
+    }
   },
   "trainings": {
     "title": "Training Catalog",

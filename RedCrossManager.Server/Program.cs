@@ -15,7 +15,9 @@ using RedCrossManager.Server.Services.Dashboard;
 using RedCrossManager.Server.Services.Trainings;
 using RedCrossManager.Server.Services.Certificates;
 using RedCrossManager.Server.Services.Communications;
+using RedCrossManager.Server.Services.Missions;
 using RedCrossManager.Server.Domain.Entities;
+using RedCrossManager.Server.Services.Documents;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Serilog;
@@ -65,6 +67,7 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
 builder.Services.AddScoped<IMissionRepository, MissionRepository>();
 builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -77,6 +80,9 @@ builder.Services.AddScoped<ICertificateService, CertificateService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<ICommunicationService, CommunicationService>();
+builder.Services.AddScoped<IMissionService, MissionService>();
+builder.Services.AddScoped<IAssignmentValidator, AssignmentValidator>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 // Communication providers (email/SMS)
 builder.Services.AddScoped<IEmailProvider, SendGridEmailProvider>();
@@ -150,6 +156,9 @@ app.MapHealthChecks("/health/ready");
 app.UseCors("AngularClient");
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Serve static files (e.g., uploaded documents)
+app.UseStaticFiles();
 
 // Map controllers
 app.MapControllers();

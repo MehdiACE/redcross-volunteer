@@ -47,6 +47,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'missions',
+    loadComponent: () => import('./features/missions/missions.component').then(m => m.MissionsComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'documents',
+    loadComponent: () => import('./features/documents/documents.component').then(m => m.DocumentsComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: 'benevole-ponctuel',
     loadComponent: () => import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(m => m.OneTimeVolunteerComponent)
   },

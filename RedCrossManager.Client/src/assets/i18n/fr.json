@@ -62,7 +62,10 @@
       "password": "Mot de passe"
     },
     "errors": {
-      "required": "Ce champ est obligatoire",
+    "clear": "Effacer",
+    "search": "Rechercher",
+    "details": "Détails",
+    "all": "Tous"
       "invalidEmail": "Veuillez entrer une adresse courriel valide",
       "invalidCredentials": "Courriel ou mot de passe incorrect",
       "serverError": "Une erreur s'est produite. Veuillez réessayer plus tard."
@@ -426,6 +429,53 @@
     "failed": "échoué",
     "bounced": "rejeté",
     "success": "taux de succès"
+  },
+  "missions": {
+    "title": "Missions",
+    "subtitle": "Parcourez et postulez aux missions bénévoles",
+    "filters": "Filtrer les missions",
+    "missionType": "Type de mission",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "availableSpotsOnly": "Seulement les places disponibles",
+    "loadError": "Échec du chargement des missions. Veuillez réessayer plus tard.",
+    "noMissions": "Aucune mission ne correspond à vos filtres.",
+    "apply": "Postuler",
+    "slots": "places",
+    "location": "Lieu",
+    "availableSlots": "Places disponibles",
+    "requiredCertifications": "Certifications requises",
+    "applySuccess": "Candidature envoyée",
+    "applyError": "Impossible de postuler à la mission",
+    "authRequired": "Veuillez vous connecter pour postuler",
+    "missingVolunteerId": "Impossible d'identifier le bénévole"
+  },
+  "documents": {
+    "title": "Documents",
+    "subtitle": "Téléversez et gérez vos documents de vérification",
+    "uploadTitle": "Téléverser un document",
+    "listTitle": "Vos documents",
+    "category": "Catégorie",
+    "file": "Fichier",
+    "upload": "Téléverser",
+    "empty": "Aucun document téléversé pour le moment.",
+    "loadError": "Échec du chargement des documents.",
+    "selectFile": "Veuillez sélectionner une catégorie et un fichier",
+    "uploadSuccess": "Document téléversé avec succès",
+    "uploadError": "Échec du téléversement du document",
+    "columns": {
+      "fileName": "Nom du fichier",
+      "category": "Catégorie",
+      "uploadedAt": "Téléversé le",
+      "status": "Statut"
+    },
+    "categories": {
+      "Identification": "Identification",
+      "BackgroundCheck": "Vérification d'antécédents",
+      "Certification": "Certification",
+      "MedicalForm": "Formulaire médical",
+      "ConsentForm": "Formulaire de consentement"
+    }
   },
   "trainings": {
     "title": "Catalogue de formations",

@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+coverage/
+.angular/
+
+# Logs
+*.log
+
+# Environment
+.env*
+
+# IDE/Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend artifacts
+bin/
+obj/
+
+# Generated
+*.generated.ts

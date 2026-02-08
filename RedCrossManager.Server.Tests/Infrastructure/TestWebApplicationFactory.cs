@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
+using RedCrossManager.Server.Services.Auth;
 
 namespace RedCrossManager.Server.Tests.Infrastructure;
 
@@ -79,6 +80,77 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             dbContext.Roles.AddRange(roles);
             await dbContext.SaveChangesAsync();
         }
+    }
+
+    public async Task InitializeDatabaseAsync()
+    {
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
+        await dbContext.Database.EnsureCreatedAsync();
+        await SeedDatabaseAsync();
+    }
+
+    public async Task ResetDatabaseAsync()
+    {
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
+        await dbContext.Database.EnsureDeletedAsync();
+    }
+
+    public async Task<Dictionary<string, string>> SeedTestUsersAsync()
+    {
+        await SeedDatabaseAsync();
+
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
+        var tokenService = scope.ServiceProvider.GetRequiredService<IJwtTokenService>();
+
+        var adminUser = await CreateTestUserAsync("admin@test.com", "Password123!", "Admin");
+        var coordinatorUser = await CreateTestUserAsync("coordinator@test.com", "Password123!", "Coordinator");
+        var volunteerUser = await CreateTestUserAsync("volunteer@test.com", "Password123!", "Volunteer");
+
+        var volunteer = await dbContext.Volunteers.FirstOrDefaultAsync(v => v.UserId == volunteerUser.Id);
+        if (volunteer == null)
+        {
+            volunteer = new Volunteer
+            {
+                Id = volunteerUser.Id,
+                FirstName = "Test",
+                LastName = "Volunteer",
+                Email = volunteerUser.Email,
+                Phone = "+15145550000",
+                DateOfBirth = DateTime.UtcNow.AddYears(-25),
+                AddressStreet = "123 Test St",
+                AddressCity = "Montreal",
+                AddressStateProvince = "QC",
+                AddressPostalCode = "H2X 1Y4",
+                AddressCountry = "Canada",
+                EmergencyContactName = "Test Contact",
+                EmergencyContactPhone = "+15145550001",
+                AreasOfInterest = "[]",
+                Availability = "{}",
+                LanguagePreference = "en",
+                Status = VolunteerStatus.Active,
+                UserId = volunteerUser.Id
+            };
+
+            dbContext.Volunteers.Add(volunteer);
+            await dbContext.SaveChangesAsync();
+        }
+
+        var adminToken = tokenService.CreateToken(adminUser, new[] { "Admin" }).Token;
+        var coordinatorToken = tokenService.CreateToken(coordinatorUser, new[] { "Coordinator" }).Token;
+        var volunteerToken = tokenService.CreateToken(volunteerUser, new[] { "Volunteer" }).Token;
+
+        return new Dictionary<string, string>
+        {
+            ["admin"] = adminToken,
+            ["coordinator"] = coordinatorToken,
+            ["volunteer"] = volunteerToken,
+            ["adminId"] = adminUser.Id.ToString(),
+            ["coordinatorId"] = coordinatorUser.Id.ToString(),
+            ["volunteerId"] = volunteer.Id.ToString()
+        };
     }
 
     /// <summary>
