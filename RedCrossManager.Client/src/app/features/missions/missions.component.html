@@ -83,10 +83,13 @@
     <div *ngIf="!isLoading && !loadError" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div *ngFor="let mission of filteredMissions" class="mission-card rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
         <div class="flex items-start justify-between">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
-            <mat-icon>medical_services</mat-icon>
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg" [ngClass]="getMissionIconClass(mission)">
+            <mat-icon>{{ getMissionIcon(mission) }}</mat-icon>
           </div>
-          <span *ngIf="!hasAvailableSlots(mission)" class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+          <span *ngIf="isUrgent(mission)" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+            {{ 'missions.urgent' | translate }}
+          </span>
+          <span *ngIf="!isUrgent(mission) && !hasAvailableSlots(mission)" class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
             {{ 'missions.full' | translate }}
           </span>
         </div>
@@ -95,13 +98,12 @@
           <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">
             {{ mission.title }}
           </h3>
-          <p class="text-xs text-gray-500 mt-1">{{ mission.missionType }}</p>
         </div>
 
-        <div class="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-400">
+        <div class="mt-3 space-y-2 text-xs text-gray-600 dark:text-gray-400">
           <div class="flex items-center gap-2">
             <mat-icon class="text-base">calendar_today</mat-icon>
-            <span>{{ mission.startAt | date: 'EEE. dd MMM - HH:mm' }}</span>
+            <span>{{ getMissionDateRange(mission) }}</span>
           </div>
           <div class="flex items-center gap-2">
             <mat-icon class="text-base">location_on</mat-icon>
@@ -115,7 +117,7 @@
             <span>{{ mission.availableSlots }} / {{ mission.volunteersNeeded }}</span>
           </div>
           <div class="mt-2 h-1.5 w-full rounded-full bg-gray-100">
-            <div class="h-1.5 rounded-full bg-red-500" [style.width.%]="getAvailabilityPercent(mission)"></div>
+            <div class="h-1.5 rounded-full" [ngClass]="hasAvailableSlots(mission) ? 'bg-red-500' : 'bg-gray-300'" [style.width.%]="getAvailabilityPercent(mission)"></div>
           </div>
         </div>
 
@@ -133,6 +135,22 @@
     <div *ngIf="!isLoading && !loadError && filteredMissions.length === 0" class="text-center py-12">
       <mat-icon class="text-6xl text-gray-300 mb-4">search_off</mat-icon>
       <p class="text-gray-500">{{ 'missions.noMissions' | translate }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !loadError && filteredMissions.length > 0" class="flex justify-center">
+      <div class="inline-flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <button class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" aria-label="Previous">
+          <mat-icon class="text-base">chevron_left</mat-icon>
+        </button>
+        <button class="h-8 w-8 rounded-lg bg-red-600 text-white text-sm font-semibold" aria-current="page">1</button>
+        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">2</button>
+        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">3</button>
+        <span class="px-1 text-gray-400">...</span>
+        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">12</button>
+        <button class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" aria-label="Next">
+          <mat-icon class="text-base">chevron_right</mat-icon>
+        </button>
+      </div>
     </div>
 
     <div *ngIf="showDetailsModal && selectedMission" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
