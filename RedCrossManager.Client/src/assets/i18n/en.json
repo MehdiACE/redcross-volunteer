@@ -410,6 +410,23 @@
       }
     }
   },
+  "commHistory": {
+    "title": "Communication History",
+    "refresh": "Refresh",
+    "empty": "No communications sent yet",
+    "columns": {
+      "sentAt": "Sent At",
+      "segment": "Segment",
+      "subject": "Subject",
+      "channels": "Channels",
+      "delivery": "Delivery Stats"
+    },
+    "sent": "sent",
+    "queued": "queued",
+    "failed": "failed",
+    "bounced": "bounced",
+    "success": "success rate"
+  },
   "trainings": {
     "title": "Training Catalog",
     "subtitle": "Browse and enroll in available trainings for volunteers",

@@ -132,15 +132,15 @@ description: "Tasks for volunteer onboarding & management system"
 **Independent Test**: Send message to "B1J - Missing Consent" segment -> email delivered, SMS queued where opted; history visible to volunteer/guardian.
 
 ### Tests (write first)
-- [ ] T039 [P] [US7] Integration test for communications send + status tracking in `RedCrossManager.Server/Tests/Integration/CommunicationsTests.cs`
+- [X] T039 [P] [US7] Integration test for communications send + status tracking in `RedCrossManager.Server/Tests/Integration/CommunicationsTests.cs`
 - [X] T040 [P] [US7] Frontend component test for comms composer and status table in `RedCrossManager.Client/src/app/features/b1j-comms/b1j-comms.component.spec.ts`
 
 ### Implementation
-- [ ] T041 [P] [US7] Implement `CommunicationMessage` + `CommunicationRecipient` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`
-- [ ] T042 [US7] Implement communications service with SendGrid (email) and ACS SMS provider abstraction in `RedCrossManager.Server/Services/Communications`
-- [ ] T043 [US7] Implement communications controller endpoints in `RedCrossManager.Server/Controllers/CommunicationsController.cs`
-- [ ] T044 [US7] Build B1J communications UI (composer, recipient preview, delivery status) in `RedCrossManager.Client/src/app/features/b1j-comms`
-- [ ] T045 [US7] Add message history view for volunteers/guardians in `RedCrossManager.Client/src/app/features/b1j-comms/history`
+- [X] T041 [P] [US7] Implement `CommunicationMessage` + `CommunicationRecipient` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`
+- [X] T042 [US7] Implement communications service with SendGrid (email) and ACS SMS provider abstraction in `RedCrossManager.Server/Services/Communications`
+- [X] T043 [US7] Implement communications controller endpoints in `RedCrossManager.Server/Controllers/CommunicationsController.cs`
+- [X] T044 [US7] Build B1J communications UI (composer, recipient preview, delivery status) in `RedCrossManager.Client/src/app/features/volunteer-communications`
+- [X] T045 [US7] Add message history view for volunteers/guardians in `RedCrossManager.Client/src/app/features/volunteer-communications/history`
 
 ---
 
@@ -155,7 +155,7 @@ description: "Tasks for volunteer onboarding & management system"
 - [ ] T047 [P] [US5] Frontend component test for mission list/detail/apply in `RedCrossManager.Client/src/app/features/missions/missions.component.spec.ts`
 
 ### Implementation
-- [ ] T048 [P] [US5] Implement `Mission` entity/repo in `RedCrossManager.Server/Domain/Entities` and `Repositories`; add `Mission.TravelBufferMinutes` field (int, default 120) for volunteer availability validation
+- [X] T048 [P] [US5] Implement `Mission` entity/repo in `RedCrossManager.Server/Domain/Entities` and `Repositories`; add `Mission.TravelBufferMinutes` field (int, default 120) for volunteer availability validation
 - [ ] T049 [US5] Implement mission service (qualification filter, notify, assign, reminders, at-risk logic) in `RedCrossManager.Server/Services/Missions`
 - [ ] T049a [US5] Implement time-overlap detection algorithm with configurable travel buffer (default 2 hours) in `AssignmentValidator.cs` to prevent conflicting mission assignments; add unit tests in `AssignmentValidatorTests.cs`
 - [ ] T050 [US5] Implement missions controller endpoints in `RedCrossManager.Server/Controllers/MissionsController.cs`

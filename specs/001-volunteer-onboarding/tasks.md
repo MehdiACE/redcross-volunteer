@@ -157,8 +157,8 @@ description: "Tasks for volunteer onboarding & management system"
 - [ ] T041 [P] [US7] Implement `CommunicationMessage` + `CommunicationRecipient` entities/repos in `RedCrossManager.Server/Domain/Entities` and `Repositories`
 - [ ] T042 [US7] Implement communications service with SendGrid (email) and ACS SMS provider abstraction in `RedCrossManager.Server/Services/Communications`
 - [ ] T043 [US7] Implement communications controller endpoints in `RedCrossManager.Server/Controllers/CommunicationsController.cs`
-- [ ] T044 [US7] Build B1J communications UI (composer, recipient preview, delivery status) in `RedCrossManager.Client/src/app/features/b1j-comms`
-- [ ] T045 [US7] Add message history view for volunteers/guardians in `RedCrossManager.Client/src/app/features/b1j-comms/history`
+- [ ] T044 [US7] Build B1J communications UI (composer, recipient preview, delivery status) in `RedCrossManager.Client/src/app/features/volunteer-communications`
+- [ ] T045 [US7] Add message history view for volunteers/guardians in `RedCrossManager.Client/src/app/features/volunteer-communications/history`
 
 ---
 

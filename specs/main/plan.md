@@ -79,7 +79,7 @@ RedCrossManager.Client/
 │   │   │   ├── trainings/
 │   │   │   ├── missions/
 │   │   │   ├── documents/
-│   │   │   └── b1j-comms/
+│   │   │   └── volunteer-communications/
 │   │   ├── shared/ (components, directives, pipes, validators)
 │   │   └── i18n/ (fr.json, en.json)
 │   ├── assets/

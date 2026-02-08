@@ -63,6 +63,8 @@ builder.Services.AddScoped<ITrainingEnrollmentRepository, TrainingEnrollmentRepo
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<ICommunicationRepository, CommunicationRepository>();
+builder.Services.AddScoped<IMissionRepository, MissionRepository>();
+builder.Services.AddScoped<IAssignmentRepository, AssignmentRepository>();
 
 // Services
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -410,6 +410,23 @@
       }
     }
   },
+  "commHistory": {
+    "title": "Historique des communications",
+    "refresh": "Actualiser",
+    "empty": "Aucune communication envoyée",
+    "columns": {
+      "sentAt": "Envoyé le",
+      "segment": "Segment",
+      "subject": "Objet",
+      "channels": "Canaux",
+      "delivery": "Statistiques de livraison"
+    },
+    "sent": "envoyé",
+    "queued": "en file",
+    "failed": "échoué",
+    "bounced": "rejeté",
+    "success": "taux de succès"
+  },
   "trainings": {
     "title": "Catalogue de formations",
     "subtitle": "Parcourez et inscrivez-vous aux formations disponibles pour les bénévoles",
