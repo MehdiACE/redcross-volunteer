@@ -1,59 +1,74 @@
-<div class="min-h-screen bg-app-bg dark:bg-app-bg-dark">
-  <div class="max-w-7xl mx-auto p-6">
-    <div class="mb-8">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+<div class="min-h-screen bg-[#f7f4f1] dark:bg-app-bg-dark">
+  <div class="max-w-7xl mx-auto p-6 space-y-6">
+    <div class="space-y-2">
+      <h1 class="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white">
         {{ 'missions.title' | translate }}
       </h1>
-      <p class="text-gray-600 dark:text-gray-400">
+      <p class="text-sm text-gray-600 dark:text-gray-400">
         {{ 'missions.subtitle' | translate }}
       </p>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 mb-6 shadow-sm">
-      <h2 class="text-lg font-semibold mb-4">{{ 'missions.filters' | translate }}</h2>
+    <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+      <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
+        <mat-icon class="text-gray-500">tune</mat-icon>
+        {{ 'missions.filters' | translate }}
+      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <mat-form-field class="w-full">
-          <mat-label>{{ 'missions.missionType' | translate }}</mat-label>
-          <mat-select [(ngModel)]="typeFilter">
-            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-            <mat-option *ngFor="let type of getMissionTypes()" [value]="type">
-              {{ type }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field class="w-full">
-          <mat-label>{{ 'missions.startDate' | translate }}</mat-label>
-          <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDateFilter">
-          <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-          <mat-datepicker #startPicker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field class="w-full">
-          <mat-label>{{ 'missions.endDate' | translate }}</mat-label>
-          <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDateFilter">
-          <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
-          <mat-datepicker #endPicker></mat-datepicker>
-        </mat-form-field>
-
-        <div class="flex items-end">
-          <label class="flex items-center cursor-pointer">
-            <input type="checkbox" [(ngModel)]="availableSpotsOnly" class="mr-2">
-            <span>{{ 'missions.availableSpotsOnly' | translate }}</span>
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <label class="text-[11px] font-semibold uppercase text-gray-400">
+            {{ 'missions.missionType' | translate }}
           </label>
+          <mat-form-field class="w-full mt-2" appearance="outline">
+            <mat-select [(ngModel)]="typeFilter">
+              <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+              <mat-option *ngFor="let type of getMissionTypes()" [value]="type">
+                {{ type }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold uppercase text-gray-400">
+            {{ 'missions.startDate' | translate }}
+          </label>
+          <mat-form-field class="w-full mt-2" appearance="outline">
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDateFilter" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <label class="text-[11px] font-semibold uppercase text-gray-400">
+            {{ 'missions.endDate' | translate }}
+          </label>
+          <mat-form-field class="w-full mt-2" appearance="outline">
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDateFilter" placeholder="mm/dd/yyyy">
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
         </div>
       </div>
 
-      <div class="flex gap-3 mt-6">
-        <button mat-raised-button color="primary" (click)="applyFilters()">
-          <mat-icon>search</mat-icon>
-          {{ 'common.search' | translate }}
-        </button>
-        <button mat-stroked-button (click)="clearFilters()">
-          <mat-icon>clear</mat-icon>
-          {{ 'common.clear' | translate }}
-        </button>
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
+        <label class="flex items-center gap-2 text-sm text-gray-600">
+          <input type="checkbox" [(ngModel)]="availableSpotsOnly" class="h-4 w-4">
+          <span>{{ 'missions.availableSpotsOnly' | translate }}</span>
+        </label>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button mat-raised-button color="primary" (click)="applyFilters()" class="rounded-full px-6">
+            <mat-icon>search</mat-icon>
+            {{ 'common.search' | translate }}
+          </button>
+          <button mat-stroked-button (click)="clearFilters()" class="rounded-full px-6">
+            <mat-icon>close</mat-icon>
+            {{ 'common.clear' | translate }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -65,51 +80,54 @@
       {{ 'missions.loadError' | translate }}
     </div>
 
-    <div *ngIf="!isLoading && !loadError" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <mat-card *ngFor="let mission of filteredMissions" class="mission-card">
-        <mat-card-header>
-          <mat-card-title>{{ mission.title }}</mat-card-title>
-          <mat-card-subtitle>{{ mission.missionType }}</mat-card-subtitle>
-        </mat-card-header>
-
-        <mat-card-content class="space-y-4">
-          <p class="text-sm text-gray-600">{{ mission.description }}</p>
-
-          <div class="space-y-2 text-sm">
-            <div class="flex items-center gap-2">
-              <mat-icon class="text-base">calendar_today</mat-icon>
-              <span>{{ mission.startAt | date: 'short' }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <mat-icon class="text-base">location_on</mat-icon>
-              <span>{{ mission.location }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <mat-icon class="text-base">group</mat-icon>
-              <span>{{ mission.availableSlots }} / {{ mission.volunteersNeeded }} {{ 'missions.slots' | translate }}</span>
-            </div>
+    <div *ngIf="!isLoading && !loadError" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div *ngFor="let mission of filteredMissions" class="mission-card rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <div class="flex items-start justify-between">
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-600">
+            <mat-icon>medical_services</mat-icon>
           </div>
+          <span *ngIf="!hasAvailableSlots(mission)" class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+            {{ 'missions.full' | translate }}
+          </span>
+        </div>
 
-          <div *ngIf="mission.requiredCertifications?.length" class="flex flex-wrap gap-2">
-            <mat-chip *ngFor="let cert of mission.requiredCertifications" selected color="accent">
-              {{ cert }}
-            </mat-chip>
+        <div class="mt-4">
+          <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">
+            {{ mission.title }}
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">{{ mission.missionType }}</p>
+        </div>
+
+        <div class="mt-4 space-y-2 text-xs text-gray-600 dark:text-gray-400">
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-base">calendar_today</mat-icon>
+            <span>{{ mission.startAt | date: 'EEE. dd MMM - HH:mm' }}</span>
           </div>
-        </mat-card-content>
+          <div class="flex items-center gap-2">
+            <mat-icon class="text-base">location_on</mat-icon>
+            <span>{{ mission.location }}</span>
+          </div>
+        </div>
 
-        <mat-card-actions class="flex gap-2">
-          <button mat-stroked-button (click)="showMissionDetails(mission)">
-            {{ 'common.details' | translate }}
-          </button>
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="applyToMission(mission)"
-            [disabled]="!hasAvailableSlots(mission)">
-            {{ 'missions.apply' | translate }}
-          </button>
-        </mat-card-actions>
-      </mat-card>
+        <div class="mt-4">
+          <div class="flex items-center justify-between text-[11px] text-gray-500">
+            <span>{{ 'missions.remaining' | translate }}</span>
+            <span>{{ mission.availableSlots }} / {{ mission.volunteersNeeded }}</span>
+          </div>
+          <div class="mt-2 h-1.5 w-full rounded-full bg-gray-100">
+            <div class="h-1.5 rounded-full bg-red-500" [style.width.%]="getAvailabilityPercent(mission)"></div>
+          </div>
+        </div>
+
+        <button
+          mat-raised-button
+          color="primary"
+          class="mt-4 w-full rounded-lg"
+          (click)="applyToMission(mission)"
+          [disabled]="!hasAvailableSlots(mission)">
+          {{ hasAvailableSlots(mission) ? ('missions.apply' | translate) : ('missions.full' | translate) }}
+        </button>
+      </div>
     </div>
 
     <div *ngIf="!isLoading && !loadError && filteredMissions.length === 0" class="text-center py-12">

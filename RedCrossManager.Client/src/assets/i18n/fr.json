@@ -442,6 +442,8 @@
     "loadError": "Échec du chargement des missions. Veuillez réessayer plus tard.",
     "noMissions": "Aucune mission ne correspond à vos filtres.",
     "apply": "Postuler",
+    "remaining": "Places restantes",
+    "full": "Complet",
     "slots": "places",
     "location": "Lieu",
     "availableSlots": "Places disponibles",

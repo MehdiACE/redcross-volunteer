@@ -155,6 +155,15 @@ export class MissionsComponent implements OnInit {
     return mission.availableSlots > 0;
   }
 
+  getAvailabilityPercent(mission: MissionDto): number {
+    if (!mission.volunteersNeeded || mission.volunteersNeeded <= 0) {
+      return 0;
+    }
+
+    const ratio = (mission.availableSlots / mission.volunteersNeeded) * 100;
+    return Math.max(0, Math.min(100, Math.round(ratio)));
+  }
+
   private toDate(value: Date | string): Date {
     return value instanceof Date ? value : new Date(value);
   }

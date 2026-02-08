@@ -442,6 +442,8 @@
     "loadError": "Failed to load missions. Please try again later.",
     "noMissions": "No missions found matching your filters.",
     "apply": "Apply",
+    "remaining": "Remaining spots",
+    "full": "Full",
     "slots": "slots",
     "location": "Location",
     "availableSlots": "Available slots",
