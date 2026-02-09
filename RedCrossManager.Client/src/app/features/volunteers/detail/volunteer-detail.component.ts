@@ -25,7 +25,7 @@ interface VolunteerMessageItem {
   selector: 'app-volunteer-detail',
   standalone: true,
   imports: [CommonModule, RouterLink, TranslateModule, MatSnackBarModule],
-  templateUrl: './volunteer-detail.component.html'
+  templateUrl: './volunteer-detail.component.html',
 })
 export class VolunteerDetailComponent implements OnInit, OnDestroy {
   volunteer: VolunteerDto | null = null;
@@ -42,37 +42,35 @@ export class VolunteerDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private volunteerService: VolunteerService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const id = params.get('id');
-        if (!id) return;
-        this.volunteerId = id;
-        this.loadVolunteer(id);
-      });
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      const id = params.get('id');
+      if (!id) return;
+      this.volunteerId = id;
+      this.loadVolunteer(id);
+    });
 
     this.documents = [
-      { name: 'CNI_Recto_Verso.pdf', type: 'Pièce d\'identité', size: '2.1 MB' },
-      { name: 'Extrait_Casier_Judiciaire.pdf', type: 'Document légal', size: '1.3 MB' }
+      { name: 'CNI_Recto_Verso.pdf', type: "Pièce d'identité", size: '2.1 MB' },
+      { name: 'Extrait_Casier_Judiciaire.pdf', type: 'Document légal', size: '1.3 MB' },
     ];
 
     this.messages = [
       {
         from: 'Volontaire',
-        content: 'Bonjour, j\'ai envoyé mes documents. Pouvez-vous confirmer la réception ?',
+        content: "Bonjour, j'ai envoyé mes documents. Pouvez-vous confirmer la réception ?",
         timestamp: '11:42',
-        isAdmin: false
+        isAdmin: false,
       },
       {
         from: 'Admin',
-        content: 'Merci Jane, dossier complet. Nous revenons vers vous d\'ici 48h.',
+        content: "Merci Jane, dossier complet. Nous revenons vers vous d'ici 48h.",
         timestamp: '14:05',
-        isAdmin: true
-      }
+        isAdmin: true,
+      },
     ];
   }
 
@@ -89,37 +87,43 @@ export class VolunteerDetailComponent implements OnInit, OnDestroy {
   validateProfile(): void {
     if (!this.volunteerId || this.isUpdatingStatus) return;
     this.isUpdatingStatus = true;
-    this.volunteerService.updateStatus(this.volunteerId, 'Active')
+    this.volunteerService
+      .updateStatus(this.volunteerId, 'Active')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.isUpdatingStatus = false;
-          this.snackBar.open(this.translate.instant('volunteerDetail.validateSuccess'), this.translate.instant('common.close'), {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+          this.snackBar.open(
+            this.translate.instant('volunteerDetail.validateSuccess'),
+            this.translate.instant('common.close'),
+            {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+            },
+          );
           this.loadVolunteer(this.volunteerId!);
         },
         error: () => {
           this.isUpdatingStatus = false;
-        }
+        },
       });
   }
 
   private loadVolunteer(id: string): void {
     this.isLoading = true;
     this.loadError = false;
-    this.volunteerService.getById(id)
+    this.volunteerService
+      .getById(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: volunteer => {
+        next: (volunteer) => {
           this.volunteer = volunteer;
           this.isLoading = false;
         },
         error: () => {
           this.loadError = true;
           this.isLoading = false;
-        }
+        },
       });
   }
 }

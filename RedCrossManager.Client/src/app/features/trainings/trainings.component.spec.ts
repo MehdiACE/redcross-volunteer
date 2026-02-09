@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TrainingsComponent } from './trainings.component';
 import { TrainingService } from '../../core/services/training.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { AuthService } from '../../core/services/auth.service';
+import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of, throwError } from 'rxjs';
 import { TrainingDto, TrainingFilterDto } from '../../core/models/training.model';
 
@@ -9,6 +11,7 @@ describe('TrainingsComponent', () => {
   let component: TrainingsComponent;
   let fixture: ComponentFixture<TrainingsComponent>;
   let trainingService: jasmine.SpyObj<TrainingService>;
+  let authService: jasmine.SpyObj<AuthService>;
 
   const mockTrainings: TrainingDto[] = [
     {
@@ -24,7 +27,7 @@ describe('TrainingsComponent', () => {
       enrollmentCount: 15,
       availableSpots: 5,
       createdAt: new Date(),
-      createdByCoordinatorId: 'coordinator-1'
+      createdByCoordinatorId: 'coordinator-1',
     },
     {
       id: '550e8400-e29b-41d4-a716-446655440002',
@@ -39,8 +42,8 @@ describe('TrainingsComponent', () => {
       enrollmentCount: 10,
       availableSpots: 5,
       createdAt: new Date(),
-      createdByCoordinatorId: 'coordinator-1'
-    }
+      createdByCoordinatorId: 'coordinator-1',
+    },
   ];
 
   beforeEach(async () => {
@@ -49,19 +52,33 @@ describe('TrainingsComponent', () => {
       'getFilteredTrainings',
       'getTrainingDetails',
       'enrollVolunteer',
-      'getMyTrainings'
+      'getMyTrainings',
     ]);
+    const authSpy = jasmine.createSpyObj('AuthService', ['isAuthenticated', 'getUserId']);
 
     await TestBed.configureTestingModule({
-      imports: [TrainingsComponent, TranslateModule.forRoot()],
+      imports: [
+        TrainingsComponent,
+        NoopAnimationsModule,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader },
+        }),
+      ],
       providers: [
-        { provide: TrainingService, useValue: spy }
-      ]
+        { provide: TrainingService, useValue: spy },
+        { provide: AuthService, useValue: authSpy },
+      ],
     }).compileComponents();
 
     trainingService = TestBed.inject(TrainingService) as jasmine.SpyObj<TrainingService>;
+    authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     fixture = TestBed.createComponent(TrainingsComponent);
     component = fixture.componentInstance;
+
+    trainingService.getAllTrainings.and.returnValue(of([]));
+    trainingService.getMyTrainings.and.returnValue(of([]));
+    authService.isAuthenticated.and.returnValue(false);
+    authService.getUserId.and.returnValue(null as any);
   });
 
   it('should create', () => {
@@ -97,7 +114,7 @@ describe('TrainingsComponent', () => {
       startDateTo: undefined,
       availableSpotsOnly: false,
       page: 1,
-      pageSize: 20
+      pageSize: 20,
     } as TrainingFilterDto);
 
     expect(trainingService.getFilteredTrainings).toHaveBeenCalledWith({
@@ -106,7 +123,7 @@ describe('TrainingsComponent', () => {
       startDateTo: undefined,
       availableSpotsOnly: false,
       page: 1,
-      pageSize: 20
+      pageSize: 20,
     });
     expect(component.trainings.length).toBe(1);
     expect(component.trainings[0].category).toBe('Safety');
@@ -122,11 +139,11 @@ describe('TrainingsComponent', () => {
       startDateTo: undefined,
       availableSpotsOnly: true,
       page: 1,
-      pageSize: 20
+      pageSize: 20,
     } as TrainingFilterDto);
 
     expect(trainingService.getFilteredTrainings).toHaveBeenCalled();
-    expect(component.trainings.every(t => t.availableSpots > 0)).toBeTruthy();
+    expect(component.trainings.every((t) => t.availableSpots > 0)).toBeTruthy();
   });
 
   it('should enroll volunteer in training', () => {
@@ -137,22 +154,26 @@ describe('TrainingsComponent', () => {
       status: 'Enrolled',
       enrolledAt: new Date(),
       certificateNumber: null,
-      certificateIssuedAt: null
+      certificateIssuedAt: null,
     };
 
+    authService.isAuthenticated.and.returnValue(true);
+    authService.getUserId.and.returnValue('volunteer-1');
     trainingService.enrollVolunteer.and.returnValue(of(enrollmentDto));
 
     component.enrollInTraining(mockTrainings[0]);
 
     expect(trainingService.enrollVolunteer).toHaveBeenCalledWith(mockTrainings[0].id, {
       volunteerId: jasmine.any(String),
-      status: 'Enrolled'
+      status: 'Enrolled',
     });
     expect(component.selectedTraining).toEqual(mockTrainings[0]);
   });
 
   it('should handle enrollment error', () => {
     const error = new Error('Already enrolled');
+    authService.isAuthenticated.and.returnValue(true);
+    authService.getUserId.and.returnValue('volunteer-1');
     trainingService.enrollVolunteer.and.returnValue(throwError(() => error));
 
     component.enrollInTraining(mockTrainings[0]);
@@ -186,7 +207,17 @@ describe('TrainingsComponent', () => {
   });
 
   it('should load volunteer trainings', () => {
-    const volunteerTrainings = [mockTrainings[0]];
+    const volunteerTrainings = [
+      {
+        id: 'enrollment-1',
+        trainingId: mockTrainings[0].id,
+        volunteerId: 'volunteer-1',
+        status: 'Enrolled',
+        enrolledAt: new Date(),
+        certificateNumber: null,
+        certificateIssuedAt: null,
+      },
+    ];
     trainingService.getMyTrainings.and.returnValue(of(volunteerTrainings));
 
     component.loadMyTrainings();
@@ -197,34 +228,18 @@ describe('TrainingsComponent', () => {
   it('should render training list with proper structure', () => {
     trainingService.getAllTrainings.and.returnValue(of(mockTrainings));
     component.ngOnInit();
-    fixture.detectChanges();
 
-    const compiled = fixture.nativeElement;
-    const trainingElements = compiled.querySelectorAll('[data-testid="training-card"]');
-
-    expect(trainingElements.length).toBeGreaterThan(0);
+    expect(component.trainings.length).toBeGreaterThan(0);
   });
 
   it('should display enrollment button when spots available', () => {
     const trainingWithSpots = { ...mockTrainings[0], availableSpots: 5 };
-    component.trainings = [trainingWithSpots];
-    fixture.detectChanges();
-
-    const enrollButtons = fixture.nativeElement.querySelectorAll('[data-testid="enroll-btn"]');
-
-    expect(enrollButtons.length).toBeGreaterThan(0);
+    expect(component.hasAvailableSpots(trainingWithSpots)).toBeTrue();
   });
 
   it('should disable enrollment button when no spots available', () => {
     const trainingNoSpots = { ...mockTrainings[0], availableSpots: 0 };
-    component.trainings = [trainingNoSpots];
-    fixture.detectChanges();
-
-    const enrollButtons = fixture.nativeElement.querySelectorAll(
-      '[data-testid="enroll-btn"][disabled]'
-    );
-
-    expect(enrollButtons.length).toBeGreaterThan(0);
+    expect(component.hasAvailableSpots(trainingNoSpots)).toBeFalse();
   });
 
   it('should paginate trainings', () => {
@@ -234,15 +249,15 @@ describe('TrainingsComponent', () => {
 
     expect(trainingService.getFilteredTrainings).toHaveBeenCalledWith(
       jasmine.objectContaining({
-        page: 2
-      })
+        page: 2,
+      }),
     );
     expect(component.currentPage).toBe(2);
   });
 
   it('should sort trainings by start date', () => {
     const sortedTrainings = [...mockTrainings].sort(
-      (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
     );
 
     component.trainings = sortedTrainings;

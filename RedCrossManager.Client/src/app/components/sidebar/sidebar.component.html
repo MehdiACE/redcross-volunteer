@@ -1,18 +1,10 @@
 <div class="sidebar-backdrop" *ngIf="isOpen" (click)="onBackdropClick()"></div>
 
-<aside 
-  class="sidebar" 
-  [class.open]="isOpen"
-  role="navigation"
-  aria-label="Main navigation">
-  
+<aside class="sidebar" [class.open]="isOpen" role="navigation" aria-label="Main navigation">
   <!-- Header -->
   <div class="sidebar-header">
     <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="logo" />
-    <button 
-      class="close-btn"
-      (click)="closeSidebar()"
-      aria-label="Close sidebar">
+    <button class="close-btn" (click)="closeSidebar()" aria-label="Close sidebar">
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -32,10 +24,7 @@
   <nav class="menu">
     <ul class="menu-list">
       <li *ngFor="let item of menuItems" class="menu-item">
-        <button 
-          class="menu-link"
-          (click)="navigateTo(item.route)"
-          [attr.aria-label]="item.label">
+        <button class="menu-link" (click)="navigateTo(item.route)" [attr.aria-label]="item.label">
           <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
           <span class="menu-label">{{ item.translationKey | translate }}</span>
           <span *ngIf="item.badge && item.badge > 0" class="badge">

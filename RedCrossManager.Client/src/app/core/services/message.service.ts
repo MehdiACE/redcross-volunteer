@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { MessageItem, CreateMessageDto, SendToVolunteerDto } from '../models/message.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
   private apiUrl = `${environment.apiUrl}/messages`;

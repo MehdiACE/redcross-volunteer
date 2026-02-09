@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
+using RedCrossManager.Server.Tests.Infrastructure;
 
 namespace RedCrossManager.Server.Tests.Integration;
 
@@ -37,17 +38,8 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "John",
-            LastName = "Doe",
-            Email = "john@example.com",
-            Phone = "+15145551234",
-            Status = VolunteerStatus.Pending,
-            IsMinor = false,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: false, email: "john@example.com");
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -56,10 +48,9 @@ public class OnboardingTests : IAsyncLifetime
         {
             Id = Guid.NewGuid(),
             VolunteerId = volunteerId,
-            StepNumber = 1,
-            Title = "Profile Completion",
-            IsCompleted = true,
-            CompletedAt = DateTime.UtcNow
+            StepType = StepType.DocumentVerification,
+            Status = StepStatus.Approved,
+            ApprovedAt = DateTime.UtcNow
         };
 
         // Act
@@ -68,12 +59,12 @@ public class OnboardingTests : IAsyncLifetime
 
         // Assert
         var savedStep = await _context.OnboardingSteps
-            .FirstOrDefaultAsync(s => s.VolunteerId == volunteerId && s.StepNumber == 1);
+            .FirstOrDefaultAsync(s => s.VolunteerId == volunteerId && s.StepType == StepType.DocumentVerification);
 
         Assert.NotNull(savedStep);
         Assert.Equal(volunteerId, savedStep.VolunteerId);
-        Assert.True(savedStep.IsCompleted);
-        Assert.Equal(1, savedStep.StepNumber);
+        Assert.Equal(StepStatus.Approved, savedStep.Status);
+        Assert.Equal(StepType.DocumentVerification, savedStep.StepType);
     }
 
     [Fact]
@@ -81,17 +72,7 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Jane",
-            LastName = "Smith",
-            Email = "jane@example.com",
-            Phone = "+15145552345",
-            Status = VolunteerStatus.Pending,
-            IsMinor = false,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: false, email: "jane@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -103,37 +84,33 @@ public class OnboardingTests : IAsyncLifetime
             {
                 Id = Guid.NewGuid(),
                 VolunteerId = volunteerId,
-                StepNumber = 1,
-                Title = "Profile Completion",
-                IsCompleted = true,
-                CompletedAt = DateTime.UtcNow.AddDays(-3)
+                StepType = StepType.DocumentVerification,
+                Status = StepStatus.Approved,
+                ApprovedAt = DateTime.UtcNow.AddDays(-3)
             },
             new OnboardingStep
             {
                 Id = Guid.NewGuid(),
                 VolunteerId = volunteerId,
-                StepNumber = 2,
-                Title = "Orientation",
-                IsCompleted = true,
-                CompletedAt = DateTime.UtcNow.AddDays(-2)
+                StepType = StepType.OrientationTraining,
+                Status = StepStatus.Approved,
+                ApprovedAt = DateTime.UtcNow.AddDays(-2)
             },
             new OnboardingStep
             {
                 Id = Guid.NewGuid(),
                 VolunteerId = volunteerId,
-                StepNumber = 3,
-                Title = "Training Modules",
-                IsCompleted = true,
-                CompletedAt = DateTime.UtcNow.AddDays(-1)
+                StepType = StepType.Certification,
+                Status = StepStatus.Approved,
+                ApprovedAt = DateTime.UtcNow.AddDays(-1)
             },
             new OnboardingStep
             {
                 Id = Guid.NewGuid(),
                 VolunteerId = volunteerId,
-                StepNumber = 4,
-                Title = "Final Review",
-                IsCompleted = false,
-                CompletedAt = null
+                StepType = StepType.FinalReview,
+                Status = StepStatus.NotStarted,
+                ApprovedAt = null
             }
         };
 
@@ -143,12 +120,12 @@ public class OnboardingTests : IAsyncLifetime
         // Assert
         var savedSteps = await _context.OnboardingSteps
             .Where(s => s.VolunteerId == volunteerId)
-            .OrderBy(s => s.StepNumber)
+            .OrderBy(s => s.StepType)
             .ToListAsync();
 
         Assert.Equal(4, savedSteps.Count);
-        Assert.All(savedSteps.Take(3), step => Assert.True(step.IsCompleted));
-        Assert.False(savedSteps[3].IsCompleted);
+        Assert.All(savedSteps.Take(3), step => Assert.Equal(StepStatus.Approved, step.Status));
+        Assert.Equal(StepStatus.NotStarted, savedSteps[3].Status);
     }
 
     [Fact]
@@ -156,17 +133,8 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Bob",
-            LastName = "Johnson",
-            Email = "bob@example.com",
-            Phone = "+15145553456",
-            Status = VolunteerStatus.Pending,
-            IsMinor = false,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: false, email: "bob@example.com");
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -193,17 +161,7 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Young",
-            LastName = "Volunteer",
-            Email = "young@example.com",
-            Phone = "+15145554567",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "young@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -213,10 +171,11 @@ public class OnboardingTests : IAsyncLifetime
         {
             Id = Guid.NewGuid(),
             VolunteerId = volunteerId,
+            GuardianName = "Parent Guardian",
             GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
+            GuardianPhone = "+15145552222",
+            ConsentStatus = ConsentStatus.Requested,
+            SubmittedAt = DateTime.UtcNow
         };
 
         _context.ParentalConsents.Add(parentalConsent);
@@ -227,7 +186,7 @@ public class OnboardingTests : IAsyncLifetime
             .FirstOrDefaultAsync(c => c.VolunteerId == volunteerId);
 
         Assert.NotNull(pendingConsent);
-        Assert.Equal(ConsentStatus.Pending, pendingConsent.Status);
+        Assert.Equal(ConsentStatus.Requested, pendingConsent.ConsentStatus);
 
         // Attempt to transition status should fail in business logic
         var volunteerCheck = await _context.Volunteers.FindAsync(volunteerId);
@@ -239,46 +198,28 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Minor",
-            LastName = "Applicant",
-            Email = "minor@example.com",
-            Phone = "+15145555678",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "minor@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var parentalConsent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
+        var parentalConsent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(parentalConsent);
         await _context.SaveChangesAsync();
 
         // Act - Approve consent
         var consent = await _context.ParentalConsents.FindAsync(consentId);
-        consent!.Status = ConsentStatus.Approved;
-        consent.ApprovedAt = DateTime.UtcNow;
+        consent!.ConsentStatus = ConsentStatus.Approved;
+        consent.ReviewedAt = DateTime.UtcNow;
         _context.ParentalConsents.Update(consent);
         await _context.SaveChangesAsync();
 
         // Assert
         var approvedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.Equal(ConsentStatus.Approved, approvedConsent?.Status);
-        Assert.NotNull(approvedConsent?.ApprovedAt);
+        Assert.Equal(ConsentStatus.Approved, approvedConsent?.ConsentStatus);
+        Assert.NotNull(approvedConsent?.ReviewedAt);
     }
 
     [Fact]
@@ -286,17 +227,8 @@ public class OnboardingTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Test",
-            LastName = "User",
-            Email = "test@example.com",
-            Phone = "+15145556789",
-            Status = VolunteerStatus.Pending,
-            IsMinor = false,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: false, email: "test@example.com");
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -304,10 +236,10 @@ public class OnboardingTests : IAsyncLifetime
         // Act - Add steps out of order
         var stepsOutOfOrder = new[]
         {
-            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepNumber = 3, Title = "Training", IsCompleted = false },
-            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepNumber = 1, Title = "Profile", IsCompleted = true, CompletedAt = DateTime.UtcNow },
-            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepNumber = 4, Title = "Review", IsCompleted = false },
-            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepNumber = 2, Title = "Orientation", IsCompleted = false }
+            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepType = StepType.Certification, Status = StepStatus.NotStarted },
+            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepType = StepType.DocumentVerification, Status = StepStatus.Approved, ApprovedAt = DateTime.UtcNow },
+            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepType = StepType.FinalReview, Status = StepStatus.NotStarted },
+            new OnboardingStep { Id = Guid.NewGuid(), VolunteerId = volunteerId, StepType = StepType.OrientationTraining, Status = StepStatus.NotStarted }
         };
 
         _context.OnboardingSteps.AddRange(stepsOutOfOrder);
@@ -316,10 +248,10 @@ public class OnboardingTests : IAsyncLifetime
         // Assert - Retrieve in correct order
         var orderedSteps = await _context.OnboardingSteps
             .Where(s => s.VolunteerId == volunteerId)
-            .OrderBy(s => s.StepNumber)
-            .Select(s => s.StepNumber)
+            .OrderBy(s => s.StepType)
+            .Select(s => s.StepType)
             .ToListAsync();
 
-        Assert.Equal(new[] { 1, 2, 3, 4 }, orderedSteps);
+        Assert.Equal(new[] { StepType.DocumentVerification, StepType.OrientationTraining, StepType.Certification, StepType.FinalReview }, orderedSteps);
     }
 }

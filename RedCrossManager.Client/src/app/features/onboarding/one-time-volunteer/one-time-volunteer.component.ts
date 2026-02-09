@@ -24,9 +24,9 @@ import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSnackBarModule,
-    TranslateModule
+    TranslateModule,
   ],
-  templateUrl: './one-time-volunteer.component.html'
+  templateUrl: './one-time-volunteer.component.html',
 })
 export class OneTimeVolunteerComponent implements OnInit {
   form!: FormGroup;
@@ -35,7 +35,7 @@ export class OneTimeVolunteerComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +57,7 @@ export class OneTimeVolunteerComponent implements OnInit {
       keepDataConsent: ['yes', Validators.required],
       signedAt: ['', [Validators.required, Validators.maxLength(120)]],
       signedOn: ['', Validators.required],
-      signature: ['', [Validators.required, Validators.maxLength(120)]]
+      signature: ['', [Validators.required, Validators.maxLength(120)]],
     });
   }
 
@@ -67,7 +67,7 @@ export class OneTimeVolunteerComponent implements OnInit {
       this.snackBar.open(
         this.translate.instant('oneTimeVolunteer.errors.invalidForm'),
         this.translate.instant('common.close'),
-        { duration: 4000 }
+        { duration: 4000 },
       );
       return;
     }
@@ -75,7 +75,7 @@ export class OneTimeVolunteerComponent implements OnInit {
     this.isGenerating = true;
     try {
       const templateUrl = '/assets/forms/formulaire-benevole-ponctuel.pdf';
-      const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+      const existingPdfBytes = await fetch(templateUrl).then((res) => res.arrayBuffer());
       const pdfDoc = await PDFDocument.load(existingPdfBytes);
       const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
@@ -129,13 +129,13 @@ export class OneTimeVolunteerComponent implements OnInit {
       this.snackBar.open(
         this.translate.instant('oneTimeVolunteer.messages.generated'),
         this.translate.instant('common.close'),
-        { duration: 4000 }
+        { duration: 4000 },
       );
     } catch (error) {
       this.snackBar.open(
         this.translate.instant('oneTimeVolunteer.errors.generationFailed'),
         this.translate.instant('common.close'),
-        { duration: 5000 }
+        { duration: 5000 },
       );
     } finally {
       this.isGenerating = false;

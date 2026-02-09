@@ -1,4 +1,13 @@
-import { Component, EventEmitter, HostBinding, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +15,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './app-drawer.component.html',
-  styleUrl: './app-drawer.component.scss'
+  styleUrl: './app-drawer.component.scss',
 })
 export class AppDrawerComponent implements OnChanges, OnDestroy {
   @Input() title = '';

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import { ProfileComponent } from './profile.component';
 import { VolunteerService } from '../../core/services/volunteer.service';
@@ -22,20 +23,25 @@ describe('ProfileComponent', () => {
     languagePreference: 'en',
     registeredAt: new Date(),
     isMinor: false,
-    smsOptIn: false
+    smsOptIn: false,
   };
 
   beforeEach(async () => {
     const volunteerServiceSpy = jasmine.createSpyObj('VolunteerService', [
       'getProfile',
-      'updateSmsOptIn'
+      'updateSmsOptIn',
     ]);
 
     await TestBed.configureTestingModule({
-      imports: [ProfileComponent, ReactiveFormsModule, MatSnackBarModule],
-      providers: [
-        { provide: VolunteerService, useValue: volunteerServiceSpy }
-      ]
+      imports: [
+        ProfileComponent,
+        ReactiveFormsModule,
+        MatSnackBarModule,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader },
+        }),
+      ],
+      providers: [{ provide: VolunteerService, useValue: volunteerServiceSpy }],
     }).compileComponents();
 
     volunteerService = TestBed.inject(VolunteerService) as jasmine.SpyObj<VolunteerService>;
@@ -77,9 +83,7 @@ describe('ProfileComponent', () => {
   });
 
   it('should handle profile loading error', (done) => {
-    volunteerService.getProfile.and.returnValue(
-      throwError(() => new Error('Load error'))
-    );
+    volunteerService.getProfile.and.returnValue(throwError(() => new Error('Load error')));
 
     component.ngOnInit();
 
@@ -90,9 +94,7 @@ describe('ProfileComponent', () => {
   });
 
   it('should handle SMS update error', (done) => {
-    volunteerService.updateSmsOptIn.and.returnValue(
-      throwError(() => new Error('Update error'))
-    );
+    volunteerService.updateSmsOptIn.and.returnValue(throwError(() => new Error('Update error')));
 
     fixture.detectChanges();
 

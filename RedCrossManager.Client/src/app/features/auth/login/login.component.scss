@@ -1,11 +1,11 @@
 // Align icons vertically within header icon buttons
 :host ::ng-deep .icon-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 
 :host ::ng-deep .icon-btn .mat-icon {
-	line-height: 1;
+  line-height: 1;
 }

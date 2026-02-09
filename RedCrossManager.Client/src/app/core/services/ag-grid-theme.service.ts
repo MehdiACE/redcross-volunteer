@@ -5,14 +5,14 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 type ThemeMode = 'light' | 'dark';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AgGridThemeService {
   private readonly mode$ = new BehaviorSubject<ThemeMode>(this.getInitialMode());
 
   readonly themeClass$ = this.mode$.pipe(
     distinctUntilChanged(),
-    map(mode => (mode === 'dark' ? 'ag-theme-quartz-dark' : 'ag-theme-quartz'))
+    map((mode) => (mode === 'dark' ? 'ag-theme-quartz-dark' : 'ag-theme-quartz')),
   );
 
   setDarkMode(isDark: boolean): void {

@@ -1,4 +1,6 @@
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-blue-50 py-8 px-4">
+<div
+  class="min-h-screen bg-gradient-to-br from-red-50 to-blue-50 dark:from-slate-900 dark:to-slate-950 py-8 px-4"
+>
   <div class="max-w-4xl mx-auto">
     <!-- Loading State -->
     <div *ngIf="isLoading" class="flex justify-center items-center min-h-96">
@@ -9,19 +11,23 @@
     <div *ngIf="!isLoading && consentData" class="space-y-6">
       <!-- Header -->
       <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
           {{ 'guardianConsent.title' | translate }}
         </h1>
-        <p class="text-gray-600">
+        <p class="text-gray-600 dark:text-gray-300">
           {{ 'guardianConsent.subtitle' | translate }}
         </p>
       </div>
 
       <form [formGroup]="consentForm" (ngSubmit)="submit()">
         <!-- Volunteer Information (Read-only) -->
-        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
-          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
-            <mat-card-title>{{ 'guardianConsent.volunteerInformation' | translate }}</mat-card-title>
+        <mat-card
+          class="mb-6 shadow-sm dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none"
+        >
+          <mat-card-header class="bg-blue-50 border-b dark:bg-slate-800 dark:border-slate-700">
+            <mat-card-title>{{
+              'guardianConsent.volunteerInformation' | translate
+            }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
             <div formGroupName="volunteerInfo" class="grid grid-cols-2 gap-4">
@@ -49,8 +55,10 @@
         </mat-card>
 
         <!-- Guardian Information -->
-        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
-          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
+        <mat-card
+          class="mb-6 shadow-sm dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none"
+        >
+          <mat-card-header class="bg-blue-50 border-b dark:bg-slate-800 dark:border-slate-700">
             <mat-card-title>{{ 'guardianConsent.guardianInformation' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
@@ -85,7 +93,9 @@
               <mat-form-field class="w-full col-span-2">
                 <mat-label>{{ 'guardianConsent.relationship' | translate }}</mat-label>
                 <input matInput formControlName="relationship" required />
-                <mat-error *ngIf="consentForm.get('guardianInfo.relationship')?.hasError('required')">
+                <mat-error
+                  *ngIf="consentForm.get('guardianInfo.relationship')?.hasError('required')"
+                >
                   {{ 'guardianConsent.required' | translate }}
                 </mat-error>
               </mat-form-field>
@@ -94,45 +104,53 @@
         </mat-card>
 
         <!-- Consent Agreements -->
-        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
-          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
+        <mat-card
+          class="mb-6 shadow-sm dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none"
+        >
+          <mat-card-header class="bg-blue-50 border-b dark:bg-slate-800 dark:border-slate-700">
             <mat-card-title>{{ 'guardianConsent.agreements' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6 space-y-4">
             <!-- Guardian Agreement -->
-            <div class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800/60 dark:border dark:border-gray-700 rounded-lg">
+            <div
+              class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-slate-800/60 dark:border dark:border-slate-700 rounded-lg"
+            >
               <mat-checkbox formControlName="guardianAgreement" class="pt-1"></mat-checkbox>
               <div class="flex-1">
-                <p class="font-semibold text-gray-900">
+                <p class="font-semibold text-gray-900 dark:text-gray-100">
                   {{ 'guardianConsent.guardianAgreementLabel' | translate }}
                 </p>
-                <p class="text-sm text-gray-600 mt-1">
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   {{ 'guardianConsent.guardianAgreementText' | translate }}
                 </p>
               </div>
             </div>
 
             <!-- Data Processing Agreement -->
-            <div class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-gray-800/60 dark:border dark:border-gray-700 rounded-lg">
+            <div
+              class="flex items-start space-x-3 p-4 bg-gray-50 dark:bg-slate-800/60 dark:border dark:border-slate-700 rounded-lg"
+            >
               <mat-checkbox formControlName="dataProcessingAgreement" class="pt-1"></mat-checkbox>
               <div class="flex-1">
-                <p class="font-semibold text-gray-900">
+                <p class="font-semibold text-gray-900 dark:text-gray-100">
                   {{ 'guardianConsent.dataProcessingLabel' | translate }}
                 </p>
-                <p class="text-sm text-gray-600 mt-1">
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   {{ 'guardianConsent.dataProcessingText' | translate }}
                 </p>
               </div>
             </div>
 
             <!-- Accept Terms -->
-            <div class="flex items-start space-x-3 p-4 bg-blue-50 dark:bg-gray-800/60 dark:border-gray-700 rounded-lg border border-blue-200">
+            <div
+              class="flex items-start space-x-3 p-4 bg-blue-50 dark:bg-slate-800/60 dark:border-slate-700 rounded-lg border border-blue-200"
+            >
               <mat-checkbox formControlName="acceptTerms" required class="pt-1"></mat-checkbox>
               <div class="flex-1">
-                <p class="font-semibold text-gray-900">
+                <p class="font-semibold text-gray-900 dark:text-gray-100">
                   {{ 'guardianConsent.acceptTermsLabel' | translate }}
                 </p>
-                <p class="text-sm text-gray-600 mt-1">
+                <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   {{ 'guardianConsent.acceptTermsText' | translate }}
                 </p>
               </div>
@@ -141,16 +159,20 @@
         </mat-card>
 
         <!-- Signature Section -->
-        <mat-card class="mb-6 shadow-sm dark:bg-gray-900 dark:border dark:border-gray-800">
-          <mat-card-header class="bg-blue-50 border-b dark:bg-gray-800 dark:border-gray-700">
+        <mat-card
+          class="mb-6 shadow-sm dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none"
+        >
+          <mat-card-header class="bg-blue-50 border-b dark:bg-slate-800 dark:border-slate-700">
             <mat-card-title>{{ 'guardianConsent.signature' | translate }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="pt-6">
-            <p class="text-sm text-gray-600 mb-4">
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
               {{ 'guardianConsent.signatureInstructions' | translate }}
             </p>
 
-            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800/60 mb-4">
+            <div
+              class="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-800/60 mb-4"
+            >
               <canvas
                 #signatureCanvas
                 class="signature-canvas"
@@ -162,7 +184,10 @@
                 (touchmove)="draw($event)"
                 (touchend)="endDrawing()"
               ></canvas>
-              <div *ngIf="isSignatureEmpty" class="text-center text-gray-500 text-sm py-3">
+              <div
+                *ngIf="isSignatureEmpty"
+                class="text-center text-gray-500 dark:text-gray-400 text-sm py-3"
+              >
                 {{ 'guardianConsent.signaturePadPlaceholder' | translate }}
               </div>
             </div>
@@ -187,11 +212,7 @@
 
         <!-- Action Buttons -->
         <div class="flex justify-between gap-4">
-          <button
-            type="button"
-            mat-stroked-button
-            [disabled]="isSubmitting"
-          >
+          <button type="button" mat-stroked-button [disabled]="isSubmitting">
             {{ 'common.cancel' | translate }}
           </button>
 

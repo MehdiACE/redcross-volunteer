@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MessageService } from '../../core/services/message.service';
@@ -28,9 +31,9 @@ import { AppDrawerComponent } from '../drawer/app-drawer.component';
     MatInputModule,
     AppDrawerComponent,
     ReadMessageComponent,
-    ComposeMessageComponent
+    ComposeMessageComponent,
   ],
-  templateUrl: './user-message.component.html'
+  templateUrl: './user-message.component.html',
 })
 export class UserMessageComponent implements OnInit, OnDestroy {
   showMessageMenu = false;
@@ -55,7 +58,7 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private adminDashboardService: AdminDashboardService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
   ngOnInit(): void {
     this.isAdmin = this.authService.hasRole('Admin');
@@ -89,13 +92,14 @@ export class UserMessageComponent implements OnInit, OnDestroy {
     this.showMessageMenu = false;
 
     if (message && !message.isRead) {
-      this.messageService.markAsRead(message.id)
+      this.messageService
+        .markAsRead(message.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
             message.isRead = true;
             this.loadMessageSummary();
-          }
+          },
         });
     }
 
@@ -128,13 +132,14 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   selectInboxMessage(message: MessageItem): void {
     this.selectedMessage = message;
     if (message.isRead) return;
-    this.messageService.markAsRead(message.id)
+    this.messageService
+      .markAsRead(message.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           message.isRead = true;
           this.loadMessageSummary();
-        }
+        },
       });
   }
 
@@ -162,10 +167,12 @@ export class UserMessageComponent implements OnInit, OnDestroy {
 
     if (this.composeRecipientType === 'volunteer') {
       if (!this.composeVolunteerId) return;
-      this.messageService.sendToVolunteer({
-        volunteerId: this.composeVolunteerId,
-        content: this.composeContent.trim()
-      }).pipe(takeUntil(this.destroy$))
+      this.messageService
+        .sendToVolunteer({
+          volunteerId: this.composeVolunteerId,
+          content: this.composeContent.trim(),
+        })
+        .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
             this.composeContent = '';
@@ -173,22 +180,24 @@ export class UserMessageComponent implements OnInit, OnDestroy {
             this.composeVolunteerSearch = '';
             this.composeVolunteerId = '';
             this.loadMessageSummary();
-          }
+          },
         });
       return;
     }
 
     if (!this.adminTargetUserId) return;
-    this.messageService.sendMessage({
-      toUserId: this.adminTargetUserId,
-      content: this.composeContent.trim()
-    }).pipe(takeUntil(this.destroy$))
+    this.messageService
+      .sendMessage({
+        toUserId: this.adminTargetUserId,
+        content: this.composeContent.trim(),
+      })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.composeContent = '';
           this.composeSubject = '';
           this.loadMessageSummary();
-        }
+        },
       });
   }
 
@@ -214,7 +223,7 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   get filteredComposeVolunteers(): AdminVolunteerListItem[] {
     const query = this.composeVolunteerSearch.trim().toLowerCase();
     if (!query) return this.volunteers;
-    return this.volunteers.filter(volunteer => {
+    return this.volunteers.filter((volunteer) => {
       const fullName = `${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
       return fullName.includes(query) || volunteer.email.toLowerCase().includes(query);
     });
@@ -225,36 +234,42 @@ export class UserMessageComponent implements OnInit, OnDestroy {
   }
 
   private loadMessageSummary(): void {
-    this.messageService.getUnreadCount()
+    this.messageService
+      .getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: count => {
+        next: (count) => {
           this.unreadCount = count;
-        }
+        },
       });
 
-    this.messageService.getInbox()
+    this.messageService
+      .getInbox()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: messages => {
+        next: (messages) => {
           this.recentMessages = [...messages]
             .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .slice(0, 5);
-          const adminMessage = messages.find(msg => msg.fromUserName.toLowerCase().includes('admin'));
+          const adminMessage = messages.find((msg) =>
+            msg.fromUserName.toLowerCase().includes('admin'),
+          );
           this.adminTargetUserId = adminMessage?.fromUserId ?? this.adminTargetUserId;
-        }
+        },
       });
   }
 
   private loadAllMessages(): void {
     this.isLoadingAllMessages = true;
     this.hasInboxError = false;
-    this.messageService.getInbox()
+    this.messageService
+      .getInbox()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: messages => {
-          this.allMessages = [...messages]
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        next: (messages) => {
+          this.allMessages = [...messages].sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
           if (!this.selectedMessage && this.allMessages.length > 0) {
             this.selectedMessage = this.allMessages[0];
           }
@@ -263,18 +278,19 @@ export class UserMessageComponent implements OnInit, OnDestroy {
         error: () => {
           this.isLoadingAllMessages = false;
           this.hasInboxError = true;
-        }
+        },
       });
   }
 
   private loadVolunteers(): void {
     if (this.volunteers.length > 0) return;
-    this.adminDashboardService.getVolunteers()
+    this.adminDashboardService
+      .getVolunteers()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.volunteers = data;
-        }
+        },
       });
   }
 }

@@ -20,7 +20,7 @@ import {
   TrainingDto,
   TrainingDetailDto,
   TrainingFilterDto,
-  EnrollTrainingDto
+  EnrollTrainingDto,
 } from '../../core/models/training.model';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -41,10 +41,10 @@ import { AuthService } from '../../core/services/auth.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTabsModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './trainings.component.html',
-  styleUrls: ['./trainings.component.scss']
+  styleUrls: ['./trainings.component.scss'],
 })
 export class TrainingsComponent implements OnInit, OnDestroy {
   trainings: TrainingDto[] = [];
@@ -62,17 +62,11 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   availableSpotsOnlyFilter = false;
   private destroy$ = new Subject<void>();
 
-  categories = [
-    'Safety',
-    'Medical',
-    'Training',
-    'Orientation',
-    'Other'
-  ];
+  categories = ['Safety', 'Medical', 'Training', 'Orientation', 'Other'];
 
   constructor(
     private trainingService: TrainingService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -90,7 +84,8 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   loadAllTrainings(): void {
     this.isLoading = true;
     this.loadError = false;
-    this.trainingService.getAllTrainings()
+    this.trainingService
+      .getAllTrainings()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -101,12 +96,13 @@ export class TrainingsComponent implements OnInit, OnDestroy {
           console.error('Failed to load trainings:', error);
           this.loadError = true;
           this.isLoading = false;
-        }
+        },
       });
   }
 
   loadMyTrainings(): void {
-    this.trainingService.getMyTrainings()
+    this.trainingService
+      .getMyTrainings()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -114,13 +110,14 @@ export class TrainingsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error('Failed to load my trainings:', error);
-        }
+        },
       });
   }
 
   applyFilter(filter: TrainingFilterDto): void {
     this.isLoading = true;
-    this.trainingService.getFilteredTrainings(filter)
+    this.trainingService
+      .getFilteredTrainings(filter)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -131,7 +128,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
           console.error('Failed to filter trainings:', error);
           this.loadError = true;
           this.isLoading = false;
-        }
+        },
       });
   }
 
@@ -142,7 +139,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
       startDateTo: this.endDateFilter || undefined,
       availableSpotsOnly: this.availableSpotsOnlyFilter,
       page: this.currentPage,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
     };
     this.applyFilter(filter);
   }
@@ -170,10 +167,11 @@ export class TrainingsComponent implements OnInit, OnDestroy {
 
     const enrollDto: EnrollTrainingDto = {
       volunteerId: userId,
-      status: 'Enrolled'
+      status: 'Enrolled',
     };
 
-    this.trainingService.enrollVolunteer(training.id, enrollDto)
+    this.trainingService
+      .enrollVolunteer(training.id, enrollDto)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (enrollment) => {
@@ -185,7 +183,7 @@ export class TrainingsComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Failed to enroll:', error);
           this.enrollmentError = true;
-        }
+        },
       });
   }
 
@@ -213,11 +211,11 @@ export class TrainingsComponent implements OnInit, OnDestroy {
   }
 
   isAlreadyEnrolled(training: TrainingDto): boolean {
-    return this.myTrainings.some(t => t.trainingId === training.id);
+    return this.myTrainings.some((t) => t.trainingId === training.id);
   }
 
   getEnrollmentStatus(training: TrainingDto): string {
-    const enrollment = this.myTrainings.find(t => t.trainingId === training.id);
+    const enrollment = this.myTrainings.find((t) => t.trainingId === training.id);
     return enrollment?.status || '';
   }
 }

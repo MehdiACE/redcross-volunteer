@@ -162,13 +162,14 @@ public class MissionService : IMissionService
         var results = new List<AssignmentDto>();
         foreach (var volunteerId in dto.VolunteerIds)
         {
-            var hasConflict = await _assignmentValidator.HasTimeConflictAsync(
+            var bufferStart = mission.StartAt.AddMinutes(-mission.TravelBufferMinutes);
+            var bufferEnd = mission.EndAt.AddMinutes(mission.TravelBufferMinutes);
+            var conflictingAssignments = await _assignmentRepository.GetVolunteerAssignmentsInTimeRangeAsync(
                 volunteerId,
-                mission.StartAt,
-                mission.EndAt,
-                mission.TravelBufferMinutes);
+                bufferStart,
+                bufferEnd);
 
-            if (hasConflict)
+            if (conflictingAssignments.Any(a => a.MissionId != missionId))
             {
                 throw new InvalidOperationException("Volunteer has conflicting assignments");
             }

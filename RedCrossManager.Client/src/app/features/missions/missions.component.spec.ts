@@ -27,7 +27,7 @@ describe('MissionsComponent', () => {
       published: true,
       createdAt: new Date(),
       createdBy: 'coordinator-1',
-      availableSlots: 2
+      availableSlots: 2,
     },
     {
       id: 'mission-2',
@@ -43,8 +43,8 @@ describe('MissionsComponent', () => {
       published: true,
       createdAt: new Date(),
       createdBy: 'coordinator-2',
-      availableSlots: 0
-    }
+      availableSlots: 0,
+    },
   ];
 
   beforeEach(async () => {
@@ -55,8 +55,8 @@ describe('MissionsComponent', () => {
       imports: [MissionsComponent, TranslateModule.forRoot()],
       providers: [
         { provide: MissionService, useValue: missionSpy },
-        { provide: AuthService, useValue: authSpy }
-      ]
+        { provide: AuthService, useValue: authSpy },
+      ],
     }).compileComponents();
 
     missionService = TestBed.inject(MissionService) as jasmine.SpyObj<MissionService>;
@@ -73,6 +73,7 @@ describe('MissionsComponent', () => {
   it('should load missions on init', () => {
     missionService.getMissions.and.returnValue(of(mockMissions));
 
+    component.useMockData = false;
     component.ngOnInit();
 
     expect(missionService.getMissions).toHaveBeenCalled();
@@ -84,6 +85,7 @@ describe('MissionsComponent', () => {
   it('should handle load error', () => {
     missionService.getMissions.and.returnValue(throwError(() => new Error('fail')));
 
+    component.useMockData = false;
     component.ngOnInit();
 
     expect(component.loadError).toBeTrue();
@@ -101,21 +103,25 @@ describe('MissionsComponent', () => {
   });
 
   it('should apply to mission when authenticated', () => {
-    missionService.applyToMission.and.returnValue(of({
-      id: 'assignment-1',
-      missionId: 'mission-1',
-      volunteerId: 'volunteer-1',
-      status: 'Pending',
-      roleDescription: undefined,
-      assignedAt: new Date(),
-      reminderSentAt: null
-    }));
+    missionService.applyToMission.and.returnValue(
+      of({
+        id: 'assignment-1',
+        missionId: 'mission-1',
+        volunteerId: 'volunteer-1',
+        status: 'Pending',
+        roleDescription: undefined,
+        assignedAt: new Date(),
+        reminderSentAt: null,
+      }),
+    );
 
     authService.isAuthenticated.and.returnValue(true);
     authService.getUserId.and.returnValue('volunteer-1');
 
     component.applyToMission(mockMissions[0]);
 
-    expect(missionService.applyToMission).toHaveBeenCalledWith('mission-1', { volunteerId: 'volunteer-1' });
+    expect(missionService.applyToMission).toHaveBeenCalledWith('mission-1', {
+      volunteerId: 'volunteer-1',
+    });
   });
 });

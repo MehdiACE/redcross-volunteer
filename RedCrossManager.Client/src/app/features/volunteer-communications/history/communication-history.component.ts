@@ -7,7 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommunicationService, CommunicationMessageDto } from '../../../core/services/communication.service';
+import {
+  CommunicationService,
+  CommunicationMessageDto,
+} from '../../../core/services/communication.service';
 
 @Component({
   selector: 'app-communication-history',
@@ -20,10 +23,10 @@ import { CommunicationService, CommunicationMessageDto } from '../../../core/ser
     MatIconModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './communication-history.component.html',
-  styleUrls: ['./communication-history.component.scss']
+  styleUrls: ['./communication-history.component.scss'],
 })
 export class CommunicationHistoryComponent implements OnInit {
   messages: CommunicationMessageDto[] = [];
@@ -46,7 +49,7 @@ export class CommunicationHistoryComponent implements OnInit {
       error: (error) => {
         console.error('Failed to load communication history:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
+using RedCrossManager.Server.Tests.Infrastructure;
 
 namespace RedCrossManager.Server.Tests.Integration;
 
@@ -36,32 +37,14 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Minor",
-            LastName = "Child",
-            Email = "minor@example.com",
-            Phone = "+15145551234",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "minor@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         // Act
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
@@ -70,8 +53,8 @@ public class ConsentTests : IAsyncLifetime
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
         Assert.NotNull(savedConsent);
         Assert.Equal(volunteerId, savedConsent.VolunteerId);
-        Assert.Equal(ConsentStatus.Pending, savedConsent.Status);
-        Assert.Null(savedConsent.ApprovedAt);
+        Assert.Equal(ConsentStatus.Requested, savedConsent.ConsentStatus);
+        Assert.Null(savedConsent.ReviewedAt);
     }
 
     [Fact]
@@ -79,46 +62,28 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Young",
-            LastName = "Applicant",
-            Email = "young@example.com",
-            Phone = "+15145552345",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "young@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Approve consent
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        dbConsent!.Status = ConsentStatus.Approved;
-        dbConsent.ApprovedAt = DateTime.UtcNow;
+        dbConsent!.ConsentStatus = ConsentStatus.Approved;
+        dbConsent.ReviewedAt = DateTime.UtcNow;
         _context.ParentalConsents.Update(dbConsent);
         await _context.SaveChangesAsync();
 
         // Assert
         var approvedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.Equal(ConsentStatus.Approved, approvedConsent?.Status);
-        Assert.NotNull(approvedConsent?.ApprovedAt);
+        Assert.Equal(ConsentStatus.Approved, approvedConsent?.ConsentStatus);
+        Assert.NotNull(approvedConsent?.ReviewedAt);
     }
 
     [Fact]
@@ -126,48 +91,30 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Another",
-            LastName = "Minor",
-            Email = "another@example.com",
-            Phone = "+15145553456",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "another@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Reject consent
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        dbConsent!.Status = ConsentStatus.Rejected;
-        dbConsent.RejectedAt = DateTime.UtcNow;
-        dbConsent.RejectionReason = "Does not meet criteria";
+        dbConsent!.ConsentStatus = ConsentStatus.Rejected;
+        dbConsent.ReviewedAt = DateTime.UtcNow;
+        dbConsent.ReviewerNotes = "Does not meet criteria";
         _context.ParentalConsents.Update(dbConsent);
         await _context.SaveChangesAsync();
 
         // Assert
         var rejectedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.Equal(ConsentStatus.Rejected, rejectedConsent?.Status);
-        Assert.NotNull(rejectedConsent?.RejectedAt);
-        Assert.NotNull(rejectedConsent?.RejectionReason);
+        Assert.Equal(ConsentStatus.Rejected, rejectedConsent?.ConsentStatus);
+        Assert.NotNull(rejectedConsent?.ReviewedAt);
+        Assert.NotNull(rejectedConsent?.ReviewerNotes);
     }
 
     [Fact]
@@ -175,39 +122,22 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "SLA",
-            LastName = "Test",
-            Email = "sla@example.com",
-            Phone = "+15145554567",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "sla@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
         var createdAt = DateTime.UtcNow.AddHours(-36); // Created 36 hours ago
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = createdAt
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
+        consent.SubmittedAt = createdAt;
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Check if SLA is approaching (within 48 hours)
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        var hoursElapsed = (DateTime.UtcNow - savedConsent!.CreatedAt).TotalHours;
+        var hoursElapsed = (DateTime.UtcNow - savedConsent!.SubmittedAt!.Value).TotalHours;
         var isWithinSLA = hoursElapsed < 48;
 
         // Assert
@@ -220,40 +150,23 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Overdue",
-            LastName = "Test",
-            Email = "overdue@example.com",
-            Phone = "+15145555678",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "overdue@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
         var createdAt = DateTime.UtcNow.AddHours(-72); // Created 72 hours ago (overdue)
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = createdAt
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
+        consent.SubmittedAt = createdAt;
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        var hoursElapsed = (DateTime.UtcNow - savedConsent!.CreatedAt).TotalHours;
-        var isOverdue = hoursElapsed >= 48 && savedConsent.Status == ConsentStatus.Pending;
+        var hoursElapsed = (DateTime.UtcNow - savedConsent!.SubmittedAt!.Value).TotalHours;
+        var isOverdue = hoursElapsed >= 48 && savedConsent.ConsentStatus == ConsentStatus.Requested;
 
         // Assert
         Assert.True(isOverdue, "Consent should be marked as overdue");
@@ -265,34 +178,13 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Token",
-            LastName = "Test",
-            Email = "token@example.com",
-            Phone = "+15145556789",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "token@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var verificationToken = Guid.NewGuid().ToString();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = verificationToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
@@ -301,9 +193,8 @@ public class ConsentTests : IAsyncLifetime
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
 
         // Assert
-        Assert.NotNull(savedConsent?.EmailVerificationToken);
-        Assert.Equal(verificationToken, savedConsent.EmailVerificationToken);
-        Assert.False(savedConsent.IsEmailVerified);
+        Assert.NotNull(savedConsent);
+        Assert.Equal(IdentityVerificationStatus.NotVerified, savedConsent!.IdentityVerificationStatus);
     }
 
     [Fact]
@@ -311,49 +202,26 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Verify",
-            LastName = "Test",
-            Email = "verify@example.com",
-            Phone = "+15145557890",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "verify@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var verificationToken = Guid.NewGuid().ToString();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = verificationToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Verify email
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        dbConsent!.IsEmailVerified = true;
-        dbConsent.EmailVerificationToken = null;
+        dbConsent!.IdentityVerificationStatus = IdentityVerificationStatus.EmailConfirmed;
         _context.ParentalConsents.Update(dbConsent);
         await _context.SaveChangesAsync();
 
         // Assert
         var verifiedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.True(verifiedConsent?.IsEmailVerified);
-        Assert.Null(verifiedConsent?.EmailVerificationToken);
+        Assert.Equal(IdentityVerificationStatus.EmailConfirmed, verifiedConsent?.IdentityVerificationStatus);
     }
 
     [Fact]
@@ -361,32 +229,14 @@ public class ConsentTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "SMS",
-            LastName = "Test",
-            Email = "sms@example.com",
-            Phone = "+15145558901",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "sms@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent Name",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            SmsOptIn = true
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
+        consent.SmsOptIn = true;
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();

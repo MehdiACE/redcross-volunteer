@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AdminOnboardingStep, AdminVolunteerListItem, ReviewStepRequest } from '../models/admin-dashboard.model';
+import {
+  AdminOnboardingStep,
+  AdminVolunteerListItem,
+  ReviewStepRequest,
+} from '../models/admin-dashboard.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminDashboardService {
   private readonly volunteersUrl = `${environment.apiUrl}/volunteers`;

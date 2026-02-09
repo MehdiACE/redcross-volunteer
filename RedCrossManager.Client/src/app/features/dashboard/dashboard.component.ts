@@ -15,7 +15,7 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, MatProgressSpinnerModule, TranslateModule, RouterLink],
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   dashboard: VolunteerDashboardDto | null = null;
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private dashboardService: DashboardService,
     private notificationService: NotificationService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   get isAdmin(): boolean {
@@ -50,7 +50,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.loadError = false;
 
-    this.dashboardService.getDashboard()
+    this.dashboardService
+      .getDashboard()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (dashboard) => {
@@ -60,7 +61,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error: () => {
           this.loadError = true;
           this.isLoading = false;
-        }
+        },
       });
   }
 
@@ -68,7 +69,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.notificationsLoading = true;
     this.notificationsError = false;
 
-    this.notificationService.getMyNotifications()
+    this.notificationService
+      .getMyNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (notifications) => {
@@ -78,23 +80,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
         error: () => {
           this.notificationsError = true;
           this.notificationsLoading = false;
-        }
+        },
       });
   }
 
   markAsRead(notificationId: string): void {
-    this.notificationService.markAsRead(notificationId)
+    this.notificationService
+      .markAsRead(notificationId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          const notification = this.notifications.find(n => n.id === notificationId);
+          const notification = this.notifications.find((n) => n.id === notificationId);
           if (notification) {
             notification.isRead = true;
           }
         },
         error: (err) => {
           console.error('Failed to mark notification as read', err);
-        }
+        },
       });
   }
 }

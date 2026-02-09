@@ -35,10 +35,10 @@ import { MissionDto } from '../../core/models/mission.model';
     MatDatepickerModule,
     MatNativeDateModule,
     MatSnackBarModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './missions.component.html',
-  styleUrls: ['./missions.component.scss']
+  styleUrls: ['./missions.component.scss'],
 })
 export class MissionsComponent implements OnInit {
   missions: MissionDto[] = [];
@@ -54,7 +54,9 @@ export class MissionsComponent implements OnInit {
   endDateFilter: Date | null = null;
   availableSpotsOnly = false;
 
-  private readonly mockMissions: Array<MissionDto & { urgent?: boolean; icon?: string; iconClass?: string }> = [
+  private readonly mockMissions: Array<
+    MissionDto & { urgent?: boolean; icon?: string; iconClass?: string }
+  > = [
     this.createMockMission({
       id: 'mock-1',
       title: 'Secouriste de Proximité',
@@ -67,7 +69,7 @@ export class MissionsComponent implements OnInit {
       volunteersNeeded: 5,
       urgent: true,
       icon: 'medical_services',
-      iconClass: 'bg-blue-50 text-blue-600'
+      iconClass: 'bg-blue-50 text-blue-600',
     }),
     this.createMockMission({
       id: 'mock-2',
@@ -80,7 +82,7 @@ export class MissionsComponent implements OnInit {
       availableSlots: 1,
       volunteersNeeded: 8,
       icon: 'restaurant',
-      iconClass: 'bg-amber-50 text-amber-600'
+      iconClass: 'bg-amber-50 text-amber-600',
     }),
     this.createMockMission({
       id: 'mock-3',
@@ -93,7 +95,7 @@ export class MissionsComponent implements OnInit {
       availableSlots: 4,
       volunteersNeeded: 4,
       icon: 'menu_book',
-      iconClass: 'bg-purple-50 text-purple-600'
+      iconClass: 'bg-purple-50 text-purple-600',
     }),
     this.createMockMission({
       id: 'mock-4',
@@ -106,7 +108,7 @@ export class MissionsComponent implements OnInit {
       availableSlots: 2,
       volunteersNeeded: 3,
       icon: 'psychology',
-      iconClass: 'bg-emerald-50 text-emerald-600'
+      iconClass: 'bg-emerald-50 text-emerald-600',
     }),
     this.createMockMission({
       id: 'mock-5',
@@ -119,7 +121,7 @@ export class MissionsComponent implements OnInit {
       availableSlots: 5,
       volunteersNeeded: 6,
       icon: 'local_shipping',
-      iconClass: 'bg-pink-50 text-pink-600'
+      iconClass: 'bg-pink-50 text-pink-600',
     }),
     this.createMockMission({
       id: 'mock-6',
@@ -132,15 +134,15 @@ export class MissionsComponent implements OnInit {
       availableSlots: 0,
       volunteersNeeded: 4,
       icon: 'groups',
-      iconClass: 'bg-gray-100 text-gray-500'
-    })
+      iconClass: 'bg-gray-100 text-gray-500',
+    }),
   ];
 
   constructor(
     private missionService: MissionService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -167,7 +169,7 @@ export class MissionsComponent implements OnInit {
       error: () => {
         this.loadError = true;
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -216,24 +218,32 @@ export class MissionsComponent implements OnInit {
 
   applyToMission(mission: MissionDto): void {
     if (!this.authService.isAuthenticated()) {
-      this.snackBar.open(this.translate.instant('missions.authRequired'), undefined, { duration: 3000 });
+      this.snackBar.open(this.translate.instant('missions.authRequired'), undefined, {
+        duration: 3000,
+      });
       return;
     }
 
     const volunteerId = this.authService.getUserId();
     if (!volunteerId) {
-      this.snackBar.open(this.translate.instant('missions.missingVolunteerId'), undefined, { duration: 3000 });
+      this.snackBar.open(this.translate.instant('missions.missingVolunteerId'), undefined, {
+        duration: 3000,
+      });
       return;
     }
 
     this.missionService.applyToMission(mission.id, { volunteerId }).subscribe({
       next: () => {
-        this.snackBar.open(this.translate.instant('missions.applySuccess'), undefined, { duration: 3000 });
+        this.snackBar.open(this.translate.instant('missions.applySuccess'), undefined, {
+          duration: 3000,
+        });
         this.loadMissions();
       },
       error: () => {
-        this.snackBar.open(this.translate.instant('missions.applyError'), undefined, { duration: 3000 });
-      }
+        this.snackBar.open(this.translate.instant('missions.applyError'), undefined, {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -265,7 +275,7 @@ export class MissionsComponent implements OnInit {
       urgent?: boolean;
       icon?: string;
       iconClass?: string;
-    }
+    },
   ): MissionDto & { urgent?: boolean; icon?: string; iconClass?: string } {
     return {
       requiredCertifications: [],
@@ -273,7 +283,7 @@ export class MissionsComponent implements OnInit {
       published: true,
       createdAt: new Date(),
       createdBy: 'seed',
-      ...data
+      ...data,
     };
   }
 
@@ -283,11 +293,11 @@ export class MissionsComponent implements OnInit {
     const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
       weekday: 'short',
       day: '2-digit',
-      month: 'long'
+      month: 'long',
     });
     const timeFormatter = new Intl.DateTimeFormat('fr-FR', {
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
 
     return `${dateFormatter.format(start)} - ${timeFormatter.format(start)} à ${timeFormatter.format(end)}`;

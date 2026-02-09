@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
@@ -16,9 +19,9 @@ import { AdminVolunteerListItem } from '../../core/models/admin-dashboard.model'
     TranslateModule,
     MatAutocompleteModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
-  templateUrl: './compose-message.component.html'
+  templateUrl: './compose-message.component.html',
 })
 export class ComposeMessageComponent {
   @Input() isAdmin = false;

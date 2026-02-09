@@ -13,10 +13,12 @@
       'app-drawer-left': position === 'left' && !isClosing,
       'app-drawer-right': position !== 'left' && !isClosing,
       'app-drawer-left-close': position === 'left' && isClosing,
-      'app-drawer-right-close': position !== 'left' && isClosing
+      'app-drawer-right-close': position !== 'left' && isClosing,
     }"
   >
-    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-text-dark">
+    <div
+      class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-text-dark"
+    >
       <h2 class="text-lg font-semibold text-gray-900 dark:text-[#F5F5F0]">
         {{ title }}
       </h2>
@@ -34,7 +36,9 @@
       <ng-content></ng-content>
     </div>
 
-    <div class="sticky bottom-0 border-t border-gray-100 bg-white px-6 py-4 dark:border-text-dark dark:bg-[#191a1f]">
+    <div
+      class="sticky bottom-0 border-t border-gray-100 bg-white px-6 py-4 dark:border-text-dark dark:bg-[#191a1f]"
+    >
       <div class="grid grid-cols-2 gap-4">
         <button
           type="button"

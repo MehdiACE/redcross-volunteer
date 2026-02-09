@@ -6,11 +6,11 @@ import {
   UploadDocumentRequestDto,
   UploadDocumentResponseDto,
   DocumentDto,
-  VerifyDocumentDto
+  VerifyDocumentDto,
 } from '../models/document.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DocumentService {
   private apiUrl = `${environment.apiUrl}/documents`;

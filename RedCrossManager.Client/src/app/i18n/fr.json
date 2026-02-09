@@ -8,6 +8,7 @@
   "common": {
     "cancel": "Annuler",
     "close": "Fermer",
+    "download": "Télécharger",
     "submit": "Soumettre",
     "submitting": "Envoi en cours...",
     "save": "Enregistrer",
@@ -17,7 +18,8 @@
     "back": "Retour",
     "next": "Suivant",
     "loading": "Chargement...",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "viewDetails": "Voir les détails"
   },
   "login": {
     "title": "Connexion",

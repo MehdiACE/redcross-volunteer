@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
+import { AgGridThemeService } from '../../../core/services/ag-grid-theme.service';
 
 @Component({
   selector: 'app-login',
@@ -24,10 +25,10 @@ import { AuthService } from '../../../core/services/auth.service';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatIconModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
@@ -43,17 +44,20 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private agGridThemeService: AgGridThemeService,
   ) {}
 
   ngOnInit(): void {
     const savedLang = localStorage.getItem('lang');
-    this.currentLang = savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
+    this.currentLang =
+      savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
     this.translate.use(this.currentLang);
 
     const savedTheme = localStorage.getItem('theme');
     this.isDarkMode = savedTheme === 'dark';
     document.documentElement.classList.toggle('dark', this.isDarkMode);
+    this.agGridThemeService.setDarkMode(this.isDarkMode);
 
     // Get the return URL from route parameters or default to '/onboarding'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/onboarding';
@@ -67,7 +71,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
   }
 
@@ -85,18 +89,19 @@ export class LoginComponent implements OnInit {
         this.snackBar.open(
           this.translate.instant('login.success'),
           this.translate.instant('common.close'),
-          { duration: 3000 }
+          { duration: 3000 },
         );
         const target = this.authService.hasRole('Admin') ? '/admin/dashboard' : this.returnUrl;
         this.router.navigate([target]);
       },
       error: (error) => {
         this.isLoading = false;
-        const message = error.status === 401
-          ? this.translate.instant('login.errors.invalidCredentials')
-          : this.translate.instant('login.errors.serverError');
+        const message =
+          error.status === 401
+            ? this.translate.instant('login.errors.invalidCredentials')
+            : this.translate.instant('login.errors.serverError');
         this.snackBar.open(message, this.translate.instant('common.close'), { duration: 5000 });
-      }
+      },
     });
   }
 
@@ -123,5 +128,6 @@ export class LoginComponent implements OnInit {
     this.isDarkMode = !this.isDarkMode;
     document.documentElement.classList.toggle('dark', this.isDarkMode);
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+    this.agGridThemeService.setDarkMode(this.isDarkMode);
   }
 }

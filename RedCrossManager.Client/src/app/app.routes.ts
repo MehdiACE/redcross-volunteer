@@ -5,68 +5,95 @@ import { adminGuard } from './core/guards/admin.guard';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () =>
+      import('./features/auth/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'register',
-    loadComponent: () => import('./features/onboarding/registration/registration.component').then(m => m.RegistrationComponent)
+    loadComponent: () =>
+      import('./features/onboarding/registration/registration.component').then(
+        (m) => m.RegistrationComponent,
+      ),
   },
   {
     path: 'onboarding',
-    loadComponent: () => import('./features/onboarding/stepper/stepper.component').then(m => m.StepperComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/onboarding/stepper/stepper.component').then((m) => m.StepperComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'admin/dashboard',
-    loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-    canActivate: [adminGuard]
+    loadComponent: () =>
+      import('./features/admin-dashboard/admin-dashboard.component').then(
+        (m) => m.AdminDashboardComponent,
+      ),
+    canActivate: [adminGuard],
   },
   {
     path: 'admin/volunteers/:id',
-    loadComponent: () => import('./features/volunteers/detail/volunteer-detail.component').then(m => m.VolunteerDetailComponent),
-    canActivate: [adminGuard]
+    loadComponent: () =>
+      import('./features/volunteers/detail/volunteer-detail.component').then(
+        (m) => m.VolunteerDetailComponent,
+      ),
+    canActivate: [adminGuard],
   },
   {
     path: 'admin/volunteer-communications',
-    loadComponent: () => import('./features/volunteer-communications/volunteer-communications.component').then(m => m.VolunteerCommunicationsComponent),
-    canActivate: [adminGuard]
+    loadComponent: () =>
+      import('./features/volunteer-communications/volunteer-communications.component').then(
+        (m) => m.VolunteerCommunicationsComponent,
+      ),
+    canActivate: [adminGuard],
   },
   {
     path: 'admin/communication-history',
-    loadComponent: () => import('./features/volunteer-communications/history/communication-history.component').then(m => m.CommunicationHistoryComponent),
-    canActivate: [adminGuard]
+    loadComponent: () =>
+      import('./features/volunteer-communications/history/communication-history.component').then(
+        (m) => m.CommunicationHistoryComponent,
+      ),
+    canActivate: [adminGuard],
   },
   {
     path: 'trainings',
-    loadComponent: () => import('./features/trainings/trainings.component').then(m => m.TrainingsComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/trainings/trainings.component').then((m) => m.TrainingsComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'missions',
-    loadComponent: () => import('./features/missions/missions.component').then(m => m.MissionsComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/missions/missions.component').then((m) => m.MissionsComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'documents',
-    loadComponent: () => import('./features/documents/documents.component').then(m => m.DocumentsComponent),
-    canActivate: [authGuard]
+    loadComponent: () =>
+      import('./features/documents/documents.component').then((m) => m.DocumentsComponent),
+    canActivate: [authGuard],
   },
   {
     path: 'benevole-ponctuel',
-    loadComponent: () => import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(m => m.OneTimeVolunteerComponent)
+    loadComponent: () =>
+      import('./features/onboarding/one-time-volunteer/one-time-volunteer.component').then(
+        (m) => m.OneTimeVolunteerComponent,
+      ),
   },
   {
     path: 'guardian-consent/:volunteerId',
-    loadComponent: () => import('./features/onboarding/guardian-consent/guardian-consent.component').then(m => m.GuardianConsentComponent)
+    loadComponent: () =>
+      import('./features/onboarding/guardian-consent/guardian-consent.component').then(
+        (m) => m.GuardianConsentComponent,
+      ),
   },
   {
     path: '',
     redirectTo: '/login',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];

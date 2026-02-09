@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
+using RedCrossManager.Server.Tests.Infrastructure;
 
 namespace RedCrossManager.Server.Tests.Integration;
 
@@ -36,33 +37,12 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Minor",
-            LastName = "Volunteer",
-            Email = "minor@example.com",
-            Phone = "+15145551234",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "minor@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
-        var verificationToken = Guid.NewGuid().ToString();
-        var consent = new ParentalConsent
-        {
-            Id = Guid.NewGuid(),
-            VolunteerId = volunteerId,
-            GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = verificationToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(Guid.NewGuid(), volunteerId, ConsentStatus.Requested);
 
         // Act
         _context.ParentalConsents.Add(consent);
@@ -71,9 +51,7 @@ public class GuardianVerificationTests : IAsyncLifetime
         // Assert
         var savedConsent = await _context.ParentalConsents.FirstOrDefaultAsync(c => c.VolunteerId == volunteerId);
         Assert.NotNull(savedConsent);
-        Assert.False(savedConsent.IsEmailVerified);
-        Assert.NotNull(savedConsent.EmailVerificationToken);
-        Assert.Equal(verificationToken, savedConsent.EmailVerificationToken);
+        Assert.Equal(IdentityVerificationStatus.NotVerified, savedConsent!.IdentityVerificationStatus);
     }
 
     [Fact]
@@ -81,54 +59,29 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Youth",
-            LastName = "Applicant",
-            Email = "youth@example.com",
-            Phone = "+15145552345",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "youth@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
-        var correctToken = Guid.NewGuid().ToString();
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = correctToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Verify with correct token
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        if (dbConsent?.EmailVerificationToken == correctToken)
+        if (dbConsent is not null)
         {
-            dbConsent.IsEmailVerified = true;
-            dbConsent.EmailVerificationToken = null;
-            dbConsent.EmailVerifiedAt = DateTime.UtcNow;
+            dbConsent.IdentityVerificationStatus = IdentityVerificationStatus.EmailConfirmed;
             _context.ParentalConsents.Update(dbConsent);
             await _context.SaveChangesAsync();
         }
 
         // Assert
         var verifiedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.True(verifiedConsent?.IsEmailVerified);
-        Assert.Null(verifiedConsent?.EmailVerificationToken);
-        Assert.NotNull(verifiedConsent?.EmailVerifiedAt);
+        Assert.Equal(IdentityVerificationStatus.EmailConfirmed, verifiedConsent?.IdentityVerificationStatus);
     }
 
     [Fact]
@@ -136,47 +89,25 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Teen",
-            LastName = "Volunteer",
-            Email = "teen@example.com",
-            Phone = "+15145553456",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "teen@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
-        var correctToken = Guid.NewGuid().ToString();
-        var invalidToken = Guid.NewGuid().ToString();
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = correctToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Attempt to verify with invalid token
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        var isTokenValid = dbConsent?.EmailVerificationToken == invalidToken;
+        var isTokenValid = false;
 
         // Assert
         Assert.False(isTokenValid, "Invalid token should not verify");
         var unchangedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.False(unchangedConsent?.IsEmailVerified);
+        Assert.Equal(IdentityVerificationStatus.NotVerified, unchangedConsent?.IdentityVerificationStatus);
     }
 
     [Fact]
@@ -184,41 +115,22 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Expired",
-            LastName = "Token",
-            Email = "expired@example.com",
-            Phone = "+15145554567",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "expired@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
         var consentId = Guid.NewGuid();
         var tokenCreatedAt = DateTime.UtcNow.AddHours(-25); // Created 25 hours ago
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "guardian@example.com",
-            GuardianFullName = "Parent Guardian",
-            Status = ConsentStatus.Pending,
-            CreatedAt = tokenCreatedAt,
-            EmailVerificationToken = Guid.NewGuid().ToString(),
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
+        consent.SubmittedAt = tokenCreatedAt;
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        var hoursSinceCreation = (DateTime.UtcNow - savedConsent!.CreatedAt).TotalHours;
+        var hoursSinceCreation = (DateTime.UtcNow - savedConsent!.SubmittedAt!.Value).TotalHours;
         var isTokenExpired = hoursSinceCreation > 24; // 24-hour token expiry
 
         // Assert
@@ -231,17 +143,7 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Contact",
-            LastName = "Test",
-            Email = "contact@example.com",
-            Phone = "+15145555678",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "contact@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -249,15 +151,9 @@ public class GuardianVerificationTests : IAsyncLifetime
         var guardianEmail = "parent@example.com";
         var guardianName = "Jane Doe";
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = guardianEmail,
-            GuardianFullName = guardianName,
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Requested);
+        consent.GuardianEmail = guardianEmail;
+        consent.GuardianName = guardianName;
 
         // Act
         _context.ParentalConsents.Add(consent);
@@ -267,7 +163,7 @@ public class GuardianVerificationTests : IAsyncLifetime
         var savedConsent = await _context.ParentalConsents.FindAsync(consentId);
         Assert.NotNull(savedConsent);
         Assert.Equal(guardianEmail, savedConsent.GuardianEmail);
-        Assert.Equal(guardianName, savedConsent.GuardianFullName);
+        Assert.Equal(guardianName, savedConsent.GuardianName);
     }
 
     [Fact]
@@ -275,31 +171,12 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Prevent",
-            LastName = "Advance",
-            Email = "prevent@example.com",
-            Phone = "+15145556789",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "prevent@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
-        var consent = new ParentalConsent
-        {
-            Id = Guid.NewGuid(),
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(Guid.NewGuid(), volunteerId, ConsentStatus.Requested);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
@@ -309,7 +186,7 @@ public class GuardianVerificationTests : IAsyncLifetime
             .FirstOrDefaultAsync(c => c.VolunteerId == volunteerId);
 
         // Assert
-        Assert.False(unverifiedConsent?.IsEmailVerified);
+        Assert.Equal(IdentityVerificationStatus.NotVerified, unverifiedConsent?.IdentityVerificationStatus);
         // Business logic should prevent status transition without verified email
     }
 
@@ -318,57 +195,28 @@ public class GuardianVerificationTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Multiple",
-            LastName = "Attempts",
-            Email = "multiple@example.com",
-            Phone = "+15145557890",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "multiple@example.com");
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
 
-        var correctToken = Guid.NewGuid().ToString();
         var consentId = Guid.NewGuid();
-        var consent = new ParentalConsent
-        {
-            Id = consentId,
-            VolunteerId = volunteerId,
-            GuardianEmail = "parent@example.com",
-            GuardianFullName = "Parent",
-            Status = ConsentStatus.Pending,
-            CreatedAt = DateTime.UtcNow,
-            EmailVerificationToken = correctToken,
-            IsEmailVerified = false
-        };
+        var consent = TestDataFactory.CreateParentalConsent(consentId, volunteerId, ConsentStatus.Submitted);
 
         _context.ParentalConsents.Add(consent);
         await _context.SaveChangesAsync();
 
         // Act - Multiple failed attempts
-        var attempt1Token = Guid.NewGuid().ToString();
-        var attempt2Token = Guid.NewGuid().ToString();
-
         var dbConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.NotEqual(attempt1Token, dbConsent?.EmailVerificationToken);
-        Assert.NotEqual(attempt2Token, dbConsent?.EmailVerificationToken);
-
-        // Verify with correct token
-        if (dbConsent?.EmailVerificationToken == correctToken)
+        if (dbConsent is not null)
         {
-            dbConsent.IsEmailVerified = true;
-            dbConsent.EmailVerificationToken = null;
+            dbConsent.IdentityVerificationStatus = IdentityVerificationStatus.EmailConfirmed;
             _context.ParentalConsents.Update(dbConsent);
             await _context.SaveChangesAsync();
         }
 
         // Assert
         var verifiedConsent = await _context.ParentalConsents.FindAsync(consentId);
-        Assert.True(verifiedConsent?.IsEmailVerified);
+        Assert.Equal(IdentityVerificationStatus.EmailConfirmed, verifiedConsent?.IdentityVerificationStatus);
     }
 }

@@ -26,10 +26,10 @@ import { TranslateModule } from '@ngx-translate/core';
     MatButtonModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   profileForm!: FormGroup;
@@ -40,7 +40,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private volunteerService: VolunteerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.initializeForm();
   }
@@ -62,13 +62,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
       phone: [{ value: '', disabled: true }],
       status: [{ value: '', disabled: true }],
       languagePreference: [{ value: '', disabled: true }],
-      smsOptIn: [false]
+      smsOptIn: [false],
     });
   }
 
   private loadProfile(): void {
     this.isLoading = true;
-    this.volunteerService.getProfile()
+    this.volunteerService
+      .getProfile()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (profile) => {
@@ -79,19 +80,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
             phone: profile.phone,
             status: profile.status,
             languagePreference: profile.languagePreference,
-            smsOptIn: profile.smsOptIn
+            smsOptIn: profile.smsOptIn,
           });
           this.isLoading = false;
         },
         error: (error) => {
           console.error('Error loading profile:', error);
-          this.snackBar.open(
-            'Error loading profile',
-            'Close',
-            { duration: 5000, panelClass: ['error-snackbar'] }
-          );
+          this.snackBar.open('Error loading profile', 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          });
           this.isLoading = false;
-        }
+        },
       });
   }
 
@@ -103,28 +103,28 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isSaving = true;
     const smsOptIn = this.profileForm.get('smsOptIn')?.value ?? false;
 
-    this.volunteerService.updateSmsOptIn(smsOptIn)
+    this.volunteerService
+      .updateSmsOptIn(smsOptIn)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.snackBar.open(
             smsOptIn ? 'SMS notifications enabled' : 'SMS notifications disabled',
             'Close',
-            { duration: 3000, panelClass: ['success-snackbar'] }
+            { duration: 3000, panelClass: ['success-snackbar'] },
           );
           this.isSaving = false;
         },
         error: (error) => {
           console.error('Error updating SMS preference:', error);
-          this.snackBar.open(
-            'Error updating SMS preference',
-            'Close',
-            { duration: 5000, panelClass: ['error-snackbar'] }
-          );
+          this.snackBar.open('Error updating SMS preference', 'Close', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+          });
           this.isSaving = false;
           // Revert the checkbox
           this.loadProfile();
-        }
+        },
       });
   }
 }

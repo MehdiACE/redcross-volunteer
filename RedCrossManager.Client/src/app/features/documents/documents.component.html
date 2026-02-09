@@ -9,7 +9,9 @@
       </p>
     </div>
 
-    <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div
+      class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+    >
       <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
         <mat-icon class="text-red-600">note_add</mat-icon>
         {{ 'documents.addNew' | translate }}
@@ -25,23 +27,30 @@
               <mat-select [(ngModel)]="selectedCategory">
                 <mat-option value="">{{ 'documents.selectCategory' | translate }}</mat-option>
                 <mat-option *ngFor="let category of categories" [value]="category">
-                  {{ ('documents.categories.' + category) | translate }}
+                  {{ 'documents.categories.' + category | translate }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
-          <div 
+          <div
             class="rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-6 text-center transition-colors"
             [class.border-red-400]="isDragOver"
             [class.bg-red-50]="isDragOver"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
-            (drop)="onDrop($event)">
-            <mat-icon class="text-gray-400" [class.text-red-500]="isDragOver">cloud_upload</mat-icon>
+            (drop)="onDrop($event)"
+          >
+            <mat-icon class="text-gray-400" [class.text-red-500]="isDragOver"
+              >cloud_upload</mat-icon
+            >
             <p class="text-sm text-gray-600 mt-2">
               {{ 'documents.dropHint' | translate }}
-              <button class="text-red-600 font-semibold" type="button" (click)="$event.preventDefault(); fileInput.click()">
+              <button
+                class="text-red-600 font-semibold"
+                type="button"
+                (click)="$event.preventDefault(); fileInput.click()"
+              >
                 {{ 'documents.browse' | translate }}
               </button>
             </p>
@@ -51,7 +60,7 @@
             <p *ngIf="selectedFile" class="text-xs text-gray-600 mt-3">
               {{ selectedFile.name }}
             </p>
-            <input type="file" hidden (change)="onFileSelected($event)" #fileInput>
+            <input type="file" hidden (change)="onFileSelected($event)" #fileInput />
           </div>
         </div>
 
@@ -65,7 +74,8 @@
               color="primary"
               class="w-full"
               (click)="uploadDocument()"
-              [disabled]="uploadInProgress">
+              [disabled]="uploadInProgress"
+            >
               <mat-icon>cloud_upload</mat-icon>
               {{ 'documents.uploadCta' | translate }}
             </button>
@@ -74,7 +84,9 @@
       </div>
     </div>
 
-    <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div
+      class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+    >
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
           <mat-icon class="text-gray-400">folder</mat-icon>
@@ -84,19 +96,22 @@
           <button
             class="status-tab px-3 py-1 rounded-full"
             [class.is-active]="statusFilter === 'all'"
-            (click)="setStatusFilter('all')">
+            (click)="setStatusFilter('all')"
+          >
             {{ 'documents.tabs.all' | translate }}
           </button>
           <button
             class="status-tab px-3 py-1 rounded-full"
             [class.is-active]="statusFilter === 'pending'"
-            (click)="setStatusFilter('pending')">
+            (click)="setStatusFilter('pending')"
+          >
             {{ 'documents.tabs.pending' | translate }}
           </button>
           <button
             class="status-tab px-3 py-1 rounded-full"
             [class.is-active]="statusFilter === 'approved'"
-            (click)="setStatusFilter('approved')">
+            (click)="setStatusFilter('approved')"
+          >
             {{ 'documents.tabs.approved' | translate }}
           </button>
         </div>
@@ -106,20 +121,32 @@
         <mat-spinner diameter="40"></mat-spinner>
       </div>
 
-      <div *ngIf="!isLoading && filteredDocuments.length === 0" class="text-center py-6 text-gray-500">
+      <div
+        *ngIf="!isLoading && filteredDocuments.length === 0"
+        class="text-center py-6 text-gray-500"
+      >
         {{ 'documents.empty' | translate }}
       </div>
 
       <div *ngIf="!isLoading && filteredDocuments.length > 0" class="mt-6 space-y-4">
         <div *ngFor="let group of groupedDocuments" class="rounded-xl border border-gray-100">
-          <div class="flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase text-gray-500">
-            <span>{{ ('documents.categories.' + group.category) | translate }}</span>
-            <span class="rounded-full bg-gray-100 px-2 py-1 text-[10px]">{{ group.items.length }}</span>
+          <div
+            class="flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase text-gray-500"
+          >
+            <span>{{ 'documents.categories.' + group.category | translate }}</span>
+            <span class="rounded-full bg-gray-100 px-2 py-1 text-[10px]">{{
+              group.items.length
+            }}</span>
           </div>
           <div class="divide-y divide-gray-100">
-            <div *ngFor="let doc of group.items" class="flex items-center justify-between px-4 py-3">
+            <div
+              *ngFor="let doc of group.items"
+              class="flex items-center justify-between px-4 py-3"
+            >
               <div class="flex items-center gap-3">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
+                <div
+                  class="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600"
+                >
                   <mat-icon>description</mat-icon>
                 </div>
                 <div>
@@ -130,10 +157,18 @@
                 </div>
               </div>
               <div class="flex items-center gap-3">
-                <span class="rounded-full px-3 py-1 text-xs font-semibold" [class]="getStatusBadgeClass(doc.verificationStatus)">
-                  {{ ('documents.status.' + doc.verificationStatus) | translate }}
+                <span
+                  class="rounded-full px-3 py-1 text-xs font-semibold"
+                  [class]="getStatusBadgeClass(doc.verificationStatus)"
+                >
+                  {{ 'documents.status.' + doc.verificationStatus | translate }}
                 </span>
-                <button mat-icon-button (click)="downloadDocument(doc)">
+                <button
+                  mat-icon-button
+                  type="button"
+                  (click)="downloadDocument(doc)"
+                  [attr.aria-label]="'common.download' | translate"
+                >
                   <mat-icon>more_vert</mat-icon>
                 </button>
               </div>

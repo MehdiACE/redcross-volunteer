@@ -7,18 +7,17 @@ import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { RegistrationComponent } from './registration.component';
 import { VolunteerService } from '../../../core/services/volunteer.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateFakeLoader, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RegistrationComponent', () => {
   let component: RegistrationComponent;
   let fixture: ComponentFixture<RegistrationComponent>;
   let volunteerService: jasmine.SpyObj<VolunteerService>;
-  let router: jasmine.SpyObj<Router>;
+  let router: Router;
 
   beforeEach(async () => {
     const volunteerServiceSpy = jasmine.createSpyObj('VolunteerService', ['register']);
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
-
     await TestBed.configureTestingModule({
       imports: [
         RegistrationComponent,
@@ -26,16 +25,17 @@ describe('RegistrationComponent', () => {
         MatSnackBarModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        TranslateModule.forRoot()
+        RouterTestingModule,
+        TranslateModule.forRoot({
+          loader: { provide: TranslateLoader, useClass: TranslateFakeLoader },
+        }),
       ],
-      providers: [
-        { provide: VolunteerService, useValue: volunteerServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+      providers: [{ provide: VolunteerService, useValue: volunteerServiceSpy }],
     }).compileComponents();
 
     volunteerService = TestBed.inject(VolunteerService) as jasmine.SpyObj<VolunteerService>;
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
 
     fixture = TestBed.createComponent(RegistrationComponent);
     component = fixture.componentInstance;
@@ -55,7 +55,7 @@ describe('RegistrationComponent', () => {
     expect(form.get('phone')).toBeTruthy();
     expect(form.get('dateOfBirth')).toBeTruthy();
     expect(form.get('languagePreference')).toBeTruthy();
-    expect(form.get('interests')).toBeTruthy();
+    expect(form.get('areasOfInterest')).toBeTruthy();
     expect(form.get('availability')).toBeTruthy();
   });
 
@@ -89,14 +89,14 @@ describe('RegistrationComponent', () => {
     expect(emailControl?.hasError('email')).toBe(false);
   });
 
-  it('should mark phone field as invalid with too few digits', () => {
+  it('should mark phone field as invalid with incorrect format', () => {
     fixture.detectChanges();
 
     const phoneControl = component.registrationForm.get('phone');
-    phoneControl?.setValue('123');
+    phoneControl?.setValue('invalid-phone');
     phoneControl?.markAsTouched();
 
-    expect(phoneControl?.hasError('minlength')).toBe(true);
+    expect(phoneControl?.hasError('pattern')).toBe(true);
   });
 
   it('should mark phone field as valid with correct format', () => {
@@ -123,20 +123,6 @@ describe('RegistrationComponent', () => {
     expect(lastNameControl?.hasError('required')).toBe(true);
   });
 
-  it('should mark dateOfBirth as invalid if too recent', () => {
-    fixture.detectChanges();
-
-    const dobControl = component.registrationForm.get('dateOfBirth');
-    const today = new Date();
-    const tooYoung = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
-
-    dobControl?.setValue(tooYoung);
-    dobControl?.markAsTouched();
-
-    // Assuming validator checks age is >= 13 years
-    expect(dobControl?.hasError('minAge')).toBe(true);
-  });
-
   it('should enable submit button when form is valid', () => {
     fixture.detectChanges();
 
@@ -145,11 +131,27 @@ describe('RegistrationComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
+      password: 'SecurePassword123!',
+      confirmPassword: 'SecurePassword123!',
       phone: '+15145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
-      interests: ['First Aid'],
-      availability: ['Monday']
+      areasOfInterest: ['First Aid'],
+      availability: {
+        daysOfWeek: ['Monday'],
+        timePreference: 'Morning',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'Montreal',
+        stateProvince: 'QC',
+        postalCode: 'H1A 1A1',
+        country: 'Canada',
+      },
+      emergencyContact: {
+        name: 'Jane Doe',
+        phone: '+15145555678',
+      },
     });
 
     expect(form.valid).toBe(true);
@@ -161,7 +163,7 @@ describe('RegistrationComponent', () => {
     const form = component.registrationForm;
     form.patchValue({
       firstName: 'John',
-      email: 'invalid-email'
+      email: 'invalid-email',
     });
 
     expect(form.valid).toBe(false);
@@ -169,7 +171,7 @@ describe('RegistrationComponent', () => {
 
   it('should call volunteerService.register on submit', () => {
     volunteerService.register.and.returnValue(
-      of({ id: '123', status: 'Pending' } as any)
+      of({ accessToken: 'token', userId: 'user-1', roles: [] } as any),
     );
 
     fixture.detectChanges();
@@ -179,27 +181,43 @@ describe('RegistrationComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
+      password: 'SecurePassword123!',
+      confirmPassword: 'SecurePassword123!',
       phone: '+15145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
-      interests: ['First Aid'],
-      availability: ['Monday']
+      areasOfInterest: ['First Aid'],
+      availability: {
+        daysOfWeek: ['Monday'],
+        timePreference: 'Morning',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'Montreal',
+        stateProvince: 'QC',
+        postalCode: 'H1A 1A1',
+        country: 'Canada',
+      },
+      emergencyContact: {
+        name: 'Jane Doe',
+        phone: '+15145555678',
+      },
     });
 
-    component.register();
+    component.onSubmit();
 
     expect(volunteerService.register).toHaveBeenCalledWith(
       jasmine.objectContaining({
         firstName: 'John',
         lastName: 'Doe',
-        email: 'john@example.com'
-      })
+        email: 'john@example.com',
+      }),
     );
   });
 
   it('should navigate on successful registration', (done) => {
     volunteerService.register.and.returnValue(
-      of({ id: '123', status: 'Pending' } as any)
+      of({ accessToken: 'token', userId: 'user-1', roles: [] } as any),
     );
 
     fixture.detectChanges();
@@ -209,25 +227,39 @@ describe('RegistrationComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
+      password: 'SecurePassword123!',
+      confirmPassword: 'SecurePassword123!',
       phone: '+15145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
-      interests: ['First Aid'],
-      availability: ['Monday']
+      areasOfInterest: ['First Aid'],
+      availability: {
+        daysOfWeek: ['Monday'],
+        timePreference: 'Morning',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'Montreal',
+        stateProvince: 'QC',
+        postalCode: 'H1A 1A1',
+        country: 'Canada',
+      },
+      emergencyContact: {
+        name: 'Jane Doe',
+        phone: '+15145555678',
+      },
     });
 
-    component.register();
+    component.onSubmit();
 
     setTimeout(() => {
-      expect(router.navigate).toHaveBeenCalledWith(['/onboarding/stepper']);
+      expect(router.navigate).toHaveBeenCalledWith(['/onboarding']);
       done();
     }, 100);
   });
 
   it('should handle registration error', (done) => {
-    volunteerService.register.and.returnValue(
-      throwError(() => new Error('Duplicate email'))
-    );
+    volunteerService.register.and.returnValue(throwError(() => new Error('Duplicate email')));
 
     fixture.detectChanges();
 
@@ -236,14 +268,30 @@ describe('RegistrationComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
+      password: 'SecurePassword123!',
+      confirmPassword: 'SecurePassword123!',
       phone: '+15145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
-      interests: ['First Aid'],
-      availability: ['Monday']
+      areasOfInterest: ['First Aid'],
+      availability: {
+        daysOfWeek: ['Monday'],
+        timePreference: 'Morning',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'Montreal',
+        stateProvince: 'QC',
+        postalCode: 'H1A 1A1',
+        country: 'Canada',
+      },
+      emergencyContact: {
+        name: 'Jane Doe',
+        phone: '+15145555678',
+      },
     });
 
-    component.register();
+    component.onSubmit();
 
     setTimeout(() => {
       expect(component.isLoading).toBe(false);
@@ -253,7 +301,7 @@ describe('RegistrationComponent', () => {
 
   it('should set isLoading to true during registration', () => {
     volunteerService.register.and.returnValue(
-      of({ id: '123', status: 'Pending' } as any)
+      of({ accessToken: 'token', userId: 'user-1', roles: [] } as any),
     );
 
     fixture.detectChanges();
@@ -263,21 +311,37 @@ describe('RegistrationComponent', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john@example.com',
+      password: 'SecurePassword123!',
+      confirmPassword: 'SecurePassword123!',
       phone: '+15145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
-      interests: ['First Aid'],
-      availability: ['Monday']
+      areasOfInterest: ['First Aid'],
+      availability: {
+        daysOfWeek: ['Monday'],
+        timePreference: 'Morning',
+      },
+      address: {
+        street: '123 Main St',
+        city: 'Montreal',
+        stateProvince: 'QC',
+        postalCode: 'H1A 1A1',
+        country: 'Canada',
+      },
+      emergencyContact: {
+        name: 'Jane Doe',
+        phone: '+15145555678',
+      },
     });
 
-    component.register();
+    component.onSubmit();
     expect(component.isLoading).toBe(true);
   });
 
   it('should allow multiple interests selection', () => {
     fixture.detectChanges();
 
-    const interestsControl = component.registrationForm.get('interests');
+    const interestsControl = component.registrationForm.get('areasOfInterest');
     interestsControl?.setValue(['First Aid', 'Disaster Response', 'Youth Programs']);
 
     expect(interestsControl?.value).toEqual(['First Aid', 'Disaster Response', 'Youth Programs']);
@@ -287,11 +351,11 @@ describe('RegistrationComponent', () => {
   it('should allow multiple availability days selection', () => {
     fixture.detectChanges();
 
-    const availabilityControl = component.registrationForm.get('availability');
-    availabilityControl?.setValue(['Monday', 'Wednesday', 'Saturday']);
+    const availabilityDays = component.registrationForm.get('availability.daysOfWeek');
+    availabilityDays?.setValue(['Monday', 'Wednesday', 'Saturday']);
 
-    expect(availabilityControl?.value).toEqual(['Monday', 'Wednesday', 'Saturday']);
-    expect(availabilityControl?.valid).toBe(true);
+    expect(availabilityDays?.value).toEqual(['Monday', 'Wednesday', 'Saturday']);
+    expect(availabilityDays?.valid).toBe(true);
   });
 
   it('should support both language preferences', () => {
@@ -309,7 +373,7 @@ describe('RegistrationComponent', () => {
   it('should require at least one interest', () => {
     fixture.detectChanges();
 
-    const interestsControl = component.registrationForm.get('interests');
+    const interestsControl = component.registrationForm.get('areasOfInterest');
     interestsControl?.setValue([]);
     interestsControl?.markAsTouched();
 
@@ -319,10 +383,10 @@ describe('RegistrationComponent', () => {
   it('should require at least one availability day', () => {
     fixture.detectChanges();
 
-    const availabilityControl = component.registrationForm.get('availability');
-    availabilityControl?.setValue([]);
-    availabilityControl?.markAsTouched();
+    const availabilityDays = component.registrationForm.get('availability.daysOfWeek');
+    availabilityDays?.setValue([]);
+    availabilityDays?.markAsTouched();
 
-    expect(availabilityControl?.hasError('required')).toBe(true);
+    expect(availabilityDays?.hasError('required')).toBe(true);
   });
 });

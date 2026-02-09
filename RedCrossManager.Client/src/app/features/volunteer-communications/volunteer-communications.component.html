@@ -50,7 +50,7 @@
         <!-- Email Subject -->
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>{{ 'b1jComms.fields.subject' | translate }}</mat-label>
-          <input matInput formControlName="subject" maxlength="500">
+          <input matInput formControlName="subject" maxlength="500" />
           <mat-hint align="end">
             {{ composerForm.get('subject')?.value?.length || 0 }}/500
           </mat-hint>
@@ -62,17 +62,17 @@
         <!-- Message Body -->
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>{{ 'b1jComms.fields.body' | translate }}</mat-label>
-          <textarea 
-            matInput 
-            formControlName="bodyTemplate" 
+          <textarea
+            matInput
+            formControlName="bodyTemplate"
             rows="12"
             class="font-mono text-sm"
           ></textarea>
           <mat-hint>
-            {{ 'b1jComms.placeholders' | translate }}: 
-            <code>{{ '{' }}FirstName{{ '}' }}</code>, 
-            <code>{{ '{' }}LastName{{ '}' }}</code>, 
-            <code>{{ '{' }}FullName{{ '}' }}</code>, 
+            {{ 'b1jComms.placeholders' | translate }}: <code>{{ '{' }}FirstName{{ '}' }}</code
+            >, <code>{{ '{' }}LastName{{ '}' }}</code
+            >, <code>{{ '{' }}FullName{{ '}' }}</code
+            >,
             <code>{{ '{' }}ConsentLink{{ '}' }}</code>
           </mat-hint>
           <mat-error *ngIf="composerForm.get('bodyTemplate')?.hasError('required')">
@@ -82,18 +82,18 @@
 
         <!-- Submit Button -->
         <div class="flex justify-end gap-3 mt-6">
-          <button 
-            mat-stroked-button 
+          <button
+            mat-stroked-button
             type="button"
             (click)="loadTemplate()"
             [disabled]="!composerForm.get('segment')?.value"
           >
             {{ 'b1jComms.actions.loadTemplate' | translate }}
           </button>
-          
-          <button 
-            mat-raised-button 
-            color="primary" 
+
+          <button
+            mat-raised-button
+            color="primary"
             type="submit"
             [disabled]="composerForm.invalid || isLoading"
           >
@@ -105,4 +105,3 @@
     </mat-card-content>
   </mat-card>
 </div>
-

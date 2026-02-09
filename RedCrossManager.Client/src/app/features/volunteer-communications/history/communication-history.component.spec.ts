@@ -12,18 +12,12 @@ describe('CommunicationHistoryComponent', () => {
 
   beforeEach(async () => {
     mockCommunicationService = jasmine.createSpyObj('CommunicationService', [
-      'getRecentCommunications'
+      'getRecentCommunications',
     ]);
 
     await TestBed.configureTestingModule({
-      imports: [
-        CommunicationHistoryComponent,
-        TranslateModule.forRoot(),
-        NoopAnimationsModule
-      ],
-      providers: [
-        { provide: CommunicationService, useValue: mockCommunicationService }
-      ]
+      imports: [CommunicationHistoryComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+      providers: [{ provide: CommunicationService, useValue: mockCommunicationService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CommunicationHistoryComponent);
@@ -43,12 +37,14 @@ describe('CommunicationHistoryComponent', () => {
         language: 'fr',
         subject: 'Test Subject',
         bodyTemplate: 'Test Body',
-        sentAt: new Date(),
+        sentAt: new Date().toISOString(),
+        createdBy: 'Coordinator',
+        totalRecipients: 16,
         queuedCount: 5,
         sentCount: 10,
         failedCount: 1,
-        bouncedCount: 0
-      }
+        bouncedCount: 0,
+      },
     ];
 
     mockCommunicationService.getRecentCommunications.and.returnValue(of(mockMessages));
@@ -61,7 +57,7 @@ describe('CommunicationHistoryComponent', () => {
 
   it('should handle load error gracefully', () => {
     mockCommunicationService.getRecentCommunications.and.returnValue(
-      throwError(() => new Error('Load failed'))
+      throwError(() => new Error('Load failed')),
     );
     spyOn(console, 'error');
 
@@ -86,11 +82,13 @@ describe('CommunicationHistoryComponent', () => {
       language: 'en',
       subject: 'Test',
       bodyTemplate: 'Test',
-      sentAt: new Date(),
+      sentAt: new Date().toISOString(),
+      createdBy: 'Coordinator',
+      totalRecipients: 10,
       queuedCount: 0,
       sentCount: 8,
       failedCount: 2,
-      bouncedCount: 0
+      bouncedCount: 0,
     };
 
     expect(component.getSuccessRate(message)).toBe(80);

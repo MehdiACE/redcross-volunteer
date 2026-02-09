@@ -53,11 +53,7 @@
 
           <div class="sms-opt-in-wrapper">
             <div class="checkbox-container">
-              <mat-checkbox
-                formControlName="smsOptIn"
-                [disabled]="isSaving"
-                class="sms-checkbox"
-              >
+              <mat-checkbox formControlName="smsOptIn" [disabled]="isSaving" class="sms-checkbox">
                 {{ 'profile.smsOptIn' | translate }}
               </mat-checkbox>
               <p class="sms-description">

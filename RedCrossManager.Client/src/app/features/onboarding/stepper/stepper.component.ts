@@ -26,9 +26,9 @@ import { AuthService } from '../../../core/services/auth.service';
     MatCardModule,
     MatChipsModule,
     RouterLink,
-    TranslateModule
+    TranslateModule,
   ],
-  templateUrl: './stepper.component.html'
+  templateUrl: './stepper.component.html',
 })
 export class StepperComponent implements OnInit, OnDestroy {
   progress: OnboardingProgressDto | null = null;
@@ -42,14 +42,14 @@ export class StepperComponent implements OnInit, OnDestroy {
     'onboarding.steps.personalInfo',
     'onboarding.steps.background',
     'onboarding.steps.training',
-    'onboarding.steps.assignment'
+    'onboarding.steps.assignment',
   ];
 
   stepDescriptions = [
     'onboarding.stepDescriptions.personalInfoDesc',
     'onboarding.stepDescriptions.backgroundDesc',
     'onboarding.stepDescriptions.trainingDesc',
-    'onboarding.stepDescriptions.assignmentDesc'
+    'onboarding.stepDescriptions.assignmentDesc',
   ];
 
   constructor(
@@ -57,7 +57,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     private router: Router,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -72,7 +72,8 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   private loadProgress(): void {
     this.isLoading = true;
-    this.onboardingService.getMyProgress()
+    this.onboardingService
+      .getMyProgress()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (progress) => {
@@ -94,24 +95,24 @@ export class StepperComponent implements OnInit, OnDestroy {
             this.snackBar.open(
               this.translate.instant('onboarding.errors.noProfile'),
               this.translate.instant('common.close'),
-              { duration: 5000 }
+              { duration: 5000 },
             );
             this.router.navigate(['/onboarding/registration']);
           } else {
             this.snackBar.open(
               this.translate.instant('onboarding.errors.loadFailed'),
               this.translate.instant('common.close'),
-              { duration: 5000 }
+              { duration: 5000 },
             );
           }
           console.error('Failed to load progress:', error);
-        }
+        },
       });
   }
 
   private getNextIncompleteStepIndex(): number {
     if (!this.progress?.steps) return 0;
-    const index = this.progress.steps.findIndex(s => s.status === 'Pending');
+    const index = this.progress.steps.findIndex((s) => s.status === 'Pending');
     return index >= 0 ? index : this.progress.steps.length - 1;
   }
 
@@ -140,21 +141,19 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   getStepStatus(stepIndex: number): 'completed' | 'current' | 'pending' {
     if (!this.progress?.steps?.[stepIndex]) return 'pending';
-    
+
     const step = this.progress.steps[stepIndex];
     if (step.status === 'Completed') {
       return 'completed';
     }
-    
+
     // Current step is the first non-completed step
-    const currentStepIndex = this.progress.steps.findIndex(s => 
-      s.status !== 'Completed'
-    );
-    
+    const currentStepIndex = this.progress.steps.findIndex((s) => s.status !== 'Completed');
+
     if (currentStepIndex === stepIndex) {
       return 'current';
     }
-    
+
     return 'pending';
   }
 
@@ -163,11 +162,11 @@ export class StepperComponent implements OnInit, OnDestroy {
       this.snackBar.open(
         this.translate.instant('onboarding.errors.stepLocked'),
         this.translate.instant('common.close'),
-        { duration: 3000 }
+        { duration: 3000 },
       );
       return;
     }
-    
+
     // Allow clicking on current and completed steps
     if (this.getStepStatus(stepIndex) !== 'pending') {
       this.selectedStepIndex = stepIndex;
@@ -185,7 +184,7 @@ export class StepperComponent implements OnInit, OnDestroy {
       this.snackBar.open(
         this.translate.instant('onboarding.errors.stepLocked'),
         this.translate.instant('common.close'),
-        { duration: 3000 }
+        { duration: 3000 },
       );
     } else {
       this.selectedStepIndex = event.selectedIndex;
@@ -198,14 +197,15 @@ export class StepperComponent implements OnInit, OnDestroy {
     const step = this.progress.steps[stepIndex];
     this.isSubmitting = true;
 
-    this.onboardingService.submitMyStep(step.id)
+    this.onboardingService
+      .submitMyStep(step.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.snackBar.open(
             this.translate.instant('onboarding.messages.stepSubmitted'),
             this.translate.instant('common.close'),
-            { duration: 3000 }
+            { duration: 3000 },
           );
           this.isSubmitting = false;
           this.loadProgress(); // Refresh progress
@@ -218,11 +218,12 @@ export class StepperComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           this.isSubmitting = false;
-          const message = error.status === 409
-            ? this.translate.instant('onboarding.errors.stepAlreadySubmitted')
-            : this.translate.instant('onboarding.errors.submitFailed');
+          const message =
+            error.status === 409
+              ? this.translate.instant('onboarding.errors.stepAlreadySubmitted')
+              : this.translate.instant('onboarding.errors.submitFailed');
           this.snackBar.open(message, this.translate.instant('common.close'), { duration: 5000 });
-        }
+        },
       });
   }
 
@@ -231,7 +232,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   getCompletedStepsCount(): number {
-    return this.progress?.steps?.filter(s => s.status === 'Completed').length || 0;
+    return this.progress?.steps?.filter((s) => s.status === 'Completed').length || 0;
   }
 
   getTotalSteps(): number {
@@ -266,5 +267,4 @@ export class StepperComponent implements OnInit, OnDestroy {
   goToRegistration(): void {
     this.router.navigate(['/register']);
   }
-
 }

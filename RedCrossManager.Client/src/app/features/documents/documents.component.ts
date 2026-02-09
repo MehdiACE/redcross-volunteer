@@ -28,10 +28,10 @@ import { DocumentDto } from '../../core/models/document.model';
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './documents.component.html',
-  styleUrls: ['./documents.component.scss']
+  styleUrls: ['./documents.component.scss'],
 })
 export class DocumentsComponent implements OnInit {
   documents: DocumentDto[] = [];
@@ -40,13 +40,7 @@ export class DocumentsComponent implements OnInit {
   statusFilter: 'all' | 'pending' | 'approved' = 'all';
   isDragOver = false;
 
-  categories = [
-    'Identification',
-    'BackgroundCheck',
-    'Certification',
-    'MedicalForm',
-    'ConsentForm'
-  ];
+  categories = ['Identification', 'BackgroundCheck', 'Certification', 'MedicalForm', 'ConsentForm'];
 
   selectedCategory = '';
   selectedFile: File | null = null;
@@ -55,7 +49,7 @@ export class DocumentsComponent implements OnInit {
     private documentService: DocumentService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -76,8 +70,10 @@ export class DocumentsComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.snackBar.open(this.translate.instant('documents.loadError'), undefined, { duration: 3000 });
-      }
+        this.snackBar.open(this.translate.instant('documents.loadError'), undefined, {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -118,39 +114,49 @@ export class DocumentsComponent implements OnInit {
 
   uploadDocument(): void {
     if (!this.selectedFile || !this.selectedCategory) {
-      this.snackBar.open(this.translate.instant('documents.selectFile'), undefined, { duration: 3000 });
+      this.snackBar.open(this.translate.instant('documents.selectFile'), undefined, {
+        duration: 3000,
+      });
       return;
     }
 
     this.uploadInProgress = true;
     const file = this.selectedFile;
 
-    this.documentService.getUploadUrl({
-      category: this.selectedCategory,
-      fileName: file.name,
-      contentType: file.type,
-      sizeBytes: file.size
-    }).subscribe({
-      next: (response) => {
-        this.documentService.uploadDocument(response.uploadUrl, file).subscribe({
-          next: () => {
-            this.uploadInProgress = false;
-            this.selectedFile = null;
-            this.selectedCategory = '';
-            this.snackBar.open(this.translate.instant('documents.uploadSuccess'), undefined, { duration: 3000 });
-            this.loadDocuments();
-          },
-          error: () => {
-            this.uploadInProgress = false;
-            this.snackBar.open(this.translate.instant('documents.uploadError'), undefined, { duration: 3000 });
-          }
-        });
-      },
-      error: () => {
-        this.uploadInProgress = false;
-        this.snackBar.open(this.translate.instant('documents.uploadError'), undefined, { duration: 3000 });
-      }
-    });
+    this.documentService
+      .getUploadUrl({
+        category: this.selectedCategory,
+        fileName: file.name,
+        contentType: file.type,
+        sizeBytes: file.size,
+      })
+      .subscribe({
+        next: (response) => {
+          this.documentService.uploadDocument(response.uploadUrl, file).subscribe({
+            next: () => {
+              this.uploadInProgress = false;
+              this.selectedFile = null;
+              this.selectedCategory = '';
+              this.snackBar.open(this.translate.instant('documents.uploadSuccess'), undefined, {
+                duration: 3000,
+              });
+              this.loadDocuments();
+            },
+            error: () => {
+              this.uploadInProgress = false;
+              this.snackBar.open(this.translate.instant('documents.uploadError'), undefined, {
+                duration: 3000,
+              });
+            },
+          });
+        },
+        error: () => {
+          this.uploadInProgress = false;
+          this.snackBar.open(this.translate.instant('documents.uploadError'), undefined, {
+            duration: 3000,
+          });
+        },
+      });
   }
 
   downloadDocument(document: DocumentDto): void {
@@ -167,7 +173,7 @@ export class DocumentsComponent implements OnInit {
     }
 
     const targetStatus = this.statusFilter === 'pending' ? 'Pending' : 'Approved';
-    return this.documents.filter(doc => doc.verificationStatus === targetStatus);
+    return this.documents.filter((doc) => doc.verificationStatus === targetStatus);
   }
 
   get groupedDocuments(): Array<{ category: string; items: DocumentDto[] }> {

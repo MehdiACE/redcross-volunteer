@@ -45,7 +45,7 @@ export interface CommunicationRecipientDto {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommunicationService {
   constructor(private api: ApiService) {}
@@ -67,6 +67,9 @@ export class CommunicationService {
   }
 
   processQueue(maxRecipients: number = 100): Observable<{ processed: number; succeeded: number }> {
-    return this.api.post<{ processed: number; succeeded: number }>(`/communications/process-queue?maxRecipients=${maxRecipients}`, {});
+    return this.api.post<{ processed: number; succeeded: number }>(
+      `/communications/process-queue?maxRecipients=${maxRecipients}`,
+      {},
+    );
   }
 }

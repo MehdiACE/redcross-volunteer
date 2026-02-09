@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Xunit;
 using RedCrossManager.Server.DTOs.Training;
 using RedCrossManager.Server.Domain.Entities;
+using RedCrossManager.Server.Tests.Infrastructure;
 
 namespace RedCrossManager.Server.Tests.Integration
 {

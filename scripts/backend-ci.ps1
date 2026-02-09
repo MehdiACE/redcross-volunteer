@@ -15,36 +15,36 @@ param(
 $ErrorActionPreference = "Stop"
 $BuildConfiguration = "Release"
 
-Write-Host "🔍 Backend CI Checks" -ForegroundColor Cyan
+Write-Host "Backend CI Checks" -ForegroundColor Cyan
 
 # Check for .NET installation
-Write-Host "✓ Checking .NET SDK..." -ForegroundColor Green
+Write-Host "Checking .NET SDK..." -ForegroundColor Green
 $dotnetVersion = dotnet --version
 Write-Host "  Using .NET $dotnetVersion"
 
 # Restore
-Write-Host "`n📦 Restoring dependencies..." -ForegroundColor Green
+Write-Host "`nRestoring dependencies..." -ForegroundColor Green
 dotnet restore
 if ($LASTEXITCODE -ne 0) { exit 1 }
 
 # Format (optional fix)
 if ($Fix) {
-    Write-Host "`n🎨 Formatting code with dotnet-format..." -ForegroundColor Green
+    Write-Host "`nFormatting code with dotnet-format..." -ForegroundColor Green
     dotnet format
 }
 
 # Build
-Write-Host "`n🏗️ Building solution..." -ForegroundColor Green
+Write-Host "`nBuilding solution..." -ForegroundColor Green
 dotnet build --no-restore --configuration $BuildConfiguration /p:EnforceCodeStyleInBuild=true
 if ($LASTEXITCODE -ne 0) { 
-    Write-Host "❌ Build failed" -ForegroundColor Red
+    Write-Host "Build failed" -ForegroundColor Red
     exit 1 
 }
-Write-Host "✅ Build successful" -ForegroundColor Green
+Write-Host "Build successful" -ForegroundColor Green
 
 # Tests
 if (-not $SkipTests) {
-    Write-Host "`n🧪 Running tests..." -ForegroundColor Green
+    Write-Host "`nRunning tests..." -ForegroundColor Green
     if ($CoverageReport) {
         dotnet test RedCrossManager.Server.Tests/RedCrossManager.Server.Tests.csproj `
             --no-build `
@@ -60,11 +60,11 @@ if (-not $SkipTests) {
     }
     
     if ($LASTEXITCODE -ne 0) { 
-        Write-Host "❌ Tests failed" -ForegroundColor Red
+        Write-Host "Tests failed" -ForegroundColor Red
         exit 1 
     }
-    Write-Host "✅ Tests passed" -ForegroundColor Green
+    Write-Host "Tests passed" -ForegroundColor Green
 }
 
-Write-Host "`n✨ Backend CI checks passed!" -ForegroundColor Green
+Write-Host "`nBackend CI checks passed!" -ForegroundColor Green
 exit 0

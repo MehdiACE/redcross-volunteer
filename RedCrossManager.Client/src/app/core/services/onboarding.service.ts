@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { OnboardingProgressDto, SubmitStepDto } from '../models/onboarding.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OnboardingService {
   private readonly apiUrl = `${environment.apiUrl}/onboarding`;

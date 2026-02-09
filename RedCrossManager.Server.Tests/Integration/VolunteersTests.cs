@@ -1,18 +1,29 @@
 using System.Net;
 using System.Net.Http.Json;
+using RedCrossManager.Server.DTOs.Auth;
 using RedCrossManager.Server.DTOs.Volunteers;
 using RedCrossManager.Server.Tests.Infrastructure;
 using Xunit;
 
 namespace RedCrossManager.Server.Tests.Integration;
 
-public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
+public class VolunteersTests : IAsyncLifetime
 {
-    private readonly HttpClient _client;
+    private TestWebApplicationFactory _factory = null!;
+    private HttpClient _client = null!;
 
-    public VolunteersTests(TestWebApplicationFactory factory)
+    public async Task InitializeAsync()
     {
-        _client = factory.CreateClient();
+        _factory = new TestWebApplicationFactory();
+        _client = _factory.CreateClient();
+        await _factory.InitializeDatabaseAsync();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _factory.ResetDatabaseAsync();
+        _client?.Dispose();
+        _factory?.Dispose();
     }
 
     [Fact]
@@ -23,6 +34,7 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
             FirstName: "John",
             LastName: "Doe",
             Email: "john.doe@example.com",
+            Password: "SecurePassword123!",
             Phone: "+15145551234",
             DateOfBirth: new DateTime(1990, 1, 1),
             AddressStreet: "123 Main St",
@@ -46,17 +58,26 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         
-        var result = await response.Content.ReadFromJsonAsync<VolunteerDto>();
-        Assert.NotNull(result);
-        Assert.NotEqual(Guid.Empty, result.Id);
-        Assert.Equal("John", result.FirstName);
-        Assert.Equal("Doe", result.LastName);
-        Assert.Equal("john.doe@example.com", result.Email);
-        Assert.Equal("+15145551234", result.Phone);
-        Assert.Equal("Pending", result.Status);
-        Assert.Equal("en", result.LanguagePreference);
-        Assert.False(result.IsMinor);
-        Assert.False(result.SmsOptIn);
+        var loginResult = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+        Assert.NotNull(loginResult);
+        Assert.NotEqual(Guid.Empty, loginResult!.UserId);
+        Assert.False(string.IsNullOrWhiteSpace(loginResult.AccessToken));
+        Assert.Contains("Volunteer", loginResult.Roles);
+
+        var volunteerResponse = await _client.GetAsync("/api/v1/volunteers/by-email/john.doe@example.com");
+        Assert.Equal(HttpStatusCode.OK, volunteerResponse.StatusCode);
+
+        var volunteer = await volunteerResponse.Content.ReadFromJsonAsync<VolunteerDto>();
+        Assert.NotNull(volunteer);
+        Assert.NotEqual(Guid.Empty, volunteer!.Id);
+        Assert.Equal("John", volunteer.FirstName);
+        Assert.Equal("Doe", volunteer.LastName);
+        Assert.Equal("john.doe@example.com", volunteer.Email);
+        Assert.Equal("+15145551234", volunteer.Phone);
+        Assert.Equal("Pending", volunteer.Status);
+        Assert.Equal("en", volunteer.LanguagePreference);
+        Assert.False(volunteer.IsMinor);
+        Assert.False(volunteer.SmsOptIn);
     }
 
     [Fact]
@@ -68,6 +89,7 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
             FirstName: "Alice",
             LastName: "Smith",
             Email: "alice.smith@example.com",
+            Password: "SecurePassword123!",
             Phone: "+15145551111",
             DateOfBirth: birthDate,
             AddressStreet: "456 Elm St",
@@ -91,10 +113,18 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
         // Assert
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         
-        var result = await response.Content.ReadFromJsonAsync<VolunteerDto>();
-        Assert.NotNull(result);
-        Assert.True(result.IsMinor);
-        Assert.Equal("fr", result.LanguagePreference);
+        var loginResult = await response.Content.ReadFromJsonAsync<LoginResponseDto>();
+        Assert.NotNull(loginResult);
+        Assert.NotEqual(Guid.Empty, loginResult!.UserId);
+        Assert.Contains("Volunteer", loginResult.Roles);
+
+        var volunteerResponse = await _client.GetAsync("/api/v1/volunteers/by-email/alice.smith@example.com");
+        Assert.Equal(HttpStatusCode.OK, volunteerResponse.StatusCode);
+
+        var volunteer = await volunteerResponse.Content.ReadFromJsonAsync<VolunteerDto>();
+        Assert.NotNull(volunteer);
+        Assert.True(volunteer!.IsMinor);
+        Assert.Equal("fr", volunteer.LanguagePreference);
     }
 
     [Fact]
@@ -105,6 +135,7 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
             FirstName: "Bob",
             LastName: "Johnson",
             Email: "bob.johnson@example.com",
+            Password: "SecurePassword123!",
             Phone: "+15145553333",
             DateOfBirth: new DateTime(1985, 5, 15),
             AddressStreet: "789 Oak St",
@@ -144,6 +175,7 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
             FirstName: "Charlie",
             LastName: "Brown",
             Email: "charlie.brown@example.com",
+            Password: "SecurePassword123!",
             Phone: "+15145555555",
             DateOfBirth: new DateTime(1992, 3, 10),
             AddressStreet: "321 Pine St",
@@ -162,7 +194,12 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
         );
 
         var createResponse = await _client.PostAsJsonAsync("/api/v1/volunteers/register", registerDto);
-        var createdVolunteer = await createResponse.Content.ReadFromJsonAsync<VolunteerDto>();
+        var loginResult = await createResponse.Content.ReadFromJsonAsync<LoginResponseDto>();
+        Assert.NotNull(loginResult);
+
+        var volunteerResponse = await _client.GetAsync("/api/v1/volunteers/by-email/charlie.brown@example.com");
+        Assert.Equal(HttpStatusCode.OK, volunteerResponse.StatusCode);
+        var createdVolunteer = await volunteerResponse.Content.ReadFromJsonAsync<VolunteerDto>();
         Assert.NotNull(createdVolunteer);
 
         // Act
@@ -196,6 +233,7 @@ public class VolunteersTests : IClassFixture<TestWebApplicationFactory>
             FirstName: "Diana",
             LastName: "Prince",
             Email: "diana.prince@example.com",
+            Password: "SecurePassword123!",
             Phone: "+15145557777",
             DateOfBirth: new DateTime(1988, 7, 20),
             AddressStreet: "654 Maple St",

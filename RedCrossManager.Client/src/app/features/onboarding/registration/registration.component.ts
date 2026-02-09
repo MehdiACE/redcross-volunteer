@@ -33,9 +33,9 @@ import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
     MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    TranslateModule
+    TranslateModule,
   ],
-  templateUrl: './registration.component.html'
+  templateUrl: './registration.component.html',
 })
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
@@ -45,7 +45,7 @@ export class RegistrationComponent implements OnInit {
     'registration.sections.personalInfo',
     'registration.sections.address',
     'registration.sections.emergencyContact',
-    'registration.sections.preferences'
+    'registration.sections.preferences',
   ];
   availableInterests = [
     { value: 'First Aid', labelKey: 'registration.interests.firstAid' },
@@ -53,7 +53,7 @@ export class RegistrationComponent implements OnInit {
     { value: 'Community Programs', labelKey: 'registration.interests.communityPrograms' },
     { value: 'Blood Drive', labelKey: 'registration.interests.bloodDrive' },
     { value: 'Emergency Services', labelKey: 'registration.interests.emergencyServices' },
-    { value: 'Youth Programs', labelKey: 'registration.interests.youthPrograms' }
+    { value: 'Youth Programs', labelKey: 'registration.interests.youthPrograms' },
   ];
   daysOfWeek = [
     { value: 'Monday', labelKey: 'registration.days.monday' },
@@ -62,7 +62,7 @@ export class RegistrationComponent implements OnInit {
     { value: 'Thursday', labelKey: 'registration.days.thursday' },
     { value: 'Friday', labelKey: 'registration.days.friday' },
     { value: 'Saturday', labelKey: 'registration.days.saturday' },
-    { value: 'Sunday', labelKey: 'registration.days.sunday' }
+    { value: 'Sunday', labelKey: 'registration.days.sunday' },
   ];
 
   constructor(
@@ -70,7 +70,7 @@ export class RegistrationComponent implements OnInit {
     private volunteerService: VolunteerService,
     private router: Router,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -78,39 +78,45 @@ export class RegistrationComponent implements OnInit {
   }
 
   private buildForm(): void {
-    this.registrationForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.maxLength(100)]],
-      lastName: ['', [Validators.required, Validators.maxLength(100)]],
-      email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$/)
-      ]],
-      confirmPassword: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]],
-      dateOfBirth: ['', Validators.required],
-      address: this.fb.group({
-        street: ['', [Validators.required, Validators.maxLength(255)]],
-        city: ['', [Validators.required, Validators.maxLength(100)]],
-        stateProvince: ['', [Validators.required, Validators.maxLength(100)]],
-        postalCode: ['', [Validators.required, Validators.maxLength(20)]],
-        country: ['', [Validators.required, Validators.maxLength(100)]]
-      }),
-      emergencyContact: this.fb.group({
-        name: ['', [Validators.required, Validators.maxLength(200)]],
-        phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]]
-      }),
-      areasOfInterest: [[], Validators.required],
-      availability: this.fb.group({
-        daysOfWeek: [[], Validators.required],
-        timePreference: ['', Validators.required]
-      }),
-      languagePreference: ['fr', Validators.required]
-    }, { validators: this.passwordMatchValidator });
+    this.registrationForm = this.fb.group(
+      {
+        firstName: ['', [Validators.required, Validators.maxLength(100)]],
+        lastName: ['', [Validators.required, Validators.maxLength(100)]],
+        email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).+$/),
+          ],
+        ],
+        confirmPassword: ['', Validators.required],
+        phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]],
+        dateOfBirth: ['', Validators.required],
+        address: this.fb.group({
+          street: ['', [Validators.required, Validators.maxLength(255)]],
+          city: ['', [Validators.required, Validators.maxLength(100)]],
+          stateProvince: ['', [Validators.required, Validators.maxLength(100)]],
+          postalCode: ['', [Validators.required, Validators.maxLength(20)]],
+          country: ['', [Validators.required, Validators.maxLength(100)]],
+        }),
+        emergencyContact: this.fb.group({
+          name: ['', [Validators.required, Validators.maxLength(200)]],
+          phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]],
+        }),
+        areasOfInterest: [[], Validators.required],
+        availability: this.fb.group({
+          daysOfWeek: [[], Validators.required],
+          timePreference: ['', Validators.required],
+        }),
+        languagePreference: ['fr', Validators.required],
+      },
+      { validators: this.passwordMatchValidator },
+    );
   }
 
-  private passwordMatchValidator(group: FormGroup): {[key: string]: boolean} | null {
+  private passwordMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
     const password = group.get('password')?.value;
     const confirmPassword = group.get('confirmPassword')?.value;
     return password === confirmPassword ? null : { passwordMismatch: true };
@@ -122,7 +128,7 @@ export class RegistrationComponent implements OnInit {
       this.snackBar.open(
         this.translate.instant('registration.errors.invalidForm'),
         this.translate.instant('common.close'),
-        { duration: 5000 }
+        { duration: 5000 },
       );
       return;
     }
@@ -147,9 +153,9 @@ export class RegistrationComponent implements OnInit {
       areasOfInterest: formValue.areasOfInterest,
       availability: {
         daysOfWeek: formValue.availability.daysOfWeek,
-        timePreference: formValue.availability.timePreference
+        timePreference: formValue.availability.timePreference,
       },
-      languagePreference: formValue.languagePreference
+      languagePreference: formValue.languagePreference,
     };
 
     this.volunteerService.register(dto).subscribe({
@@ -161,17 +167,18 @@ export class RegistrationComponent implements OnInit {
         this.snackBar.open(
           this.translate.instant('registration.success'),
           this.translate.instant('common.close'),
-          { duration: 5000 }
+          { duration: 5000 },
         );
         this.router.navigate(['/onboarding']);
       },
       error: (error) => {
         this.isLoading = false;
-        const message = error.status === 409
-          ? this.translate.instant('registration.errors.emailExists')
-          : this.translate.instant('registration.errors.serverError');
+        const message =
+          error.status === 409
+            ? this.translate.instant('registration.errors.emailExists')
+            : this.translate.instant('registration.errors.serverError');
         this.snackBar.open(message, this.translate.instant('common.close'), { duration: 5000 });
-      }
+      },
     });
   }
 
@@ -189,7 +196,9 @@ export class RegistrationComponent implements OnInit {
       return this.translate.instant('registration.errors.invalidPhone');
     }
     if (control.errors['maxlength']) {
-      return this.translate.instant('registration.errors.maxLength', { max: control.errors['maxlength'].requiredLength });
+      return this.translate.instant('registration.errors.maxLength', {
+        max: control.errors['maxlength'].requiredLength,
+      });
     }
     return '';
   }

@@ -25,15 +25,15 @@ describe('DocumentsComponent', () => {
       expiresAt: null,
       verificationStatus: 'Pending',
       virusScanStatus: 'Clean',
-      reviewerNotes: null
-    }
+      reviewerNotes: null,
+    },
   ];
 
   beforeEach(async () => {
     const documentSpy = jasmine.createSpyObj('DocumentService', [
       'getVolunteerDocuments',
       'getUploadUrl',
-      'uploadDocument'
+      'uploadDocument',
     ]);
     const authSpy = jasmine.createSpyObj('AuthService', ['getUserId']);
 
@@ -41,8 +41,8 @@ describe('DocumentsComponent', () => {
       imports: [DocumentsComponent, TranslateModule.forRoot()],
       providers: [
         { provide: DocumentService, useValue: documentSpy },
-        { provide: AuthService, useValue: authSpy }
-      ]
+        { provide: AuthService, useValue: authSpy },
+      ],
     }).compileComponents();
 
     documentService = TestBed.inject(DocumentService) as jasmine.SpyObj<DocumentService>;

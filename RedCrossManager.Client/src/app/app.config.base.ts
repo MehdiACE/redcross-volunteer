@@ -27,9 +27,9 @@ export const appBaseConfig: ApplicationConfig = {
         loader: {
           provide: TranslateLoader,
           useFactory: HttpLoaderFactory,
-          deps: [HttpClient]
-        }
-      })
-    )
-  ]
+          deps: [HttpClient],
+        },
+      }),
+    ),
+  ],
 };

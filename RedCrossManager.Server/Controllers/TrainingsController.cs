@@ -150,7 +150,7 @@ namespace RedCrossManager.Server.Controllers
         [Authorize(Policy = "Volunteer")]
         public async Task<ActionResult<List<TrainingEnrollmentDto>>> GetMyTrainings()
         {
-            var userId = User.FindFirst("sub")?.Value;
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var volunteerId))
                 return Unauthorized();
 

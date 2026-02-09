@@ -18,12 +18,17 @@
         <p class="text-gray-600">{{ 'commHistory.empty' | translate }}</p>
       </div>
 
-      <table *ngIf="!isLoading && messages.length > 0" mat-table [dataSource]="messages" class="w-full">
+      <table
+        *ngIf="!isLoading && messages.length > 0"
+        mat-table
+        [dataSource]="messages"
+        class="w-full"
+      >
         <!-- Sent At Column -->
         <ng-container matColumnDef="sentAt">
           <th mat-header-cell *matHeaderCellDef>{{ 'commHistory.columns.sentAt' | translate }}</th>
           <td mat-cell *matCellDef="let message">
-            {{ message.sentAt | date:'short' }}
+            {{ message.sentAt | date: 'short' }}
           </td>
         </ng-container>
 
@@ -45,7 +50,9 @@
 
         <!-- Channels Column -->
         <ng-container matColumnDef="channels">
-          <th mat-header-cell *matHeaderCellDef>{{ 'commHistory.columns.channels' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'commHistory.columns.channels' | translate }}
+          </th>
           <td mat-cell *matCellDef="let message">
             {{ getChannelLabel(message.channels) }}
           </td>
@@ -53,14 +60,26 @@
 
         <!-- Stats Column -->
         <ng-container matColumnDef="stats">
-          <th mat-header-cell *matHeaderCellDef>{{ 'commHistory.columns.delivery' | translate }}</th>
+          <th mat-header-cell *matHeaderCellDef>
+            {{ 'commHistory.columns.delivery' | translate }}
+          </th>
           <td mat-cell *matCellDef="let message">
             <div class="flex flex-col text-sm">
-              <span class="text-green-600">✓ {{ message.sentCount }} {{ 'commHistory.sent' | translate }}</span>
-              <span class="text-blue-600">⏳ {{ message.queuedCount }} {{ 'commHistory.queued' | translate }}</span>
-              <span *ngIf="message.failedCount > 0" class="text-red-600">✗ {{ message.failedCount }} {{ 'commHistory.failed' | translate }}</span>
-              <span *ngIf="message.bouncedCount > 0" class="text-orange-600">⚠ {{ message.bouncedCount }} {{ 'commHistory.bounced' | translate }}</span>
-              <span class="text-gray-600 font-semibold mt-1">{{ getSuccessRate(message) }}% {{ 'commHistory.success' | translate }}</span>
+              <span class="text-green-600"
+                >✓ {{ message.sentCount }} {{ 'commHistory.sent' | translate }}</span
+              >
+              <span class="text-blue-600"
+                >⏳ {{ message.queuedCount }} {{ 'commHistory.queued' | translate }}</span
+              >
+              <span *ngIf="message.failedCount > 0" class="text-red-600"
+                >✗ {{ message.failedCount }} {{ 'commHistory.failed' | translate }}</span
+              >
+              <span *ngIf="message.bouncedCount > 0" class="text-orange-600"
+                >⚠ {{ message.bouncedCount }} {{ 'commHistory.bounced' | translate }}</span
+              >
+              <span class="text-gray-600 font-semibold mt-1"
+                >{{ getSuccessRate(message) }}% {{ 'commHistory.success' | translate }}</span
+              >
             </div>
           </td>
         </ng-container>
@@ -69,14 +88,19 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let message">
-            <button mat-icon-button (click)="viewDetails(message.id)">
+            <button
+              mat-icon-button
+              type="button"
+              (click)="viewDetails(message.id)"
+              [attr.aria-label]="'common.viewDetails' | translate"
+            >
               <mat-icon>visibility</mat-icon>
             </button>
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
     </mat-card-content>
   </mat-card>

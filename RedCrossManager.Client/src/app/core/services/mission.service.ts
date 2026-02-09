@@ -6,11 +6,11 @@ import {
   MissionDto,
   ApplyMissionDto,
   AssignVolunteersDto,
-  AssignmentDto
+  AssignmentDto,
 } from '../models/mission.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MissionService {
   private apiUrl = `${environment.apiUrl}/missions`;
@@ -34,10 +34,16 @@ export class MissionService {
   }
 
   confirmAssignment(assignmentId: string): Observable<AssignmentDto> {
-    return this.http.post<AssignmentDto>(`${environment.apiUrl}/assignments/${assignmentId}/confirm`, {});
+    return this.http.post<AssignmentDto>(
+      `${environment.apiUrl}/assignments/${assignmentId}/confirm`,
+      {},
+    );
   }
 
   updateAssignmentStatus(assignmentId: string, status: string): Observable<AssignmentDto> {
-    return this.http.post<AssignmentDto>(`${environment.apiUrl}/assignments/${assignmentId}/status`, { status });
+    return this.http.post<AssignmentDto>(
+      `${environment.apiUrl}/assignments/${assignmentId}/status`,
+      { status },
+    );
   }
 }

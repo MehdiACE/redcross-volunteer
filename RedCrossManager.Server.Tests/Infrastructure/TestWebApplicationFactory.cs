@@ -1,18 +1,25 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
 using RedCrossManager.Server.Services.Auth;
+using System.Text;
 
 namespace RedCrossManager.Server.Tests.Infrastructure;
 
 public class TestWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private static readonly InMemoryDatabaseRoot DatabaseRoot = new();
+    private readonly string _databaseName = $"RedCrossManager_TestDb_{Guid.NewGuid():N}";
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureAppConfiguration((context, configBuilder) =>
@@ -48,7 +55,25 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
 
             // Add in-memory database for testing
             services.AddDbContext<RedCrossDbContext>(options =>
-                options.UseInMemoryDatabase("TestDatabase_" + Guid.NewGuid()));
+                options.UseInMemoryDatabase(_databaseName, DatabaseRoot));
+
+            services.PostConfigure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                var jwtOptions = context.Configuration.GetSection("Jwt").Get<JwtOptions>() ?? new JwtOptions();
+                var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = jwtOptions.Audience,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(2)
+                };
+            });
         });
 
         builder.UseEnvironment("Test");
@@ -163,9 +188,29 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
         var passwordHasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<User>>();
 
         // Check if user already exists
-        var existingUser = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var existingUser = await dbContext.Users
+            .Include(u => u.UserRoles)
+            .FirstOrDefaultAsync(u => u.Email == email);
         if (existingUser != null)
         {
+            if (roleNames.Length > 0)
+            {
+                var existingRoleIds = existingUser.UserRoles.Select(ur => ur.RoleId).ToHashSet();
+                var rolesToAssign = await dbContext.Roles
+                    .Where(r => roleNames.Contains(r.Name) && !existingRoleIds.Contains(r.Id))
+                    .ToListAsync();
+
+                foreach (var role in rolesToAssign)
+                {
+                    existingUser.UserRoles.Add(new UserRole { UserId = existingUser.Id, RoleId = role.Id });
+                }
+
+                if (rolesToAssign.Count > 0)
+                {
+                    await dbContext.SaveChangesAsync();
+                }
+            }
+
             return existingUser;
         }
 

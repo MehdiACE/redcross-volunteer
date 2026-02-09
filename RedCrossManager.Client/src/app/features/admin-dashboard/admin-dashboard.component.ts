@@ -3,16 +3,27 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ClientSideRowModelModule, ColDef, ICellRendererParams, ModuleRegistry } from 'ag-grid-community';
+import {
+  ClientSideRowModelModule,
+  ColDef,
+  ICellRendererParams,
+  ModuleRegistry,
+} from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { AdminDashboardService } from '../../core/services/admin-dashboard.service';
-import { AdminOnboardingStep, AdminVolunteerListItem } from '../../core/models/admin-dashboard.model';
+import {
+  AdminOnboardingStep,
+  AdminVolunteerListItem,
+} from '../../core/models/admin-dashboard.model';
 import { NotificationItem } from '../../core/models/notification.model';
 import { MessageItem } from '../../core/models/message.model';
 import { NotificationService } from '../../core/services/notification.service';
@@ -24,9 +35,19 @@ ModuleRegistry.registerModules([ClientSideRowModelModule]);
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, MatProgressSpinnerModule, TranslateModule, AgGridAngular, MatAutocompleteModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    MatProgressSpinnerModule,
+    TranslateModule,
+    AgGridAngular,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
   providers: [DatePipe],
-  templateUrl: './admin-dashboard.component.html'
+  templateUrl: './admin-dashboard.component.html',
 })
 export class AdminDashboardComponent implements OnInit, OnDestroy {
   volunteers: AdminVolunteerListItem[] = [];
@@ -50,7 +71,8 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   colDefs: ColDef[] = [
     {
       headerName: 'Name',
-      valueGetter: params => `${params.data?.firstName ?? ''} ${params.data?.lastName ?? ''}`.trim(),
+      valueGetter: (params) =>
+        `${params.data?.firstName ?? ''} ${params.data?.lastName ?? ''}`.trim(),
       flex: 1,
       minWidth: 180,
       cellRenderer: (params: ICellRendererParams) => {
@@ -60,7 +82,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         span.textContent = value;
         return span;
       },
-      onCellClicked: params => this.openVolunteerDetail(params.data?.id)
+      onCellClicked: (params) => this.openVolunteerDetail(params.data?.id),
     },
     { field: 'email', headerName: 'Email', flex: 1, minWidth: 220 },
     { field: 'status', headerName: 'Status', minWidth: 120 },
@@ -68,16 +90,16 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       field: 'registeredAt',
       headerName: 'Registered',
       minWidth: 140,
-      valueFormatter: params => this.datePipe.transform(params.value, 'dd/MM/yyyy') ?? ''
+      valueFormatter: (params) => this.datePipe.transform(params.value, 'dd/MM/yyyy') ?? '',
     },
     { field: 'languagePreference', headerName: 'Lang', minWidth: 90 },
-    { field: 'isMinor', headerName: 'Minor', minWidth: 90 }
+    { field: 'isMinor', headerName: 'Minor', minWidth: 90 },
   ];
 
   defaultColDef: ColDef = {
     sortable: true,
     filter: true,
-    resizable: true
+    resizable: true,
   };
 
   private destroy$ = new Subject<void>();
@@ -88,7 +110,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     private messageService: MessageService,
     private agGridThemeService: AgGridThemeService,
     private router: Router,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
   ) {
     this.agGridThemeClass$ = this.agGridThemeService.themeClass$;
   }
@@ -108,46 +130,50 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   approveStep(step: AdminOnboardingStep): void {
     if (this.processingStepId) return;
     this.processingStepId = step.id;
-    this.adminDashboardService.reviewStep(step.id, { approved: true })
+    this.adminDashboardService
+      .reviewStep(step.id, { approved: true })
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
           this.processingStepId = null;
-        })
+        }),
       )
       .subscribe({
         next: () => this.loadPendingSteps(),
         error: () => {
           this.stepsError = true;
-        }
+        },
       });
   }
 
   rejectStep(step: AdminOnboardingStep): void {
     if (this.processingStepId) return;
     this.processingStepId = step.id;
-    this.adminDashboardService.reviewStep(step.id, { approved: false })
+    this.adminDashboardService
+      .reviewStep(step.id, { approved: false })
       .pipe(
         takeUntil(this.destroy$),
         finalize(() => {
           this.processingStepId = null;
-        })
+        }),
       )
       .subscribe({
         next: () => this.loadPendingSteps(),
         error: () => {
           this.stepsError = true;
-        }
+        },
       });
   }
 
   sendMessage(): void {
     if (!this.newMessageContent.trim() || !this.selectedVolunteerId) return;
 
-    this.messageService.sendMessage({
-      toVolunteerId: this.selectedVolunteerId,
-      content: this.newMessageContent
-    }).pipe(takeUntil(this.destroy$))
+    this.messageService
+      .sendMessage({
+        toVolunteerId: this.selectedVolunteerId,
+        content: this.newMessageContent,
+      })
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.newMessageContent = '';
@@ -156,7 +182,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.messagesError = true;
-        }
+        },
       });
   }
 
@@ -181,7 +207,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   get filteredVolunteers(): AdminVolunteerListItem[] {
     const query = this.volunteerSearch.trim().toLowerCase();
     if (!query) return this.volunteers;
-    return this.volunteers.filter(volunteer => {
+    return this.volunteers.filter((volunteer) => {
       const fullName = `${volunteer.firstName} ${volunteer.lastName}`.toLowerCase();
       return fullName.includes(query) || volunteer.email.toLowerCase().includes(query);
     });
@@ -189,80 +215,85 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
   markMessageAsRead(message: MessageItem): void {
     if (message.isRead) return;
-    this.messageService.markAsRead(message.id)
+    this.messageService
+      .markAsRead(message.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           message.isRead = true;
-        }
+        },
       });
   }
 
   private loadVolunteers(): void {
     this.isLoadingVolunteers = true;
     this.volunteerError = false;
-    this.adminDashboardService.getVolunteers()
+    this.adminDashboardService
+      .getVolunteers()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.volunteers = data;
           this.isLoadingVolunteers = false;
         },
         error: () => {
           this.volunteerError = true;
           this.isLoadingVolunteers = false;
-        }
+        },
       });
   }
 
   private loadPendingSteps(): void {
     this.isLoadingSteps = true;
     this.stepsError = false;
-    this.adminDashboardService.getPendingOnboardingSteps()
+    this.adminDashboardService
+      .getPendingOnboardingSteps()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.pendingSteps = data;
           this.isLoadingSteps = false;
         },
         error: () => {
           this.stepsError = true;
           this.isLoadingSteps = false;
-        }
+        },
       });
   }
 
   private loadNotifications(): void {
     this.isLoadingNotifications = true;
     this.notificationsError = false;
-    this.notificationService.getMyNotifications()
+    this.notificationService
+      .getMyNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.notifications = data;
           this.isLoadingNotifications = false;
         },
         error: () => {
           this.notificationsError = true;
           this.isLoadingNotifications = false;
-        }
+        },
       });
   }
 
   private loadInbox(): void {
     this.isLoadingMessages = true;
     this.messagesError = false;
-    this.messageService.getInbox()
+    this.messageService
+      .getInbox()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: data => {
+        next: (data) => {
           this.messages = data;
           this.isLoadingMessages = false;
         },
         error: () => {
           this.messagesError = true;
           this.isLoadingMessages = false;
-        }
+        },
       });
   }
 

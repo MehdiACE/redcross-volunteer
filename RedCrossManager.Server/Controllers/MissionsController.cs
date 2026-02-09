@@ -119,7 +119,7 @@ public class AssignmentsController : ControllerBase
     [Authorize(Policy = "Volunteer")]
     public async Task<ActionResult<AssignmentDto>> ConfirmAssignment(Guid assignmentId)
     {
-        var userId = User.FindFirst("sub")?.Value;
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userId) || !Guid.TryParse(userId, out var volunteerId))
         {
             return Unauthorized();

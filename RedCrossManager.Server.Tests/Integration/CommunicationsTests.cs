@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using RedCrossManager.Server.Domain.Entities;
 using RedCrossManager.Server.Infrastructure;
+using RedCrossManager.Server.Tests.Infrastructure;
 
 namespace RedCrossManager.Server.Tests.Integration;
 
@@ -65,17 +66,8 @@ public class CommunicationsTests : IAsyncLifetime
     {
         // Arrange
         var volunteerId = Guid.NewGuid();
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Young",
-            LastName = "Volunteer",
-            Email = "young@example.com",
-            Phone = "+15145551234",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "young@example.com");
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
         await _context.SaveChangesAsync();
@@ -126,18 +118,7 @@ public class CommunicationsTests : IAsyncLifetime
         var messageId = Guid.NewGuid();
         var volunteerId = Guid.NewGuid();
 
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Test",
-            LastName = "Minor",
-            Email = "test@example.com",
-            Phone = "+15145552345",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = false
-        };
-
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "test@example.com");
         _context.Volunteers.Add(volunteer);
 
         var message = new CommunicationMessage
@@ -189,17 +170,8 @@ public class CommunicationsTests : IAsyncLifetime
         var messageId = Guid.NewGuid();
         var volunteerId = Guid.NewGuid();
 
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Retry",
-            LastName = "Test",
-            Email = "retry@example.com",
-            Phone = "+15145553456",
-            Status = VolunteerStatus.Pending,
-            IsMinor = true,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "retry@example.com");
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
 
@@ -209,7 +181,7 @@ public class CommunicationsTests : IAsyncLifetime
             Segment = "B1J - Assigned",
             Channels = CommunicationChannel.SMS,
             Language = "en",
-            Subject = "",
+            Subject = string.Empty,
             BodyTemplate = "You have been assigned to a mission...",
             SentAt = DateTime.UtcNow,
             CreatedBy = Guid.NewGuid()
@@ -313,9 +285,9 @@ public class CommunicationsTests : IAsyncLifetime
             .ToListAsync();
 
         Assert.Equal(3, messageRecipients.Count);
-        Assert.Single(messageRecipients.Where(r => r.DeliveryStatus == DeliveryStatus.Sent));
-        Assert.Single(messageRecipients.Where(r => r.DeliveryStatus == DeliveryStatus.Queued));
-        Assert.Single(messageRecipients.Where(r => r.DeliveryStatus == DeliveryStatus.Failed));
+        Assert.Single(messageRecipients, r => r.DeliveryStatus == DeliveryStatus.Sent);
+        Assert.Single(messageRecipients, r => r.DeliveryStatus == DeliveryStatus.Queued);
+        Assert.Single(messageRecipients, r => r.DeliveryStatus == DeliveryStatus.Failed);
     }
 
     [Fact]
@@ -325,17 +297,9 @@ public class CommunicationsTests : IAsyncLifetime
         var messageId = Guid.NewGuid();
         var volunteerId = Guid.NewGuid();
 
-        var volunteer = new Volunteer
-        {
-            Id = volunteerId,
-            FirstName = "Multi",
-            LastName = "Channel",
-            Email = "multi@example.com",
-            Phone = "+15145554567",
-            Status = VolunteerStatus.Active,
-            IsMinor = true,
-            SmsOptIn = true
-        };
+        var volunteer = TestDataFactory.CreateVolunteer(volunteerId, isMinor: true, email: "multi@example.com");
+        volunteer.Status = VolunteerStatus.Active;
+        volunteer.SmsOptIn = true;
 
         _context.Volunteers.Add(volunteer);
 

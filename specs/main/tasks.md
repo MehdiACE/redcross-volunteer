@@ -184,12 +184,12 @@ description: "Tasks for volunteer onboarding & management system"
 ## Phase 10: Cross-Cutting Polish
 
 - [X] T100 Add localization resources (fr/en) for all new UI strings and email/SMS templates in `RedCrossManager.Client/src/app/i18n` and `RedCrossManager.Server/Resources`
-- [ ] T101 [P] Add logging/enrichment for PII-safe telemetry in `RedCrossManager.Server`
+- [X] T101 [P] Add logging/enrichment for PII-safe telemetry in `RedCrossManager.Server`
 - [X] T102 [P] Harden validation (FluentValidation + data annotations) across DTOs in `RedCrossManager.Server/DTOs`
-- [ ] T103 Improve accessibility (focus states, ARIA, contrast) in `RedCrossManager.Client/src`
-- [ ] T106 [P] Sync Ag Grid theme with app dark mode via `AgGridThemeService` (Prereqs: T010, ag-theme-quartz.css import) in `RedCrossManager.Client/src/app/core/services/ag-grid-theme.service.ts` and `features/*`
-- [ ] T107 [P] Evolve onboarding cards to dark-mode surfaces (dark cards + dark form panels, keep accent color) in `RedCrossManager.Client/src/app/features/onboarding/**`
-- [ ] T104 Final CI pass: lint, tests, build artifacts for API and UI in repo root pipelines
+- [X] T103 Improve accessibility (focus states, ARIA, contrast) in `RedCrossManager.Client/src`
+- [X] T106 [P] Sync Ag Grid theme with app dark mode via `AgGridThemeService` (Prereqs: T010, ag-theme-quartz.css import) in `RedCrossManager.Client/src/app/core/services/ag-grid-theme.service.ts` and `features/*`
+- [X] T107 [P] Evolve onboarding cards to dark-mode surfaces (dark cards + dark form panels, keep accent color) in `RedCrossManager.Client/src/app/features/onboarding/**`
+- [X] T104 Final CI pass: lint, tests, build artifacts for API and UI in repo root pipelines
 - [X] T105 Configure CI/CD coverage gate: enforce ≥80% line coverage for services/repositories; fail build if coverage drops; add PR template with constitution compliance checklist in `.github/pull_request_template.md`
 
 ---

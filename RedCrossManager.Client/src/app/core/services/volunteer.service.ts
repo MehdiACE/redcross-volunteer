@@ -2,10 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { RegisterVolunteerDto, VolunteerDto, SmsOptInDto, LoginResponseDto, UpdateStatusDto } from '../models/volunteer.model';
+import {
+  RegisterVolunteerDto,
+  VolunteerDto,
+  SmsOptInDto,
+  LoginResponseDto,
+  UpdateStatusDto,
+} from '../models/volunteer.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class VolunteerService {
   private readonly apiUrl = `${environment.apiUrl}/volunteers`;
@@ -38,4 +44,3 @@ export class VolunteerService {
     return this.http.patch<VolunteerDto>(`${this.apiUrl}/${id}/status`, dto);
   }
 }
-

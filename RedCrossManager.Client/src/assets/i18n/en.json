@@ -520,8 +520,7 @@
     "capacity": "Capacity",
     "certificateIssued": "Certificate Issued",
     "search": "Search"
-  }
-  ,
+  },
   "volunteerDetail": {
     "breadcrumbRoot": "Volunteers",
     "breadcrumbFallback": "Details",
@@ -598,5 +597,3 @@
     }
   }
 }
-
-

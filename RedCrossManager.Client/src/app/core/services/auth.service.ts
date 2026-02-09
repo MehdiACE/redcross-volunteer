@@ -11,17 +11,17 @@ export interface LoginRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
   private readonly isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken());
-  
+
   public readonly isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 
   private hasValidToken(): boolean {
@@ -31,12 +31,12 @@ export class AuthService {
   login(email: string, password: string): Observable<LoginResponseDto> {
     const request: LoginRequest = { email, password };
     return this.http.post<LoginResponseDto>(`${this.apiUrl}/login`, request).pipe(
-      tap(response => {
+      tap((response) => {
         localStorage.setItem('authToken', response.accessToken);
         localStorage.setItem('userId', response.userId);
         localStorage.setItem('roles', JSON.stringify(response.roles ?? []));
         this.isAuthenticatedSubject.next(true);
-      })
+      }),
     );
   }
 

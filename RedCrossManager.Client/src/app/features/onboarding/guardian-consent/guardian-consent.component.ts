@@ -13,7 +13,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ConsentRequestDto, ConsentService, SubmitConsentDto } from '../../../core/services/consent.service';
+import {
+  ConsentRequestDto,
+  ConsentService,
+  SubmitConsentDto,
+} from '../../../core/services/consent.service';
 
 @Component({
   selector: 'app-guardian-consent',
@@ -29,10 +33,10 @@ import { ConsentRequestDto, ConsentService, SubmitConsentDto } from '../../../co
     MatCheckboxModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   templateUrl: './guardian-consent.component.html',
-  styleUrls: ['./guardian-consent.component.scss']
+  styleUrls: ['./guardian-consent.component.scss'],
 })
 export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewInit {
   consentForm!: FormGroup;
@@ -53,7 +57,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
     private consentService: ConsentService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private translate: TranslateService
+    private translate: TranslateService,
   ) {
     this.initializeForm();
   }
@@ -64,7 +68,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
       this.snackBar.open(
         this.translate.instant('guardianConsent.errors.missingVolunteer'),
         this.translate.instant('common.close'),
-        { duration: 5000 }
+        { duration: 5000 },
       );
       return;
     }
@@ -89,21 +93,22 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
         firstName: [{ value: '', disabled: true }],
         lastName: [{ value: '', disabled: true }],
         dateOfBirth: [{ value: '', disabled: true }],
-        email: [{ value: '', disabled: true }]
+        email: [{ value: '', disabled: true }],
       }),
       guardianInfo: this.formBuilder.group({
         fullName: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],
         phone: ['', Validators.required],
-        relationship: ['', Validators.required]
+        relationship: ['', Validators.required],
       }),
-      acceptTerms: [false, Validators.requiredTrue]
+      acceptTerms: [false, Validators.requiredTrue],
     });
   }
 
   private loadConsentRequest(volunteerId: string): void {
     this.isLoading = true;
-    this.consentService.getConsentRequest(volunteerId)
+    this.consentService
+      .getConsentRequest(volunteerId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
@@ -116,10 +121,10 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
           this.snackBar.open(
             this.translate.instant('guardianConsent.errors.loadFailed'),
             this.translate.instant('common.close'),
-            { duration: 5000 }
+            { duration: 5000 },
           );
           this.isLoading = false;
-        }
+        },
       });
   }
 
@@ -130,7 +135,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
         firstName: data.volunteer?.firstName || '',
         lastName: data.volunteer?.lastName || '',
         dateOfBirth: data.volunteer?.dateOfBirth || '',
-        email: data.volunteer?.email || ''
+        email: data.volunteer?.email || '',
       });
     }
 
@@ -138,7 +143,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
     const guardianGroup = this.consentForm.get('guardianInfo');
     if (guardianGroup && data.guardianEmail) {
       guardianGroup.patchValue({
-        email: data.guardianEmail
+        email: data.guardianEmail,
       });
     }
   }
@@ -206,7 +211,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
     if (event instanceof MouseEvent) {
       return {
         x: event.clientX - rect.left,
-        y: event.clientY - rect.top
+        y: event.clientY - rect.top,
       };
     }
 
@@ -215,7 +220,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
 
     return {
       x: touch.clientX - rect.left,
-      y: touch.clientY - rect.top
+      y: touch.clientY - rect.top,
     };
   }
 
@@ -224,7 +229,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
       this.snackBar.open(
         this.translate.instant('guardianConsent.errors.missingVolunteer'),
         this.translate.instant('common.close'),
-        { duration: 5000 }
+        { duration: 5000 },
       );
       return;
     }
@@ -233,7 +238,7 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
       this.snackBar.open(
         this.translate.instant('guardianConsent.errors.signatureRequired'),
         this.translate.instant('common.close'),
-        { duration: 5000 }
+        { duration: 5000 },
       );
       return;
     }
@@ -245,19 +250,20 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
       guardianInfo: this.consentForm.get('guardianInfo')?.value,
       guardianAgreement: this.consentForm.get('guardianAgreement')?.value,
       dataProcessingAgreement: this.consentForm.get('dataProcessingAgreement')?.value,
-      signature
+      signature,
     };
 
     this.isSubmitting = true;
 
-    this.consentService.submitConsent(this.volunteerId, formData)
+    this.consentService
+      .submitConsent(this.volunteerId, formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.snackBar.open(
             this.translate.instant('guardianConsent.messages.submitSuccess'),
             this.translate.instant('common.close'),
-            { duration: 3000 }
+            { duration: 3000 },
           );
           this.isSubmitting = false;
         },
@@ -266,10 +272,10 @@ export class GuardianConsentComponent implements OnInit, OnDestroy, AfterViewIni
           this.snackBar.open(
             this.translate.instant('guardianConsent.errors.submitFailed'),
             this.translate.instant('common.close'),
-            { duration: 5000 }
+            { duration: 5000 },
           );
           this.isSubmitting = false;
-        }
+        },
       });
   }
 

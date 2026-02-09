@@ -9,7 +9,9 @@
       </p>
     </div>
 
-    <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div
+      class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+    >
       <div class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-gray-100">
         <mat-icon class="text-gray-500">tune</mat-icon>
         {{ 'missions.filters' | translate }}
@@ -35,7 +37,12 @@
             {{ 'missions.startDate' | translate }}
           </label>
           <mat-form-field class="w-full mt-2" appearance="outline">
-            <input matInput [matDatepicker]="startPicker" [(ngModel)]="startDateFilter" placeholder="mm/dd/yyyy">
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              [(ngModel)]="startDateFilter"
+              placeholder="mm/dd/yyyy"
+            />
             <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
@@ -46,7 +53,12 @@
             {{ 'missions.endDate' | translate }}
           </label>
           <mat-form-field class="w-full mt-2" appearance="outline">
-            <input matInput [matDatepicker]="endPicker" [(ngModel)]="endDateFilter" placeholder="mm/dd/yyyy">
+            <input
+              matInput
+              [matDatepicker]="endPicker"
+              [(ngModel)]="endDateFilter"
+              placeholder="mm/dd/yyyy"
+            />
             <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
@@ -55,12 +67,17 @@
 
       <div class="mt-4 flex flex-wrap items-center justify-between gap-4">
         <label class="flex items-center gap-2 text-sm text-gray-600">
-          <input type="checkbox" [(ngModel)]="availableSpotsOnly" class="h-4 w-4">
+          <input type="checkbox" [(ngModel)]="availableSpotsOnly" class="h-4 w-4" />
           <span>{{ 'missions.availableSpotsOnly' | translate }}</span>
         </label>
 
         <div class="flex flex-wrap items-center gap-3">
-          <button mat-raised-button color="primary" (click)="applyFilters()" class="rounded-full px-6">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="applyFilters()"
+            class="rounded-full px-6"
+          >
             <mat-icon>search</mat-icon>
             {{ 'common.search' | translate }}
           </button>
@@ -80,16 +97,31 @@
       {{ 'missions.loadError' | translate }}
     </div>
 
-    <div *ngIf="!isLoading && !loadError" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div *ngFor="let mission of filteredMissions" class="mission-card rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+    <div
+      *ngIf="!isLoading && !loadError"
+      class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+    >
+      <div
+        *ngFor="let mission of filteredMissions"
+        class="mission-card rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+      >
         <div class="flex items-start justify-between">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg" [ngClass]="getMissionIconClass(mission)">
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-lg"
+            [ngClass]="getMissionIconClass(mission)"
+          >
             <mat-icon>{{ getMissionIcon(mission) }}</mat-icon>
           </div>
-          <span *ngIf="isUrgent(mission)" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+          <span
+            *ngIf="isUrgent(mission)"
+            class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700"
+          >
             {{ 'missions.urgent' | translate }}
           </span>
-          <span *ngIf="!isUrgent(mission) && !hasAvailableSlots(mission)" class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+          <span
+            *ngIf="!isUrgent(mission) && !hasAvailableSlots(mission)"
+            class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500"
+          >
             {{ 'missions.full' | translate }}
           </span>
         </div>
@@ -117,7 +149,11 @@
             <span>{{ mission.availableSlots }} / {{ mission.volunteersNeeded }}</span>
           </div>
           <div class="mt-2 h-1.5 w-full rounded-full bg-gray-100">
-            <div class="h-1.5 rounded-full" [ngClass]="hasAvailableSlots(mission) ? 'bg-red-500' : 'bg-gray-300'" [style.width.%]="getAvailabilityPercent(mission)"></div>
+            <div
+              class="h-1.5 rounded-full"
+              [ngClass]="hasAvailableSlots(mission) ? 'bg-red-500' : 'bg-gray-300'"
+              [style.width.%]="getAvailabilityPercent(mission)"
+            ></div>
           </div>
         </div>
 
@@ -126,41 +162,87 @@
           color="primary"
           class="mt-4 w-full rounded-lg"
           (click)="applyToMission(mission)"
-          [disabled]="!hasAvailableSlots(mission)">
-          {{ hasAvailableSlots(mission) ? ('missions.apply' | translate) : ('missions.full' | translate) }}
+          [disabled]="!hasAvailableSlots(mission)"
+        >
+          {{
+            hasAvailableSlots(mission)
+              ? ('missions.apply' | translate)
+              : ('missions.full' | translate)
+          }}
         </button>
       </div>
     </div>
 
-    <div *ngIf="!isLoading && !loadError && filteredMissions.length === 0" class="text-center py-12">
+    <div
+      *ngIf="!isLoading && !loadError && filteredMissions.length === 0"
+      class="text-center py-12"
+    >
       <mat-icon class="text-6xl text-gray-300 mb-4">search_off</mat-icon>
       <p class="text-gray-500">{{ 'missions.noMissions' | translate }}</p>
     </div>
 
-    <div *ngIf="!isLoading && !loadError && filteredMissions.length > 0" class="flex justify-center">
-      <div class="inline-flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-sm dark:border-gray-800 dark:bg-gray-900">
-        <button class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" aria-label="Previous">
+    <div
+      *ngIf="!isLoading && !loadError && filteredMissions.length > 0"
+      class="flex justify-center"
+    >
+      <div
+        class="inline-flex items-center gap-2 rounded-xl border border-gray-100 bg-white px-3 py-2 shadow-sm dark:border-gray-800 dark:bg-gray-900"
+      >
+        <button
+          class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"
+          aria-label="Previous"
+        >
           <mat-icon class="text-base">chevron_left</mat-icon>
         </button>
-        <button class="h-8 w-8 rounded-lg bg-red-600 text-white text-sm font-semibold" aria-current="page">1</button>
-        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">2</button>
-        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">3</button>
+        <button
+          class="h-8 w-8 rounded-lg bg-red-600 text-white text-sm font-semibold"
+          aria-current="page"
+        >
+          1
+        </button>
+        <button
+          class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+        >
+          2
+        </button>
+        <button
+          class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+        >
+          3
+        </button>
         <span class="px-1 text-gray-400">...</span>
-        <button class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50">12</button>
-        <button class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50" aria-label="Next">
+        <button
+          class="h-8 w-8 rounded-lg border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+        >
+          12
+        </button>
+        <button
+          class="h-8 w-8 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"
+          aria-label="Next"
+        >
           <mat-icon class="text-base">chevron_right</mat-icon>
         </button>
       </div>
     </div>
 
-    <div *ngIf="showDetailsModal && selectedMission" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div
+      *ngIf="showDetailsModal && selectedMission"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+      >
         <div class="flex items-start justify-between mb-6">
           <div>
             <h2 class="text-2xl font-bold">{{ selectedMission.title }}</h2>
             <p class="text-gray-600">{{ selectedMission.missionType }}</p>
           </div>
-          <button mat-icon-button (click)="closeDetailsModal()">
+          <button
+            mat-icon-button
+            type="button"
+            (click)="closeDetailsModal()"
+            [attr.aria-label]="'common.close' | translate"
+          >
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -188,9 +270,15 @@
           </div>
 
           <div *ngIf="selectedMission.requiredCertifications?.length" class="mt-4">
-            <p class="font-semibold text-gray-700 mb-2">{{ 'missions.requiredCertifications' | translate }}</p>
+            <p class="font-semibold text-gray-700 mb-2">
+              {{ 'missions.requiredCertifications' | translate }}
+            </p>
             <div class="flex flex-wrap gap-2">
-              <mat-chip *ngFor="let cert of selectedMission.requiredCertifications" selected color="accent">
+              <mat-chip
+                *ngFor="let cert of selectedMission.requiredCertifications"
+                selected
+                color="accent"
+              >
                 {{ cert }}
               </mat-chip>
             </div>
@@ -205,7 +293,8 @@
             mat-raised-button
             color="primary"
             (click)="applyToMission(selectedMission)"
-            [disabled]="!hasAvailableSlots(selectedMission)">
+            [disabled]="!hasAvailableSlots(selectedMission)"
+          >
             {{ 'missions.apply' | translate }}
           </button>
         </div>

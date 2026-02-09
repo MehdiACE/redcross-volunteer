@@ -7,11 +7,11 @@ import {
   TrainingDetailDto,
   TrainingFilterDto,
   EnrollTrainingDto,
-  TrainingEnrollmentDto
+  TrainingEnrollmentDto,
 } from '../models/training.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TrainingService {
   private apiUrl = `${environment.apiUrl}/trainings`;
@@ -29,11 +29,11 @@ export class TrainingService {
         ...(filter.startDateFrom && { startDateFrom: filter.startDateFrom.toISOString() }),
         ...(filter.startDateTo && { startDateTo: filter.startDateTo.toISOString() }),
         ...(filter.availableSpotsOnly !== undefined && {
-          availableSpotsOnly: filter.availableSpotsOnly.toString()
+          availableSpotsOnly: filter.availableSpotsOnly.toString(),
         }),
         page: filter.page.toString(),
-        pageSize: filter.pageSize.toString()
-      }
+        pageSize: filter.pageSize.toString(),
+      },
     });
   }
 
@@ -42,16 +42,11 @@ export class TrainingService {
   }
 
   enrollVolunteer(trainingId: string, dto: EnrollTrainingDto): Observable<TrainingEnrollmentDto> {
-    return this.http.post<TrainingEnrollmentDto>(
-      `${this.apiUrl}/${trainingId}/enroll`,
-      dto
-    );
+    return this.http.post<TrainingEnrollmentDto>(`${this.apiUrl}/${trainingId}/enroll`, dto);
   }
 
   getTrainingEnrollments(trainingId: string): Observable<TrainingEnrollmentDto[]> {
-    return this.http.get<TrainingEnrollmentDto[]>(
-      `${this.apiUrl}/${trainingId}/enrollments`
-    );
+    return this.http.get<TrainingEnrollmentDto[]>(`${this.apiUrl}/${trainingId}/enrollments`);
   }
 
   getMyTrainings(): Observable<TrainingEnrollmentDto[]> {

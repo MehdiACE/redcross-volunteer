@@ -21,11 +21,17 @@ using RedCrossManager.Server.Services.Documents;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Serilog;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Serilog logging
-builder.Host.UseSerilog((ctx, lc) => lc.ReadFrom.Configuration(ctx.Configuration));
+builder.Services.AddHttpContextAccessor();
+builder.Host.UseSerilog((ctx, services, lc) => lc
+    .ReadFrom.Configuration(ctx.Configuration)
+    .Enrich.FromLogContext()
+    .Enrich.With(new PiiSafeLogEnricher(services.GetRequiredService<IHttpContextAccessor>()))
+    .Enrich.WithProperty("Application", "RedCrossManager.Server"));
 
 // Add services to the container.
 builder.Services.AddScoped<LoggingActionFilter>();
@@ -37,8 +43,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Database
-builder.Services.AddDbContext<RedCrossDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    builder.Services.AddDbContext<RedCrossDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 builder.Services.AddHealthChecks();
 
 // AutoMapper
@@ -134,8 +143,9 @@ builder.Services.AddAuthorization(options =>
 var app = builder.Build();
 
 // Seed database with roles
-using (var scope = app.Services.CreateScope())
+if (!app.Environment.IsEnvironment("Test"))
 {
+    using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<RedCrossDbContext>();
     await DatabaseSeeder.SeedRolesAsync(dbContext);
     await DatabaseSeeder.SeedAdminUserAsync(dbContext);
@@ -151,6 +161,8 @@ if (app.Environment.IsDevelopment())
 // Health endpoints
 app.MapHealthChecks("/health");
 app.MapHealthChecks("/health/ready");
+
+app.UseSerilogRequestLogging();
 
 // Enable CORS and auth
 app.UseCors("AngularClient");

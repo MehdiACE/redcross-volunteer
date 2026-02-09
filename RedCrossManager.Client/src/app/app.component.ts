@@ -13,8 +13,15 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, TranslateModule, UserMessageComponent, MatIconModule, SidebarComponent],
-  templateUrl: './app.component.html'
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    TranslateModule,
+    UserMessageComponent,
+    MatIconModule,
+    SidebarComponent,
+  ],
+  templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'redcross-manager-client';
@@ -30,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private router: Router,
     private authService: AuthService,
-    private agGridThemeService: AgGridThemeService
+    private agGridThemeService: AgGridThemeService,
   ) {
     // Set default language
     this.translate.setDefaultLang('fr');
@@ -40,7 +47,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const savedLang = localStorage.getItem('lang');
-    this.currentLang = savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
+    this.currentLang =
+      savedLang || this.translate.currentLang || this.translate.defaultLang || 'fr';
     this.translate.use(this.currentLang);
 
     const savedTheme = localStorage.getItem('theme');
@@ -48,11 +56,10 @@ export class AppComponent implements OnInit, OnDestroy {
     document.documentElement.classList.toggle('dark', this.isDarkMode);
     this.agGridThemeService.setDarkMode(this.isDarkMode);
 
-
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         const url = this.router.url.split('?')[0];

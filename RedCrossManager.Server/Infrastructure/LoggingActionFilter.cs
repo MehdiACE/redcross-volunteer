@@ -1,4 +1,7 @@
 using System.Diagnostics;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
@@ -20,12 +23,20 @@ public sealed class LoggingActionFilter : IAsyncActionFilter
         var method = httpContext.Request.Method;
         var path = httpContext.Request.Path.Value ?? string.Empty;
         var actionName = context.ActionDescriptor.DisplayName ?? "unknown";
-        var user = httpContext.User?.Identity?.IsAuthenticated == true
-            ? httpContext.User.Identity?.Name ?? "authenticated"
-            : "anonymous";
+        var principal = httpContext.User;
+        var isAuthenticated = principal?.Identity?.IsAuthenticated == true;
+        var userId = isAuthenticated
+            ? principal?.FindFirstValue(ClaimTypes.NameIdentifier) ?? principal?.FindFirstValue("sub")
+            : null;
+        var userHash = isAuthenticated && !string.IsNullOrWhiteSpace(userId)
+            ? Hash(userId)
+            : (isAuthenticated ? "authenticated" : "anonymous");
+        var roles = isAuthenticated && principal is not null
+            ? string.Join(',', principal.FindAll(ClaimTypes.Role).Select(r => r.Value).Distinct())
+            : string.Empty;
 
-        _logger.LogDebug("Request started {Method} {Path} | Action: {Action} | User: {User}",
-            method, path, actionName, user);
+        _logger.LogDebug("Request started {Method} {Path} | Action: {Action} | UserHash: {UserHash} | Roles: {Roles} | Authenticated: {IsAuthenticated}",
+            method, path, actionName, userHash, roles, isAuthenticated);
 
         try
         {
@@ -43,5 +54,17 @@ public sealed class LoggingActionFilter : IAsyncActionFilter
                 method, path, stopwatch.ElapsedMilliseconds);
             throw;
         }
+    }
+
+    private static string Hash(string value)
+    {
+        using var sha = SHA256.Create();
+        var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(value));
+        var builder = new StringBuilder(bytes.Length * 2);
+        foreach (var b in bytes)
+        {
+            builder.Append(b.ToString("x2"));
+        }
+        return builder.ToString();
     }
 }

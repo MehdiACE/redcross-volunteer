@@ -7,7 +7,7 @@ import { MessageItem } from '../../core/models/message.model';
   selector: 'app-read-message',
   standalone: true,
   imports: [CommonModule, TranslateModule],
-  templateUrl: './read-message.component.html'
+  templateUrl: './read-message.component.html',
 })
 export class ReadMessageComponent {
   @Input() message: MessageItem | null = null;
