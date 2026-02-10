@@ -18,7 +18,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     name: Build and Test (Angular)
-    working-directory: ./RedCrossManager.Client
 
     steps:
       - name: Checkout code
