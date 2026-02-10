@@ -120,6 +120,18 @@
           </mat-error>
         </mat-form-field>
 
+        <!-- Confirm Password -->
+        <mat-form-field class="w-full">
+          <mat-label>{{ 'registration.fields.confirmPassword' | translate }}</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" required />
+          <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
+            {{ 'registration.errors.confirmPasswordRequired' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.hasError('passwordMismatch')">
+            {{ 'registration.errors.passwordMismatch' | translate }}
+          </mat-error>
+        </mat-form-field>
+
         <!-- Phone with Country Code -->
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">

@@ -19,7 +19,7 @@ export interface OnboardingStepDto {
   stepNumber: number;
   title: string;
   description: string;
-  status: 'Pending' | 'Submitted' | 'Completed' | 'Rejected';
+  status: 'NotStarted' | 'InProgress' | 'Submitted' | 'Approved' | 'Rejected';
   submittedAt?: Date;
   reviewedAt?: Date;
   reviewerNotes?: string;

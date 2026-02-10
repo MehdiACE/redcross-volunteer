@@ -112,15 +112,15 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   private getNextIncompleteStepIndex(): number {
     if (!this.progress?.steps) return 0;
-    const index = this.progress.steps.findIndex((s) => s.status === 'Pending');
+    const index = this.progress.steps.findIndex((s) => s.status !== 'Approved');
     return index >= 0 ? index : this.progress.steps.length - 1;
   }
 
   canAdvance(stepIndex: number): boolean {
     if (!this.progress?.steps) return false;
-    // Can advance if current step is completed or minor without parental consent yet
+    // Can advance if current step is approved or minor without parental consent yet
     const currentStep = this.progress.steps[stepIndex];
-    if (currentStep.status === 'Completed') return true;
+    if (currentStep.status === 'Approved') return true;
     if (stepIndex === 0) return currentStep.status === 'Submitted'; // Personal info must be submitted
     return false;
   }
@@ -133,22 +133,22 @@ export class StepperComponent implements OnInit, OnDestroy {
       return true;
     }
 
-    // Steps are locked if previous step not submitted/completed
+    // Steps are locked if previous step not submitted/approved
     if (stepIndex === 0) return false;
     const prevStep = this.progress.steps?.[stepIndex - 1];
-    return prevStep ? prevStep.status !== 'Submitted' && prevStep.status !== 'Completed' : true;
+    return prevStep ? prevStep.status !== 'Submitted' && prevStep.status !== 'Approved' : true;
   }
 
   getStepStatus(stepIndex: number): 'completed' | 'current' | 'pending' {
     if (!this.progress?.steps?.[stepIndex]) return 'pending';
 
     const step = this.progress.steps[stepIndex];
-    if (step.status === 'Completed') {
+    if (step.status === 'Approved') {
       return 'completed';
     }
 
-    // Current step is the first non-completed step
-    const currentStepIndex = this.progress.steps.findIndex((s) => s.status !== 'Completed');
+    // Current step is the first non-approved step
+    const currentStepIndex = this.progress.steps.findIndex((s) => s.status !== 'Approved');
 
     if (currentStepIndex === stepIndex) {
       return 'current';
@@ -232,7 +232,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   getCompletedStepsCount(): number {
-    return this.progress?.steps?.filter((s) => s.status === 'Completed').length || 0;
+    return this.progress?.steps?.filter((s) => s.status === 'Approved').length || 0;
   }
 
   getTotalSteps(): number {
