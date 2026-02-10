@@ -1,34 +1,27 @@
 <div class="min-h-screen bg-app-bg dark:bg-app-bg-dark flex flex-col">
-  <header class="w-full px-4 py-4">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <img
-          src="assets/images/logoCRF.svg"
-          alt="Croix-Rouge française"
-          class="md:h-24 md:w-48 h-12 w-24"
-        />
+  <!-- Header style Dashboard -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-[#191a1f]/90 dark:border-gray-700 mb-16">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="h-8 w-auto" />
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-3">
         <button
           mat-icon-button
           type="button"
           (click)="toggleTheme()"
           [attr.aria-label]="isDarkMode ? 'Passer en mode clair' : 'Passer en mode sombre'"
-          class="icon-btn h-10 w-10 rounded-full bg-white dark:bg-slate-800 border border-rose-100 dark:border-slate-700 text-rose-600 dark:text-rose-200 shadow-sm"
+          class="!flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
         >
           <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
         </button>
         <button
-          mat-icon-button
           type="button"
           (click)="toggleLanguage()"
-          [attr.aria-label]="currentLang === 'fr' ? 'Passer en anglais' : 'Switch to French'"
-          class="icon-btn h-10 w-10 rounded-full bg-white dark:bg-slate-800 border border-rose-100 dark:border-slate-700 text-rose-600 dark:text-rose-200 shadow-sm relative"
+          class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
         >
-          <mat-icon>language</mat-icon>
-          <span
-            class="absolute -bottom-1 -right-1 text-[10px] font-semibold bg-white dark:bg-slate-800 text-rose-600 dark:text-rose-200 px-1 rounded"
-          >
+          <mat-icon class="text-gray-600 dark:text-gray-300">language</mat-icon>
+          <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
             {{ currentLang.toUpperCase() }}
           </span>
         </button>

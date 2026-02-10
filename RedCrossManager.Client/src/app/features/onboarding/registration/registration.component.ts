@@ -5,13 +5,13 @@ import { Router, RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatStepperModule } from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { VolunteerService } from '../../../core/services/volunteer.service';
 import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
@@ -26,13 +26,13 @@ import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatStepperModule,
     MatSelectModule,
     MatChipsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    MatIconModule,
     TranslateModule,
   ],
   templateUrl: './registration.component.html',
@@ -40,7 +40,10 @@ import { RegisterVolunteerDto } from '../../../core/models/volunteer.model';
 export class RegistrationComponent implements OnInit {
   registrationForm!: FormGroup;
   isLoading = false;
+  hidePassword = true;
   currentStepIndex = 0;
+  isDarkMode = false;
+  currentLang = 'fr';
   stepTitles = [
     'registration.sections.personalInfo',
     'registration.sections.address',
@@ -75,6 +78,20 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    this.currentLang = this.translate.currentLang || 'fr';
+    this.isDarkMode = document.documentElement.classList.contains('dark');
+  }
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    document.documentElement.classList.toggle('dark', this.isDarkMode);
+    localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
+  }
+
+  toggleLanguage(): void {
+    this.currentLang = this.currentLang === 'fr' ? 'en' : 'fr';
+    this.translate.use(this.currentLang);
+    localStorage.setItem('language', this.currentLang);
   }
 
   private buildForm(): void {
@@ -92,7 +109,8 @@ export class RegistrationComponent implements OnInit {
           ],
         ],
         confirmPassword: ['', Validators.required],
-        phone: ['', [Validators.required, Validators.pattern(/^\+?[1-9]\d{1,14}$/)]],
+        phoneCountryCode: ['+1'],
+        phone: ['', [Validators.required, Validators.pattern(/^[0-9]{7,14}$/)]],
         dateOfBirth: ['', Validators.required],
         address: this.fb.group({
           street: ['', [Validators.required, Validators.maxLength(255)]],
@@ -141,7 +159,7 @@ export class RegistrationComponent implements OnInit {
       lastName: formValue.lastName,
       email: formValue.email,
       password: formValue.password,
-      phone: formValue.phone,
+      phone: `${formValue.phoneCountryCode}${formValue.phone.replace(/\D/g, '')}`,
       dateOfBirth: formValue.dateOfBirth,
       addressStreet: formValue.address.street,
       addressCity: formValue.address.city,
@@ -205,5 +223,21 @@ export class RegistrationComponent implements OnInit {
 
   onStepChange(event: any): void {
     this.currentStepIndex = event.selectedIndex ?? 0;
+  }
+
+  goToStep(index: number): void {
+    this.currentStepIndex = index;
+  }
+
+  nextStep(): void {
+    if (this.currentStepIndex < this.stepTitles.length - 1) {
+      this.currentStepIndex++;
+    }
+  }
+
+  previousStep(): void {
+    if (this.currentStepIndex > 0) {
+      this.currentStepIndex--;
+    }
   }
 }

@@ -1,282 +1,325 @@
-<div class="max-w-4xl mx-auto p-6 min-h-screen bg-app-bg dark:bg-app-bg-dark">
-  <h1 class="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">
-    {{ 'registration.title' | translate }}
-  </h1>
-  <p class="text-gray-600 dark:text-gray-300 mb-8">{{ 'registration.subtitle' | translate }}</p>
-
-  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-6">
-    <div class="md:hidden text-center text-lg font-semibold mb-4">
-      {{ stepTitles[currentStepIndex] | translate }}
+<div class="min-h-screen bg-stone-100 dark:bg-slate-900 flex flex-col">
+  <!-- Header style Dashboard -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-[#191a1f]/90 dark:border-gray-700">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/logoCRF.svg" alt="Croix-Rouge française" class="h-8 w-auto" />
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          mat-icon-button
+          type="button"
+          (click)="toggleTheme()"
+          [attr.aria-label]="isDarkMode ? 'Passer en mode clair' : 'Passer en mode sombre'"
+          class="!flex items-center justify-center w-9 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+        >
+          <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+        <button
+          type="button"
+          (click)="toggleLanguage()"
+          class="flex items-center gap-2 px-3 h-9 rounded-full border border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800"
+        >
+          <mat-icon class="text-gray-600 dark:text-gray-300">language</mat-icon>
+          <span class="px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-xs font-semibold">
+            {{ currentLang.toUpperCase() }}
+          </span>
+        </button>
+      </div>
     </div>
-    <mat-horizontal-stepper
-      [linear]="false"
-      class="registration-stepper dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none [&_.mat-horizontal-stepper-header-container]:hidden md:[&_.mat-horizontal-stepper-header-container]:flex dark:[&_.mat-horizontal-stepper-header-container]:bg-slate-800/70 dark:[&_.mat-step-header]:text-gray-200 dark:[&_.mat-step-label]:text-gray-200 dark:[&_.mat-step-icon]:bg-slate-800/70 dark:[&_.mat-step-icon-selected]:bg-rose-600 dark:[&_.mat-step-icon-state-done]:bg-rose-600"
-      (selectionChange)="onStepChange($event)"
-    >
-      <mat-step>
-        <ng-template matStepLabel>{{
-          'registration.sections.personalInfo' | translate
-        }}</ng-template>
-        <section
-          class="bg-white dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none p-6 rounded-lg shadow transition-shadow hover:shadow-md"
-        >
-          <h2 class="text-xl font-semibold mb-4">
-            {{ 'registration.sections.personalInfo' | translate }}
-          </h2>
+  </header>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.firstName' | translate }}</mat-label>
-              <input matInput formControlName="firstName" required />
-              <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
-            </mat-form-field>
+  <!-- Content -->
+  <div class="py-8 px-4">
+    <!-- Title Section -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-600 text-white mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        {{ 'registration.title' | translate }}
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-1">{{ 'registration.subtitle' | translate }}</p>
+    </div>
 
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.lastName' | translate }}</mat-label>
-              <input matInput formControlName="lastName" required />
-              <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
-            </mat-form-field>
+  <!-- Step Indicator -->
+  <div class="max-w-2xl mx-auto mb-6">
+    <div class="flex items-center justify-center gap-1 text-sm">
+      <span class="text-red-600 font-semibold uppercase tracking-wide">
+        {{ 'registration.stepIndicator' | translate:{current: currentStepIndex + 1, total: 4} }}
+      </span>
+    </div>
+    <div class="flex border-b border-gray-300 dark:border-slate-600 mt-3">
+      <button 
+        *ngFor="let step of stepTitles; let i = index"
+        type="button"
+        (click)="goToStep(i)"
+        class="flex-1 py-3 text-center text-sm font-medium transition-colors"
+        [class.text-red-600]="currentStepIndex === i"
+        [class.border-b-2]="currentStepIndex === i"
+        [class.border-red-600]="currentStepIndex === i"
+        [class.text-gray-400]="currentStepIndex !== i"
+        [class.dark:text-gray-500]="currentStepIndex !== i"
+      >
+        {{ step | translate }}
+      </button>
+    </div>
+  </div>
 
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.email' | translate }}</mat-label>
-              <input matInput type="email" formControlName="email" required />
-              <mat-error>{{ getErrorMessage('email') }}</mat-error>
-            </mat-form-field>
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="max-w-2xl mx-auto">
+    <!-- Step 1: Personal Info -->
+    <div *ngIf="currentStepIndex === 0" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 md:p-8">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        {{ 'registration.sections.personalInfo' | translate }}
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        {{ 'registration.personalInfoDescription' | translate }}
+      </p>
 
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.password' | translate }}</mat-label>
-              <input matInput type="password" formControlName="password" required />
-              <mat-hint>{{ 'registration.hints.password' | translate }}</mat-hint>
-              <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
-                {{ 'registration.errors.passwordRequired' | translate }}
-              </mat-error>
-              <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
-                {{ 'registration.errors.passwordMinLength' | translate }}
-              </mat-error>
-              <mat-error *ngIf="registrationForm.get('password')?.hasError('pattern')">
-                {{ 'registration.errors.passwordPattern' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.confirmPassword' | translate }}</mat-label>
-              <input matInput type="password" formControlName="confirmPassword" required />
-              <mat-error *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">
-                {{ 'registration.errors.confirmPasswordRequired' | translate }}
-              </mat-error>
-              <mat-error
-                *ngIf="
-                  registrationForm.hasError('passwordMismatch') &&
-                  registrationForm.get('confirmPassword')?.touched
-                "
-              >
-                {{ 'registration.errors.passwordMismatch' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.phone' | translate }}</mat-label>
-              <input
-                matInput
-                type="tel"
-                formControlName="phone"
-                placeholder="+15145551234"
-                required
-              />
-              <mat-error>{{ getErrorMessage('phone') }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.dateOfBirth' | translate }}</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
-              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-              <mat-error>{{ getErrorMessage('dateOfBirth') }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.languagePreference' | translate }}</mat-label>
-              <mat-select formControlName="languagePreference" required>
-                <mat-option value="fr">Français</mat-option>
-                <mat-option value="en">English</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </section>
-
-        <div class="flex justify-end mt-6">
-          <button mat-raised-button color="primary" type="button" matStepperNext>
-            {{ 'common.next' | translate }}
-          </button>
-        </div>
-      </mat-step>
-
-      <mat-step>
-        <ng-template matStepLabel>{{ 'registration.sections.address' | translate }}</ng-template>
-        <section
-          class="bg-white dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none p-6 rounded-lg shadow transition-shadow hover:shadow-md"
-          formGroupName="address"
-        >
-          <h2 class="text-xl font-semibold mb-4">
-            {{ 'registration.sections.address' | translate }}
-          </h2>
-
-          <div class="grid grid-cols-1 gap-4">
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.street' | translate }}</mat-label>
-              <input matInput formControlName="street" required />
-              <mat-error>{{ getErrorMessage('address.street') }}</mat-error>
-            </mat-form-field>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <mat-form-field class="w-full">
-                <mat-label>{{ 'registration.fields.city' | translate }}</mat-label>
-                <input matInput formControlName="city" required />
-                <mat-error>{{ getErrorMessage('address.city') }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="w-full">
-                <mat-label>{{ 'registration.fields.stateProvince' | translate }}</mat-label>
-                <input matInput formControlName="stateProvince" required />
-                <mat-error>{{ getErrorMessage('address.stateProvince') }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="w-full">
-                <mat-label>{{ 'registration.fields.postalCode' | translate }}</mat-label>
-                <input matInput formControlName="postalCode" required />
-                <mat-error>{{ getErrorMessage('address.postalCode') }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field class="w-full">
-                <mat-label>{{ 'registration.fields.country' | translate }}</mat-label>
-                <input matInput formControlName="country" required />
-                <mat-error>{{ getErrorMessage('address.country') }}</mat-error>
-              </mat-form-field>
-            </div>
-          </div>
-        </section>
-
-        <div class="flex justify-between mt-6">
-          <button mat-stroked-button type="button" matStepperPrevious>
-            {{ 'common.back' | translate }}
-          </button>
-          <button mat-raised-button color="primary" type="button" matStepperNext>
-            {{ 'common.next' | translate }}
-          </button>
-        </div>
-      </mat-step>
-
-      <mat-step>
-        <ng-template matStepLabel>{{
-          'registration.sections.emergencyContact' | translate
-        }}</ng-template>
-        <section
-          class="bg-white dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none p-6 rounded-lg shadow transition-shadow hover:shadow-md"
-          formGroupName="emergencyContact"
-        >
-          <h2 class="text-xl font-semibold mb-4">
-            {{ 'registration.sections.emergencyContact' | translate }}
-          </h2>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.emergencyContactName' | translate }}</mat-label>
-              <input matInput formControlName="name" required />
-              <mat-error>{{ getErrorMessage('emergencyContact.name') }}</mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.emergencyContactPhone' | translate }}</mat-label>
-              <input
-                matInput
-                type="tel"
-                formControlName="phone"
-                placeholder="+15145551234"
-                required
-              />
-              <mat-error>{{ getErrorMessage('emergencyContact.phone') }}</mat-error>
-            </mat-form-field>
-          </div>
-        </section>
-
-        <div class="flex justify-between mt-6">
-          <button mat-stroked-button type="button" matStepperPrevious>
-            {{ 'common.back' | translate }}
-          </button>
-          <button mat-raised-button color="primary" type="button" matStepperNext>
-            {{ 'common.next' | translate }}
-          </button>
-        </div>
-      </mat-step>
-
-      <mat-step>
-        <ng-template matStepLabel>{{
-          'registration.sections.preferences' | translate
-        }}</ng-template>
-        <section
-          class="bg-white dark:bg-slate-800/70 dark:border dark:border-slate-700 dark:shadow-none p-6 rounded-lg shadow transition-shadow hover:shadow-md"
-        >
-          <h2 class="text-xl font-semibold mb-4">
-            {{ 'registration.sections.preferences' | translate }}
-          </h2>
-
-          <mat-form-field class="w-full mb-4">
-            <mat-label>{{ 'registration.fields.areasOfInterest' | translate }}</mat-label>
-            <mat-select formControlName="areasOfInterest" multiple required>
-              <mat-option *ngFor="let interest of availableInterests" [value]="interest.value">
-                {{ interest.labelKey | translate }}
-              </mat-option>
-            </mat-select>
-            <mat-error>{{ getErrorMessage('areasOfInterest') }}</mat-error>
+      <div class="space-y-5">
+        <!-- First Name / Last Name Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.firstName' | translate }}</mat-label>
+            <input matInput formControlName="firstName" [placeholder]="'Ex: Jean'" required />
+            <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
           </mat-form-field>
 
-          <div formGroupName="availability">
-            <mat-form-field class="w-full mb-4">
-              <mat-label>{{ 'registration.fields.availableDays' | translate }}</mat-label>
-              <mat-select formControlName="daysOfWeek" multiple required>
-                <mat-option *ngFor="let day of daysOfWeek" [value]="day.value">
-                  {{ day.labelKey | translate }}
-                </mat-option>
-              </mat-select>
-              <mat-error>{{ getErrorMessage('availability.daysOfWeek') }}</mat-error>
-            </mat-form-field>
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.lastName' | translate }}</mat-label>
+            <input matInput formControlName="lastName" [placeholder]="'Ex: Dupont'" required />
+            <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
+          </mat-form-field>
+        </div>
 
-            <mat-form-field class="w-full">
-              <mat-label>{{ 'registration.fields.timePreference' | translate }}</mat-label>
-              <mat-select formControlName="timePreference" required>
-                <mat-option value="Morning">{{
-                  'registration.timeOptions.morning' | translate
-                }}</mat-option>
-                <mat-option value="Afternoon">{{
-                  'registration.timeOptions.afternoon' | translate
-                }}</mat-option>
-                <mat-option value="Evening">{{
-                  'registration.timeOptions.evening' | translate
-                }}</mat-option>
-                <mat-option value="Flexible">{{
-                  'registration.timeOptions.flexible' | translate
-                }}</mat-option>
-              </mat-select>
-              <mat-error>{{ getErrorMessage('availability.timePreference') }}</mat-error>
-            </mat-form-field>
-          </div>
-        </section>
+        <!-- Email -->
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.email' | translate }}</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="nom@exemple.com" required />
+          <mat-error>{{ getErrorMessage('email') }}</mat-error>
+        </mat-form-field>
 
-        <div class="flex justify-between mt-6">
-          <button mat-stroked-button type="button" matStepperPrevious>
-            {{ 'common.back' | translate }}
+        <!-- Password -->
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.password' | translate }}</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required />
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <div class="flex gap-4">
-            <button type="button" mat-stroked-button color="primary" [routerLink]="['/']">
-              {{ 'common.cancel' | translate }}
-            </button>
-            <button type="submit" mat-raised-button color="primary" [disabled]="isLoading">
-              <mat-spinner *ngIf="isLoading" diameter="20" class="inline-block mr-2"></mat-spinner>
-              {{ 'registration.submit' | translate }}
-            </button>
+          <mat-hint>{{ 'registration.hints.password' | translate }}</mat-hint>
+          <mat-error *ngIf="registrationForm.get('password')?.hasError('required')">
+            {{ 'registration.errors.passwordRequired' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('password')?.hasError('minlength')">
+            {{ 'registration.errors.passwordMinLength' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('password')?.hasError('pattern')">
+            {{ 'registration.errors.passwordPattern' | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Phone with Country Code -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+            {{ 'registration.fields.phone' | translate }}
+          </label>
+          <div class="flex gap-2">
+            <mat-form-field  class="w-24 flex-shrink-0">
+              <mat-select formControlName="phoneCountryCode" class="text-center">
+                <mat-option value="+1">+1</mat-option>
+                <mat-option value="+33">+33</mat-option>
+                <mat-option value="+44">+44</mat-option>
+                <mat-option value="+49">+49</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field  class="flex-1">
+              <input matInput type="tel" formControlName="phone" placeholder="(555) 000-0000" required />
+              <mat-error>{{ getErrorMessage('phone') }}</mat-error>
+            </mat-form-field>
           </div>
         </div>
-      </mat-step>
-    </mat-horizontal-stepper>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+        <button type="button" mat-stroked-button class="px-6" [routerLink]="['/']">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button type="button" mat-flat-button color="primary" class="px-6" (click)="nextStep()">
+          {{ 'common.next' | translate }}
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2: Address -->
+    <div *ngIf="currentStepIndex === 1" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 md:p-8" formGroupName="address">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        {{ 'registration.sections.address' | translate }}
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        {{ 'registration.addressDescription' | translate }}
+      </p>
+
+      <div class="space-y-5">
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.street' | translate }}</mat-label>
+          <input matInput formControlName="street" required />
+          <mat-error>{{ getErrorMessage('address.street') }}</mat-error>
+        </mat-form-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.city' | translate }}</mat-label>
+            <input matInput formControlName="city" required />
+            <mat-error>{{ getErrorMessage('address.city') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.stateProvince' | translate }}</mat-label>
+            <input matInput formControlName="stateProvince" required />
+            <mat-error>{{ getErrorMessage('address.stateProvince') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.postalCode' | translate }}</mat-label>
+            <input matInput formControlName="postalCode" required />
+            <mat-error>{{ getErrorMessage('address.postalCode') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.country' | translate }}</mat-label>
+            <input matInput formControlName="country" required />
+            <mat-error>{{ getErrorMessage('address.country') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+        <button type="button" mat-stroked-button class="px-6" (click)="previousStep()">
+          {{ 'common.back' | translate }}
+        </button>
+        <button type="button" mat-flat-button color="primary" class="px-6" (click)="nextStep()">
+          {{ 'common.next' | translate }}
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Emergency Contact -->
+    <div *ngIf="currentStepIndex === 2" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 md:p-8" formGroupName="emergencyContact">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        {{ 'registration.sections.emergencyContact' | translate }}
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        {{ 'registration.emergencyContactDescription' | translate }}
+      </p>
+
+      <div class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.emergencyContactName' | translate }}</mat-label>
+            <input matInput formControlName="name" required />
+            <mat-error>{{ getErrorMessage('emergencyContact.name') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.emergencyContactPhone' | translate }}</mat-label>
+            <input matInput type="tel" formControlName="phone" placeholder="+15145551234" required />
+            <mat-error>{{ getErrorMessage('emergencyContact.phone') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+        <button type="button" mat-stroked-button class="px-6" (click)="previousStep()">
+          {{ 'common.back' | translate }}
+        </button>
+        <button type="button" mat-flat-button color="primary" class="px-6" (click)="nextStep()">
+          {{ 'common.next' | translate }}
+          <mat-icon iconPositionEnd>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: Preferences -->
+    <div *ngIf="currentStepIndex === 3" class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 md:p-8">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        {{ 'registration.sections.preferences' | translate }}
+      </h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+        {{ 'registration.preferencesDescription' | translate }}
+      </p>
+
+      <div class="space-y-5">
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.dateOfBirth' | translate }}</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>{{ getErrorMessage('dateOfBirth') }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.languagePreference' | translate }}</mat-label>
+          <mat-select formControlName="languagePreference" required>
+            <mat-option value="fr">Français</mat-option>
+            <mat-option value="en">English</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field  class="w-full">
+          <mat-label>{{ 'registration.fields.areasOfInterest' | translate }}</mat-label>
+          <mat-select formControlName="areasOfInterest" multiple required>
+            <mat-option *ngFor="let interest of availableInterests" [value]="interest.value">
+              {{ interest.labelKey | translate }}
+            </mat-option>
+          </mat-select>
+          <mat-error>{{ getErrorMessage('areasOfInterest') }}</mat-error>
+        </mat-form-field>
+
+        <div formGroupName="availability">
+          <mat-form-field  class="w-full">
+            <mat-label>{{ 'registration.fields.availableDays' | translate }}</mat-label>
+            <mat-select formControlName="daysOfWeek" multiple required>
+              <mat-option *ngFor="let day of daysOfWeek" [value]="day.value">
+                {{ day.labelKey | translate }}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessage('availability.daysOfWeek') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field  class="w-full mt-4">
+            <mat-label>{{ 'registration.fields.timePreference' | translate }}</mat-label>
+            <mat-select formControlName="timePreference" required>
+              <mat-option value="Morning">{{ 'registration.timeOptions.morning' | translate }}</mat-option>
+              <mat-option value="Afternoon">{{ 'registration.timeOptions.afternoon' | translate }}</mat-option>
+              <mat-option value="Evening">{{ 'registration.timeOptions.evening' | translate }}</mat-option>
+              <mat-option value="Flexible">{{ 'registration.timeOptions.flexible' | translate }}</mat-option>
+            </mat-select>
+            <mat-error>{{ getErrorMessage('availability.timePreference') }}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-slate-700">
+        <button type="button" mat-stroked-button class="px-6" (click)="previousStep()">
+          {{ 'common.back' | translate }}
+        </button>
+        <button type="submit" mat-flat-button color="primary" class="px-6" [disabled]="isLoading">
+          <mat-spinner *ngIf="isLoading" diameter="20" class="inline-block mr-2"></mat-spinner>
+          {{ 'registration.submit' | translate }}
+        </button>
+      </div>
+    </div>
   </form>
+
+    <!-- Login Link -->
+    <div class="text-center mt-6 text-sm text-gray-600 dark:text-gray-400">
+      {{ 'registration.alreadyHaveAccount' | translate }}
+      <a routerLink="/login" class="text-red-600 hover:text-red-700 font-medium">{{ 'registration.signIn' | translate }}</a>
+    </div>
+  </div>
 </div>

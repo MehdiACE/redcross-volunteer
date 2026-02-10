@@ -41,7 +41,14 @@
   },
   "registration": {
     "title": "Volunteer Registration",
-    "subtitle": "Join the Canadian Red Cross volunteer community. Fill out the form below to get started.",
+    "subtitle": "Join the Red Cross community.",
+    "stepIndicator": "STEP {{current}} OF {{total}}",
+    "personalInfoDescription": "Please fill in your basic contact information to start your volunteer profile.",
+    "addressDescription": "Please enter your full address.",
+    "emergencyContactDescription": "Please provide contact information for someone we can reach in case of emergency.",
+    "preferencesDescription": "Please indicate your preferences and availability.",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in",
     "submit": "Register",
     "success": "Registration successful! Check your email for confirmation.",
     "sections": {

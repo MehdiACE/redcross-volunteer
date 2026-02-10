@@ -103,7 +103,7 @@ describe('RegistrationComponent', () => {
     fixture.detectChanges();
 
     const phoneControl = component.registrationForm.get('phone');
-    phoneControl?.setValue('+15145551234');
+    phoneControl?.setValue('5145551234');
 
     expect(phoneControl?.valid).toBe(true);
   });
@@ -133,7 +133,8 @@ describe('RegistrationComponent', () => {
       email: 'john@example.com',
       password: 'SecurePassword123!',
       confirmPassword: 'SecurePassword123!',
-      phone: '+15145551234',
+      phoneCountryCode: '+1',
+      phone: '5145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
       areasOfInterest: ['First Aid'],
@@ -183,7 +184,8 @@ describe('RegistrationComponent', () => {
       email: 'john@example.com',
       password: 'SecurePassword123!',
       confirmPassword: 'SecurePassword123!',
-      phone: '+15145551234',
+      phoneCountryCode: '+1',
+      phone: '5145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
       areasOfInterest: ['First Aid'],
@@ -229,7 +231,8 @@ describe('RegistrationComponent', () => {
       email: 'john@example.com',
       password: 'SecurePassword123!',
       confirmPassword: 'SecurePassword123!',
-      phone: '+15145551234',
+      phoneCountryCode: '+1',
+      phone: '5145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
       areasOfInterest: ['First Aid'],
@@ -270,7 +273,8 @@ describe('RegistrationComponent', () => {
       email: 'john@example.com',
       password: 'SecurePassword123!',
       confirmPassword: 'SecurePassword123!',
-      phone: '+15145551234',
+      phoneCountryCode: '+1',
+      phone: '5145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
       areasOfInterest: ['First Aid'],
@@ -313,7 +317,8 @@ describe('RegistrationComponent', () => {
       email: 'john@example.com',
       password: 'SecurePassword123!',
       confirmPassword: 'SecurePassword123!',
-      phone: '+15145551234',
+      phoneCountryCode: '+1',
+      phone: '5145551234',
       dateOfBirth: new Date('2000-01-01'),
       languagePreference: 'en',
       areasOfInterest: ['First Aid'],

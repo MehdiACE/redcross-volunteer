@@ -41,7 +41,14 @@
   },
   "registration": {
     "title": "Inscription des bénévoles",
-    "subtitle": "Rejoignez la communauté de bénévoles de la Croix-Rouge canadienne. Remplissez le formulaire ci-dessous pour commencer.",
+    "subtitle": "Rejoignez la communauté de la Croix-Rouge.",
+    "stepIndicator": "ÉTAPE {{current}} DE {{total}}",
+    "personalInfoDescription": "Veuillez remplir vos coordonnées de base pour commencer votre profil de bénévole.",
+    "addressDescription": "Veuillez entrer votre adresse complète.",
+    "emergencyContactDescription": "Veuillez fournir les coordonnées d'une personne à contacter en cas d'urgence.",
+    "preferencesDescription": "Veuillez indiquer vos préférences et disponibilités.",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "signIn": "Se connecter",
     "submit": "S'inscrire",
     "success": "Inscription réussie ! Vérifiez votre courriel pour la confirmation.",
     "sections": {
